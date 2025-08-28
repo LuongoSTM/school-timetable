@@ -1587,6 +1587,13 @@ document.addEventListener('DOMContentLoaded', function() {
     updateClock();
     updateTeacherBoxes();
     
+    // Display current user if logged in
+    const currentUser = sessionStorage.getItem('currentUser');
+    const userInfoElement = document.getElementById('user-info');
+    if (currentUser && userInfoElement) {
+        userInfoElement.textContent = `Logged in as: ${currentUser}`;
+    }
+    
     // Update every second
     setInterval(() => {
         updateClock();

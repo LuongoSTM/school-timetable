@@ -79,19 +79,47 @@ body {
 }
 
 .clock-section {
-    background: var(--secondary-bg);
-    padding: 15px 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px var(--card-shadow);
-    text-align: center;
-    min-width: 150px;
+    display: flex;
+    align-items: center;
 }
 
-.clock {
-    font-size: 32px;
+.clock-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.clock-box {
+    background: var(--countdown-bg);
+    border: 2px solid var(--countdown-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: center;
+    min-width: 60px;
+    box-shadow: 0 2px 4px var(--card-shadow);
+}
+
+.clock-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--countdown-text);
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.clock-label {
+    font-size: 12px;
+    color: var(--text-color);
+    text-transform: capitalize;
+    line-height: 1;
+    opacity: 0.7;
+}
+
+.clock-separator {
+    font-size: 24px;
     font-weight: bold;
     color: var(--text-color);
-    margin-bottom: 5px;
+    margin: 0 2px;
 }
 
 .title-countdown-container {

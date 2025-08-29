@@ -1157,12 +1157,20 @@ function formatTermDates(term) {
 // UI update functions
 function updateClock() {
     const now = new Date();
-    const clockElement = document.getElementById('clock');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
     const dateElement = document.getElementById('date-info');
     const weekElement = document.getElementById('week-info');
     
-    if (clockElement) {
-        clockElement.textContent = formatTime(now);
+    if (hoursElement && minutesElement && secondsElement) {
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        
+        hoursElement.textContent = hours;
+        minutesElement.textContent = minutes;
+        secondsElement.textContent = seconds;
     }
     
     if (dateElement) {
@@ -1419,6 +1427,27 @@ function updateTeacherBoxes() {
     });
 }
 
+// Check if current user can modify this lesson
+function canModifyLesson(teacherName) {
+    const currentUser = sessionStorage.getItem('currentUser');
+    
+    // Administrators can modify all lessons
+    if (currentUser === 'Fiore Luongo Administrator' || currentUser === 'Page for Test') {
+        return true;
+    }
+    
+    // Teachers can only modify their own lessons
+    if (currentUser === 'Katie Arakalian' && teacherName === 'Ms K Arakalian') {
+        return true;
+    }
+    
+    if (currentUser === 'Natalie Jenkins' && teacherName === 'Ms N Jenkins') {
+        return true;
+    }
+    
+    return false;
+}
+
 function showModal(data) {
     currentModalData = data;
     const modal = document.getElementById('subject-modal');
@@ -1433,11 +1462,39 @@ function showModal(data) {
     document.getElementById('modal-room').textContent = data.room || '-';
     document.getElementById('modal-time').textContent = data.time;
     
-    // Load existing request data
-    const requestData = getLessonRequest(data.week, data.day, data.period, data.teacher);
+    // Check if current user can modify this lesson
+    const canModify = canModifyLesson(data.teacher);
     const checkbox = document.getElementById('request-checkbox');
     const notesField = document.getElementById('notes-field');
+    const saveButton = document.getElementById('save-request');
+    const clearButton = document.getElementById('clear-request');
     const charCount = document.getElementById('char-count');
+    
+    // Enable/disable controls based on permissions
+    checkbox.disabled = !canModify;
+    notesField.disabled = !canModify;
+    saveButton.disabled = !canModify;
+    clearButton.disabled = !canModify;
+    
+    // Add visual indication for disabled state
+    if (!canModify) {
+        checkbox.style.opacity = '0.5';
+        notesField.style.opacity = '0.5';
+        saveButton.style.opacity = '0.5';
+        clearButton.style.opacity = '0.5';
+        saveButton.style.cursor = 'not-allowed';
+        clearButton.style.cursor = 'not-allowed';
+    } else {
+        checkbox.style.opacity = '1';
+        notesField.style.opacity = '1';
+        saveButton.style.opacity = '1';
+        clearButton.style.opacity = '1';
+        saveButton.style.cursor = 'pointer';
+        clearButton.style.cursor = 'pointer';
+    }
+    
+    // Load existing request data
+    const requestData = getLessonRequest(data.week, data.day, data.period, data.teacher);
     
     if (requestData) {
         checkbox.checked = requestData.hasRequest;

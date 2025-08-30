@@ -1219,6 +1219,18 @@ function updateClock() {
 }
 
 function updateWeekButtons() {
+    // Update control buttons
+    const controlButtons = document.querySelectorAll('.control-btn');
+    controlButtons.forEach(btn => {
+        btn.classList.remove('active');
+        const week = btn.dataset.week;
+        if ((currentMode === 'auto' && week === 'auto') ||
+            (currentMode === 'manual' && week === currentWeek)) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Update legacy week buttons (for backward compatibility)
     const buttons = document.querySelectorAll('.week-btn');
     buttons.forEach(btn => {
         btn.classList.remove('active');
@@ -1582,7 +1594,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (toggle) toggle.classList.add('active');
     }
     
-    // Week button event listeners
+    // Week button event listeners - Updated for control buttons
+    document.querySelectorAll('.control-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const week = this.dataset.week;
+            if (week === 'auto') {
+                currentMode = 'auto';
+            } else if (week === 'A' || week === 'B') {
+                currentMode = 'manual';
+                currentWeek = week;
+            }
+            updateWeekButtons();
+            generateTimetable();
+            updateTeacherBoxes();
+        });
+    });
+    
+    // Legacy week button event listeners (for backward compatibility)
     document.querySelectorAll('.week-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const week = this.dataset.week;

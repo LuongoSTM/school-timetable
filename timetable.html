@@ -10,77 +10,86 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="header-left">
-                <div class="clock-section">
-                    <div class="clock-container">
-                        <div class="clock-box">
-                            <div class="clock-value" id="hours">00</div>
-                            <div class="clock-label">Hours</div>
-                        </div>
-                        <div class="clock-separator">:</div>
-                        <div class="clock-box">
-                            <div class="clock-value" id="minutes">00</div>
-                            <div class="clock-label">Minutes</div>
-                        </div>
-                        <div class="clock-separator">:</div>
-                        <div class="clock-box">
-                            <div class="clock-value" id="seconds">00</div>
-                            <div class="clock-label">Seconds</div>
-                        </div>
+            <div class="clock-section">
+                <div class="clock-title">St Thomas More Time</div>
+                <div class="clock-container">
+                    <div class="clock-box">
+                        <div class="clock-value" id="hours">00</div>
+                        <div class="clock-label">Hours</div>
+                    </div>
+                    <div class="clock-box">
+                        <div class="clock-value" id="minutes">00</div>
+                        <div class="clock-label">Minutes</div>
+                    </div>
+                    <div class="clock-box">
+                        <div class="clock-value" id="seconds">00</div>
+                        <div class="clock-label">Seconds</div>
                     </div>
                 </div>
             </div>
-            
-            <div class="title-countdown-container">
+            <div class="title-section">
                 <div class="title">Time Table 2025-2026</div>
-                <div class="countdown-section">
-                    <div class="countdown-title" id="countdown-title"></div>
-                    <div class="countdown-container" id="countdown-container">
-                        <div class="countdown-box">
-                            <div class="countdown-value" id="countdown-days">000</div>
-                            <div class="countdown-label">Days</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="countdown-value" id="countdown-hours">00</div>
-                            <div class="countdown-label">Hours</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="countdown-value" id="countdown-minutes">00</div>
-                            <div class="countdown-label">Minutes</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="countdown-value" id="countdown-seconds">00</div>
-                            <div class="countdown-label">Seconds</div>
-                        </div>
+                <div class="header-right-info">
+                    <div class="date-info" id="date-info">Monday, 1 January 2025</div>
+                    <div class="date-info" id="week-info">Current Week: A</div>
+                    <div class="user-info" id="user-info" style="font-size: 14px; color: var(--text-color); margin-top: 10px; font-style: italic;"></div>
+                </div>
+            </div>
+            <div class="countdown-section">
+                <div class="countdown-title" id="countdown-title"></div>
+                <div class="countdown-container" id="countdown-container">
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="countdown-days">000</div>
+                        <div class="countdown-label">Days</div>
                     </div>
-                    <div class="countdown-subtitle" id="countdown-subtitle"></div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="countdown-hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="countdown-minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="countdown-seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="header-right">
-                <div class="date-info" id="date-info">Monday, 1 January 2025</div>
-                <div class="date-info" id="week-info">Current Week: A</div>
-                <div class="user-info" id="user-info" style="font-size: 14px; color: var(--text-color); margin-top: 10px; font-style: italic;"></div>
+                <div class="countdown-subtitle" id="countdown-subtitle"></div>
             </div>
         </div>
 
-        <div class="week-controls">
-            <button class="week-btn" id="week-a-btn" data-week="A">
-                <span>📅</span> Week A
-            </button>
-            <button class="week-btn" id="week-b-btn" data-week="B">
-                <span>📆</span> Week B
-            </button>
-            <button class="week-btn active" id="auto-btn" data-week="auto">
-                <span>🔄</span> Automatic
-            </button>
-            <div class="dark-mode-toggle">
-                <span>Dark Mode</span>
-                <div class="toggle-switch" id="dark-mode-toggle">
-                    <div class="toggle-slider"></div>
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-main">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Home</span>
+                </a>
+                <a href="timetable.html" class="nav-item active">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-text">Timetable</span>
+                </a>
+                <a href="exam-clock.html" class="nav-item">
+                    <span class="nav-icon">⏰</span>
+                    <span class="nav-text">Exam Clock</span>
+                </a>
+                <a href="data.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Data</span>
+                </a>
+            </div>
+            <div class="nav-controls">
+                <button class="control-btn" id="week-a-btn" data-week="A">Week A</button>
+                <button class="control-btn" id="week-b-btn" data-week="B">Week B</button>
+                <button class="control-btn active" id="auto-btn" data-week="auto">Auto</button>
+                <div class="dark-mode-control">
+                    <div class="toggle-switch" id="dark-mode-toggle">
+                        <div class="toggle-slider"></div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </nav>
 
         <div class="main-content">
             <div class="timetable-container">

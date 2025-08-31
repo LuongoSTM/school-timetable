@@ -1308,8 +1308,8 @@ function generateTimetable() {
                     }
                 }
                 
-                // Check if this lesson has a request
-                const requestData = getLessonRequest(week, day, period, teacher);
+                // Check if this lesson has a request using the new database system
+                const requestData = window.teacherRequestDB.getRequest(week, day, period, teacher);
                 if (requestData && requestData.hasRequest) {
                     cellClass += ' has-request';
                 }
@@ -1475,7 +1475,10 @@ function showModal(data) {
     document.getElementById('modal-time').textContent = data.time;
     
     // Check if current user can modify this lesson
-    const canModify = canModifyLesson(data.teacher);
+    const currentUser = sessionStorage.getItem('currentUser');
+    const canModify = window.teacherRequestDB.canModifyRequest(data.teacher, currentUser);
+    const canDelete = window.teacherRequestDB.canDeleteRequest(currentUser);
+    
     const checkbox = document.getElementById('request-checkbox');
     const notesField = document.getElementById('notes-field');
     const saveButton = document.getElementById('save-request');
@@ -1486,30 +1489,36 @@ function showModal(data) {
     checkbox.disabled = !canModify;
     notesField.disabled = !canModify;
     saveButton.disabled = !canModify;
-    clearButton.disabled = !canModify;
+    
+    // Clear button is available to administrators for all requests, or to teachers for their own
+    clearButton.disabled = !(canModify || canDelete);
     
     // Add visual indication for disabled state
     if (!canModify) {
         checkbox.style.opacity = '0.5';
         notesField.style.opacity = '0.5';
         saveButton.style.opacity = '0.5';
-        clearButton.style.opacity = '0.5';
         saveButton.style.cursor = 'not-allowed';
-        clearButton.style.cursor = 'not-allowed';
     } else {
         checkbox.style.opacity = '1';
         notesField.style.opacity = '1';
         saveButton.style.opacity = '1';
-        clearButton.style.opacity = '1';
         saveButton.style.cursor = 'pointer';
+    }
+    
+    if (!(canModify || canDelete)) {
+        clearButton.style.opacity = '0.5';
+        clearButton.style.cursor = 'not-allowed';
+    } else {
+        clearButton.style.opacity = '1';
         clearButton.style.cursor = 'pointer';
     }
     
-    // Load existing request data
-    const requestData = getLessonRequest(data.week, data.day, data.period, data.teacher);
+    // Load existing request data from database
+    const requestData = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
     
-    if (requestData) {
-        checkbox.checked = requestData.hasRequest;
+    if (requestData && requestData.hasRequest) {
+        checkbox.checked = true;
         notesField.value = requestData.notes || '';
         charCount.textContent = (requestData.notes || '').length;
     } else {
@@ -1518,57 +1527,179 @@ function showModal(data) {
         charCount.textContent = '0';
     }
     
-    modal.style.display = 'block';
+    // Show modal with animation
+    modal.classList.add('show');
+    modal.style.display = 'flex';
 }
 
 function hideModal() {
-    document.getElementById('subject-modal').style.display = 'none';
+    const modal = document.getElementById('subject-modal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
     currentModalData = null;
 }
 
 function saveRequest() {
     if (!currentModalData) return;
     
+    const currentUser = sessionStorage.getItem('currentUser');
     const checkbox = document.getElementById('request-checkbox');
     const notesField = document.getElementById('notes-field');
     const hasRequest = checkbox.checked;
     const notes = notesField.value.trim();
     
-    saveLessonRequest(
-        currentModalData.week,
-        currentModalData.day,
-        currentModalData.period,
-        currentModalData.teacher,
-        hasRequest,
-        notes
-    );
+    // Check permissions
+    if (!window.teacherRequestDB.canModifyRequest(currentModalData.teacher, currentUser)) {
+        alert('You do not have permission to modify this request.');
+        return;
+    }
     
-    // Refresh the timetable to show/hide the blinking effect
-    generateTimetable();
+    const requestData = {
+        week: currentModalData.week,
+        day: currentModalData.day,
+        period: currentModalData.period,
+        time: currentModalData.time,
+        teacher: currentModalData.teacher,
+        subject: currentModalData.subject,
+        room: currentModalData.room,
+        hasRequest: hasRequest,
+        notes: notes,
+        createdBy: currentUser
+    };
     
-    hideModal();
+    const success = window.teacherRequestDB.saveRequest(requestData);
+    
+    if (success) {
+        // Refresh the timetable to show/hide the blinking effect
+        generateTimetable();
+        hideModal();
+        
+        // Show success message
+        showNotification('Request saved successfully!', 'success');
+    } else {
+        showNotification('Error saving request. Please try again.', 'error');
+    }
 }
 
 function clearRequest() {
     if (!currentModalData) return;
     
-    clearLessonRequest(
+    const currentUser = sessionStorage.getItem('currentUser');
+    const canModify = window.teacherRequestDB.canModifyRequest(currentModalData.teacher, currentUser);
+    const canDelete = window.teacherRequestDB.canDeleteRequest(currentUser);
+    
+    if (!(canModify || canDelete)) {
+        alert('You do not have permission to clear this request.');
+        return;
+    }
+    
+    const success = window.teacherRequestDB.clearRequest(
         currentModalData.week,
         currentModalData.day,
         currentModalData.period,
         currentModalData.teacher
     );
     
-    // Reset form
-    document.getElementById('request-checkbox').checked = false;
-    document.getElementById('notes-field').value = '';
-    document.getElementById('char-count').textContent = '0';
-    
-    // Refresh the timetable to remove the blinking effect
-    generateTimetable();
-    
-    hideModal();
+    if (success) {
+        // Reset form
+        document.getElementById('request-checkbox').checked = false;
+        document.getElementById('notes-field').value = '';
+        document.getElementById('char-count').textContent = '0';
+        
+        // Refresh the timetable to remove the blinking effect
+        generateTimetable();
+        hideModal();
+        
+        // Show success message
+        showNotification('Request cleared successfully!', 'success');
+    } else {
+        showNotification('Error clearing request. Please try again.', 'error');
+    }
 }
+
+// Notification system
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    // Style the notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-family: 'DM Serif Text', serif;
+        font-weight: bold;
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    `;
+    
+    // Set background color based on type
+    switch (type) {
+        case 'success':
+            notification.style.backgroundColor = '#28a745';
+            break;
+        case 'error':
+            notification.style.backgroundColor = '#dc3545';
+            break;
+        case 'warning':
+            notification.style.backgroundColor = '#ffc107';
+            notification.style.color = '#000';
+            break;
+        default:
+            notification.style.backgroundColor = '#007bff';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Add CSS for notification animations
+const notificationStyles = document.createElement('style');
+notificationStyles.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(notificationStyles);
 
 function toggleDarkMode() {
     const body = document.body;

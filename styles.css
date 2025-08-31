@@ -405,58 +405,220 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
+}
+
+.modal.show {
+    display: flex;
 }
 
 .modal-content {
     background-color: var(--secondary-bg);
     padding: 25px;
-    border-radius: 10px;
+    border-radius: 15px;
     width: 90%;
-    max-width: 450px;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalFadeIn 0.3s ease-out;
+    position: relative;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
 }
 
 .modal-title {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     color: var(--header-bg);
 }
 
 .close {
-    font-size: 24px;
+    font-size: 28px;
     cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    line-height: 1;
+}
+
+.close:hover {
+    color: var(--button-active);
 }
 
 .modal-info {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .modal-field {
     display: flex;
     justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-field:last-child {
+    border-bottom: none;
+}
+
+.field-label {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.field-value {
+    color: var(--text-color);
+    text-align: right;
 }
 
 .request-section {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border-color);
+}
+
+.request-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.request-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.request-label {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--text-color);
+    cursor: pointer;
 }
 
 .notes-field {
     width: 100%;
-    height: 80px;
+    height: 100px;
     margin: 10px 0;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    font-family: 'DM Serif Text', serif;
+    font-size: 14px;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.notes-field:focus {
+    outline: none;
+    border-color: var(--header-bg);
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-bottom: 15px;
+}
+
+.save-btn, .clear-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Serif Text', serif;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.save-btn {
+    background-color: var(--header-bg);
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-1px);
+}
+
+.clear-btn {
+    background-color: var(--button-active);
+    color: white;
+}
+
+.clear-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+.save-btn:disabled, .clear-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Enhanced blinking effect for cells with requests */
+.subject-cell.has-request {
+    animation: enhancedBlink 1.5s infinite;
+    border: 3px solid var(--request-highlight) !important;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.6) !important;
+}
+
+@keyframes enhancedBlink {
+    0%, 100% {
+        background-color: var(--primary-bg);
+        box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+        border-color: var(--request-highlight);
+    }
+    50% {
+        background-color: rgba(255, 107, 107, 0.2);
+        box-shadow: 0 0 25px rgba(255, 107, 107, 1);
+        border-color: #ff3030;
+    }
+}
+
+[data-theme="dark"] .subject-cell.has-request {
+    animation: enhancedBlinkDark 1.5s infinite;
+    border: 3px solid var(--request-highlight) !important;
+}
+
+@keyframes enhancedBlinkDark {
+    0%, 100% {
+        background-color: var(--primary-bg);
+        box-shadow: 0 0 15px rgba(255, 138, 128, 0.8);
+        border-color: var(--request-highlight);
+    }
+    50% {
+        background-color: rgba(255, 138, 128, 0.3);
+        box-shadow: 0 0 25px rgba(255, 138, 128, 1);
+        border-color: #ff6b6b;
+    }
 }
 
 .page-under-construction {

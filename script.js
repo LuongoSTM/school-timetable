@@ -1309,9 +1309,11 @@ function generateTimetable() {
                 }
                 
                 // Check if this lesson has a request using the new database system
-                const requestData = window.teacherRequestDB.getRequest(week, day, period, teacher);
-                if (requestData && requestData.hasRequest) {
-                    cellClass += ' has-request';
+                if (window.teacherRequestDB) {
+                    const requestData = window.teacherRequestDB.getRequest(week, day, period, teacher);
+                    if (requestData && requestData.hasRequest && requestData.status === 'active') {
+                        cellClass += ' has-request';
+                    }
                 }
                 
                 const cellData = JSON.stringify({

@@ -165,6 +165,45 @@
             color: var(--text-color);
             margin-top: 5px;
         }
+        .table-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: flex-end;
+        }
+        .export-btn, .refresh-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .export-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .refresh-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .refresh-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .export-btn:disabled, .refresh-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
     </style>
 </head>
 <body>
@@ -189,8 +228,18 @@
                 </div>
             </div>
 
-            <div class="table-container">
-                <table id="requests-table">
+        <div class="table-container">
+            <div class="table-actions">
+                <button id="export-pdf-btn" class="export-btn">
+                    <span>📄</span>
+                    <span>Export to PDF</span>
+                </button>
+                <button id="refresh-btn" class="refresh-btn">
+                    <span>🔄</span>
+                    <span>Refresh Data</span>
+                </button>
+            </div>
+            <table id="requests-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -398,6 +447,134 @@
             // Load data
             loadStatistics();
             loadRequests();
+
+            // Export to PDF functionality
+            document.getElementById('export-pdf-btn').addEventListener('click', function() {
+                generatePDF();
+            });
+
+            // Refresh data functionality
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                loadStatistics();
+                loadRequests();
+                showNotification('Data refreshed successfully!', 'success');
+            });
+
+            function generatePDF() {
+                const exportBtn = document.getElementById('export-pdf-btn');
+                exportBtn.disabled = true;
+                exportBtn.innerHTML = '<span>⏳</span><span>Generating PDF...</span>';
+
+                try {
+                    // Get all requests including deleted ones for admin view
+                    const db_data = db.getDatabase();
+                    const allRequests = Object.values(db_data.requests);
+                    
+                    if (allRequests.length === 0) {
+                        showNotification('No requests to export!', 'warning');
+                        return;
+                    }
+
+                    // Create PDF content
+                    let pdfContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Requests Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; text-align: center; margin-bottom: 30px; }
+        .header-info { margin-bottom: 20px; font-size: 14px; color: #666; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .status-active { color: #28a745; font-weight: bold; }
+        .status-deleted { color: #dc3545; font-weight: bold; text-decoration: line-through; }
+        .notes-cell { max-width: 200px; word-wrap: break-word; }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>📋 Teacher Requests Database Report</h1>
+    <div class="header-info">
+        <p><strong>Generated on:</strong> ${new Date().toLocaleString()}</p>
+        <p><strong>Total Requests:</strong> ${allRequests.length}</p>
+        <p><strong>Active Requests:</strong> ${allRequests.filter(r => r.status === 'active').length}</p>
+        <p><strong>Deleted Requests:</strong> ${allRequests.filter(r => r.status === 'deleted').length}</p>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Week</th>
+                <th>Day</th>
+                <th>Period</th>
+                <th>Time</th>
+                <th>Teacher</th>
+                <th>Subject</th>
+                <th>Room</th>
+                <th>Notes</th>
+                <th>Created At</th>
+                <th>Modified At</th>
+                <th>Created By</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+                    allRequests.forEach(request => {
+                        pdfContent += `
+            <tr>
+                <td>${request.id.substring(0, 12)}...</td>
+                <td>${request.week}</td>
+                <td>${request.day}</td>
+                <td>${request.period}</td>
+                <td>${request.time}</td>
+                <td>${request.teacher}</td>
+                <td>${request.subject}</td>
+                <td>${request.room || '-'}</td>
+                <td class="notes-cell">${request.notes || '-'}</td>
+                <td>${new Date(request.createdAt).toLocaleString()}</td>
+                <td>${new Date(request.modifiedAt).toLocaleString()}</td>
+                <td>${request.createdBy}</td>
+                <td class="status-${request.status}">${request.status.toUpperCase()}</td>
+            </tr>`;
+                    });
+
+                    pdfContent += `
+        </tbody>
+    </table>
+    
+    <div class="footer">
+        <p>St Thomas More Timetable - Teacher Requests System</p>
+        <p>This report contains ${allRequests.length} total requests from the database.</p>
+    </div>
+</body>
+</html>`;
+
+                    // Create and download the PDF
+                    const blob = new Blob([pdfContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `teacher-requests-report-${new Date().toISOString().split('T')[0]}.html`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    showNotification('PDF report generated successfully!', 'success');
+                } catch (error) {
+                    console.error('Error generating PDF:', error);
+                    showNotification('Error generating PDF report!', 'error');
+                } finally {
+                    exportBtn.disabled = false;
+                    exportBtn.innerHTML = '<span>📄</span><span>Export to PDF</span>';
+                }
+            }
         });
     </script>
 </body>

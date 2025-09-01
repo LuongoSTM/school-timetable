@@ -6,20 +6,110 @@ class TeacherRequestDatabase {
         this.dbName = 'timetable_teacher_requests';
         this.version = '1.0';
         this.init();
+        
+        // Auto-save every 30 seconds to ensure data persistence
+        setInterval(() => {
+            this.syncData();
+        }, 30000);
+        
+        // Listen for storage events to sync across tabs and browsers
+        window.addEventListener('storage', (e) => {
+            if (e.key === this.dbName) {
+                console.log('Database updated in another tab/browser, syncing...');
+                this.loadFromStorage();
+            }
+        });
+        
+        // Listen for beforeunload to save data before closing
+        window.addEventListener('beforeunload', () => {
+            this.syncData();
+        });
     }
 
     init() {
-        // Initialize database structure if it doesn't exist
-        if (!localStorage.getItem(this.dbName)) {
-            const initialDb = {
-                version: this.version,
-                requests: {},
-                metadata: {
-                    created: new Date().toISOString(),
-                    lastModified: new Date().toISOString()
-                }
-            };
+        try {
+            this.loadFromStorage();
+        } catch (error) {
+            console.warn('Error loading database, creating new one:', error);
+            this.createNewDatabase();
+        }
+    }
+
+    createNewDatabase() {
+        const initialDb = {
+            version: this.version,
+            requests: {},
+            metadata: {
+                created: new Date().toISOString(),
+                lastModified: new Date().toISOString(),
+                totalRequests: 0
+            }
+        };
+        
+        try {
             localStorage.setItem(this.dbName, JSON.stringify(initialDb));
+            // Also create backup in sessionStorage
+            sessionStorage.setItem(this.dbName + '_backup', JSON.stringify(initialDb));
+        } catch (error) {
+            console.error('Error creating database:', error);
+        }
+    }
+
+    loadFromStorage() {
+        try {
+            const dbString = localStorage.getItem(this.dbName);
+            if (dbString) {
+                const db = JSON.parse(dbString);
+                // Validate database structure
+                if (db.version && db.requests && db.metadata) {
+                    return db;
+                }
+            }
+            
+            // Try to recover from backup
+            const backupString = sessionStorage.getItem(this.dbName + '_backup');
+            if (backupString) {
+                const backupDb = JSON.parse(backupString);
+                if (backupDb.version && backupDb.requests && backupDb.metadata) {
+                    localStorage.setItem(this.dbName, backupString);
+                    return backupDb;
+                }
+            }
+            
+            // If no valid database found, create new one
+            this.createNewDatabase();
+            return JSON.parse(localStorage.getItem(this.dbName));
+            
+        } catch (error) {
+            console.error('Error loading from storage:', error);
+            this.createNewDatabase();
+            return JSON.parse(localStorage.getItem(this.dbName));
+        }
+    }
+
+    syncData() {
+        try {
+            const db = this.getDatabase();
+            db.metadata.lastModified = new Date().toISOString();
+            
+            // Save to localStorage
+            localStorage.setItem(this.dbName, JSON.stringify(db));
+            
+            // Create backup in sessionStorage
+            sessionStorage.setItem(this.dbName + '_backup', JSON.stringify(db));
+            
+            // Trigger storage event for cross-tab sync
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: this.dbName,
+                newValue: JSON.stringify(db),
+                oldValue: null,
+                storageArea: localStorage
+            }));
+            
+            return true;
+        } catch (error) {
+            console.error('Error syncing data:', error);
+            return false;
         }
     }
 
@@ -58,8 +148,11 @@ class TeacherRequestDatabase {
 
             db.requests[key] = request;
             db.metadata.lastModified = new Date().toISOString();
+            db.metadata.totalRequests = Object.keys(db.requests).length;
             
-            localStorage.setItem(this.dbName, JSON.stringify(db));
+            // Use improved sync method
+            this.syncData();
+            
             return true;
         } catch (error) {
             console.error('Error saving request:', error);

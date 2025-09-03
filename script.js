@@ -1398,7 +1398,7 @@ function updateTeacherBoxes() {
     }
     
     teachers.forEach(teacher => {
-        const teacherKey = teacher === 'Ms K Arakalian' ? 'arakalian' : 'jenkins';
+        const teacherKey = teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins';
         let currentLesson = 'No Lesson Now';
         let nextLesson = 'No Lesson Next';
         
@@ -1483,7 +1483,7 @@ function canModifyLesson(teacherName) {
     }
     
     // Teachers can only modify their own lessons
-    if (currentUser === 'Katie Arakalian' && teacherName === 'Ms K Arakalian') {
+    if (currentUser === 'Katie Arakelian' && teacherName === 'Ms K Arakelian') {
         return true;
     }
     

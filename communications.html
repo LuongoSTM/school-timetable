@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communications - St Thomas More Time Table</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:wght@400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        .communications-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .communications-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .communications-title {
+            font-size: 2.5rem;
+            color: var(--header-bg);
+            margin-bottom: 10px;
+        }
+        
+        .communications-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .communications-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px var(--card-shadow);
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--primary-bg);
+            color: var(--text-color);
+            min-width: 250px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--header-bg);
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--primary-bg);
+            color: var(--text-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Serif Text', serif;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--header-bg);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background-color: var(--button-active);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+        
+        .communications-table-container {
+            background: var(--primary-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            overflow: hidden;
+        }
+        
+        .communications-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .communications-table th {
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .communications-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+            vertical-align: top;
+        }
+        
+        .communications-table tr:hover {
+            background-color: var(--secondary-bg);
+        }
+        
+        .communications-text {
+            max-width: 300px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-deleted {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn.edit {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .action-btn.delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+            opacity: 0.8;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--header-bg);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'DM Serif Text', serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .communications-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+            
+            .communications-table-container {
+                overflow-x: auto;
+            }
+            
+            .communications-table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='timetable.html'">← Back to Timetable</button>
+    
+    <div class="communications-container">
+        <div class="communications-header">
+            <h1 class="communications-title">Communications Management</h1>
+            <p class="communications-subtitle">Manage and view all teacher communications</p>
+        </div>
+        
+        <div class="communications-controls">
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by teacher, subject, or content...">
+                <select id="filter-select" class="filter-select">
+                    <option value="all">All Communications</option>
+                    <option value="active">Active Only</option>
+                    <option value="deleted">Deleted Only</option>
+                    <option value="week-a">Week A</option>
+                    <option value="week-b">Week B</option>
+                </select>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="export-pdf" class="btn btn-primary">Export to PDF</button>
+                <button id="clear-all" class="btn btn-danger">Clear All</button>
+            </div>
+        </div>
+        
+        <div class="communications-table-container">
+            <table class="communications-table" id="communications-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Week</th>
+                        <th>Day</th>
+                        <th>Period</th>
+                        <th>Time</th>
+                        <th>Teacher</th>
+                        <th>Subject</th>
+                        <th>Room</th>
+                        <th>Communications</th>
+                        <th>Created At</th>
+                        <th>Created By</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="communications-tbody">
+                    <!-- Communications data will be populated here -->
+                </tbody>
+            </table>
+            
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <h3>No Communications Found</h3>
+                <p>No communications have been recorded yet.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="database.js"></script>
+    <script>
+        // Initialize database
+        let communicationsDB;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize database
+            communicationsDB = new TeacherRequestDatabase();
+            
+            // Load communications data
+            loadCommunications();
+            
+            // Set up event listeners
+            document.getElementById('search-input').addEventListener('input', filterCommunications);
+            document.getElementById('filter-select').addEventListener('change', filterCommunications);
+            document.getElementById('export-pdf').addEventListener('click', exportToPDF);
+            document.getElementById('clear-all').addEventListener('click', clearAllCommunications);
+        });
+        
+        function loadCommunications() {
+            const tbody = document.getElementById('communications-tbody');
+            const emptyState = document.getElementById('empty-state');
+            
+            try {
+                const allRequests = communicationsDB.getAllRequests();
+                const communicationsData = allRequests.filter(request => 
+                    request.communications && request.communications.trim() !== ''
+                );
+                
+                if (communicationsData.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                
+                tbody.innerHTML = communicationsData.map(comm => `
+                    <tr data-id="${comm.id}">
+                        <td>${comm.id.substring(0, 8)}...</td>
+                        <td>${comm.week}</td>
+                        <td>${comm.day}</td>
+                        <td>${comm.period}</td>
+                        <td>${comm.time}</td>
+                        <td>${comm.teacher}</td>
+                        <td>${comm.subject}</td>
+                        <td>${comm.room || '-'}</td>
+                        <td class="communications-text">${comm.communications}</td>
+                        <td>${new Date(comm.createdAt).toLocaleDateString()}</td>
+                        <td>${comm.createdBy}</td>
+                        <td><span class="status-badge status-${comm.status}">${comm.status}</span></td>
+                        <td>
+                            <button class="action-btn edit" onclick="editCommunication('${comm.id}')">Edit</button>
+                            <button class="action-btn delete" onclick="deleteCommunication('${comm.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading communications:', error);
+                tbody.innerHTML = '<tr><td colspan="13">Error loading communications data</td></tr>';
+            }
+        }
+        
+        function filterCommunications() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const filterValue = document.getElementById('filter-select').value;
+            const rows = document.querySelectorAll('#communications-tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const matchesSearch = text.includes(searchTerm);
+                
+                let matchesFilter = true;
+                if (filterValue !== 'all') {
+                    const statusBadge = row.querySelector('.status-badge');
+                    const week = row.children[1].textContent.toLowerCase();
+                    
+                    switch (filterValue) {
+                        case 'active':
+                            matchesFilter = statusBadge && statusBadge.textContent === 'active';
+                            break;
+                        case 'deleted':
+                            matchesFilter = statusBadge && statusBadge.textContent === 'deleted';
+                            break;
+                        case 'week-a':
+                            matchesFilter = week === 'a';
+                            break;
+                        case 'week-b':
+                            matchesFilter = week === 'b';
+                            break;
+                    }
+                }
+                
+                row.style.display = (matchesSearch && matchesFilter) ? '' : 'none';
+            });
+        }
+        
+        function editCommunication(id) {
+            // This would open an edit modal - for now just alert
+            alert('Edit functionality would be implemented here for communication ID: ' + id);
+        }
+        
+        function deleteCommunication(id) {
+            if (confirm('Are you sure you want to delete this communication?')) {
+                try {
+                    const request = communicationsDB.getRequestById(id);
+                    if (request) {
+                        // Mark as deleted instead of removing completely
+                        request.status = 'deleted';
+                        request.modifiedAt = new Date().toISOString();
+                        communicationsDB.saveRequest(request);
+                        loadCommunications();
+                        showNotification('Communication deleted successfully', 'success');
+                    }
+                } catch (error) {
+                    console.error('Error deleting communication:', error);
+                    showNotification('Error deleting communication', 'error');
+                }
+            }
+        }
+        
+        function clearAllCommunications() {
+            if (confirm('Are you sure you want to clear all communications? This action cannot be undone.')) {
+                try {
+                    communicationsDB.clearAllRequests();
+                    loadCommunications();
+                    showNotification('All communications cleared successfully', 'success');
+                } catch (error) {
+                    console.error('Error clearing communications:', error);
+                    showNotification('Error clearing communications', 'error');
+                }
+            }
+        }
+        
+        function exportToPDF() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Add title
+                doc.setFontSize(20);
+                doc.text('Communications Report', 20, 20);
+                
+                // Add generation date
+                doc.setFontSize(12);
+                doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 35);
+                
+                // Get visible rows data
+                const visibleRows = Array.from(document.querySelectorAll('#communications-tbody tr'))
+                    .filter(row => row.style.display !== 'none');
+                
+                if (visibleRows.length === 0) {
+                    doc.text('No communications data to export.', 20, 50);
+                } else {
+                    const tableData = visibleRows.map(row => {
+                        const cells = row.querySelectorAll('td');
+                        return [
+                            cells[0].textContent, // ID
+                            cells[1].textContent, // Week
+                            cells[2].textContent, // Day
+                            cells[3].textContent, // Period
+                            cells[4].textContent, // Time
+                            cells[5].textContent, // Teacher
+                            cells[6].textContent, // Subject
+                            cells[7].textContent, // Room
+                            cells[8].textContent.substring(0, 50) + '...', // Communications (truncated)
+                            cells[9].textContent, // Created At
+                            cells[10].textContent, // Created By
+                            cells[11].textContent // Status
+                        ];
+                    });
+                    
+                    doc.autoTable({
+                        head: [['ID', 'Week', 'Day', 'Period', 'Time', 'Teacher', 'Subject', 'Room', 'Communications', 'Created At', 'Created By', 'Status']],
+                        body: tableData,
+                        startY: 45,
+                        styles: { fontSize: 8 },
+                        headStyles: { fillColor: [0, 123, 255] }
+                    });
+                }
+                
+                doc.save('communications-report.pdf');
+                showNotification('PDF exported successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error exporting PDF:', error);
+                showNotification('Error exporting PDF', 'error');
+            }
+        }
+        
+        function showNotification(message, type) {
+            // Simple notification system
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                background-color: ${type === 'success' ? '#28a745' : '#dc3545'};
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Add CSS animation for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+

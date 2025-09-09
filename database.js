@@ -130,7 +130,7 @@ class TeacherRequestDatabase {
             );
 
             const request = {
-                id: key,
+                id: requestData.id || key,
                 week: requestData.week,
                 day: requestData.day,
                 period: requestData.period,
@@ -138,12 +138,13 @@ class TeacherRequestDatabase {
                 teacher: requestData.teacher,
                 subject: requestData.subject,
                 room: requestData.room,
-                hasRequest: requestData.hasRequest,
+                hasRequest: requestData.hasRequest || false,
                 notes: requestData.notes || '',
+                communications: requestData.communications || '',
                 createdAt: requestData.createdAt || new Date().toISOString(),
                 modifiedAt: new Date().toISOString(),
                 createdBy: requestData.createdBy || 'Unknown',
-                status: 'active'
+                status: requestData.status || 'active'
             };
 
             db.requests[key] = request;
@@ -151,9 +152,10 @@ class TeacherRequestDatabase {
             db.metadata.totalRequests = Object.keys(db.requests).length;
             
             // Use improved sync method
-            this.syncData();
+            const success = this.syncData();
             
-            return true;
+            console.log('Request saved successfully:', request);
+            return success;
         } catch (error) {
             console.error('Error saving request:', error);
             return false;
@@ -209,8 +211,8 @@ class TeacherRequestDatabase {
                 db.requests[key].deletedBy = deletedBy;
                 db.metadata.lastModified = new Date().toISOString();
                 
-                localStorage.setItem(this.dbName, JSON.stringify(db));
-                return true;
+                const success = this.syncData();
+                return success;
             }
             return false;
         } catch (error) {
@@ -228,11 +230,12 @@ class TeacherRequestDatabase {
             if (db.requests[key]) {
                 db.requests[key].hasRequest = false;
                 db.requests[key].notes = '';
+                db.requests[key].communications = '';
                 db.requests[key].modifiedAt = new Date().toISOString();
                 db.metadata.lastModified = new Date().toISOString();
                 
-                localStorage.setItem(this.dbName, JSON.stringify(db));
-                return true;
+                const success = this.syncData();
+                return success;
             }
             return false;
         } catch (error) {
@@ -328,7 +331,7 @@ class TeacherRequestDatabase {
         }
         
         // Teachers can only modify their own requests
-        if (currentUser === 'Katie Arakalian' && teacher === 'Ms K Arakalian') {
+        if (currentUser === 'Katie Arakalian' && teacher === 'Miss K. Arakelian') {
             return true;
         }
         

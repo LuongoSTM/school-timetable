@@ -628,42 +628,39 @@ body {
     transform: none;
 }
 
-/* Enhanced blinking effect for cells with requests */
+/* Old blinking effect removed */
 .subject-cell.has-request {
-    animation: enhancedBlink 1.5s infinite;
-    border: 3px solid var(--request-highlight) !important;
-    box-shadow: 0 0 15px rgba(255, 107, 107, 0.6) !important;
+    /* No direct blinking on cell, dot will handle it */
+    position: relative; /* Needed for absolute positioning of the dot */
 }
 
-@keyframes enhancedBlink {
-    0%, 100% {
-        background-color: var(--primary-bg);
-        box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
-        border-color: var(--request-highlight);
-    }
-    50% {
-        background-color: rgba(255, 107, 107, 0.2);
-        box-shadow: 0 0 25px rgba(255, 107, 107, 1);
-        border-color: #ff3030;
-    }
+.blinking-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black; /* Default for light mode */
+    border: 1px solid white; /* Default for light mode */
+    animation: dotBlink 1.5s infinite alternate;
 }
 
-[data-theme="dark"] .subject-cell.has-request {
-    animation: enhancedBlinkDark 1.5s infinite;
-    border: 3px solid var(--request-highlight) !important;
+@keyframes dotBlink {
+    0% { opacity: 1; background-color: black; border-color: white; }
+    50% { opacity: 0.5; background-color: white; border-color: black; }
+    100% { opacity: 1; background-color: black; border-color: white; }
 }
 
-@keyframes enhancedBlinkDark {
-    0%, 100% {
-        background-color: var(--primary-bg);
-        box-shadow: 0 0 15px rgba(255, 138, 128, 0.8);
-        border-color: var(--request-highlight);
-    }
-    50% {
-        background-color: rgba(255, 138, 128, 0.3);
-        box-shadow: 0 0 25px rgba(255, 138, 128, 1);
-        border-color: #ff6b6b;
-    }
+[data-theme="dark"] .blinking-dot {
+    background-color: white; /* For dark mode */
+    border: 1px solid black; /* For dark mode */
+}
+
+[data-theme="dark"] @keyframes dotBlink {
+    0% { opacity: 1; background-color: white; border-color: black; }
+    50% { opacity: 0.5; background-color: black; border-color: white; }
+    100% { opacity: 1; background-color: white; border-color: black; }
 }
 
 .page-under-construction {

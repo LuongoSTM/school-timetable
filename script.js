@@ -5,7 +5,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -18,7 +18,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "12 DT Textile",
                         "room": "T1"
                     },
@@ -31,7 +31,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "12 / 13 Art",
                         "room": "A1"
                     },
@@ -44,7 +44,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9M",
                         "room": "A1"
                     },
@@ -57,7 +57,7 @@ const timetableData = {
             "4a": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -70,7 +70,7 @@ const timetableData = {
             "4b": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -83,7 +83,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "12 DT Textile",
                         "room": "T1"
                     },
@@ -98,7 +98,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -111,7 +111,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9S",
                         "room": "A2"
                     },
@@ -124,7 +124,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -137,20 +137,20 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
-                        "subject": "",
-                        "room": ""
+                        "subject": "9A",
+                        "room": "A2"
                     }
                 }
             },
             "4a": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -163,7 +163,7 @@ const timetableData = {
             "4b": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -176,7 +176,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -191,7 +191,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -204,7 +204,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9HM Food",
                         "room": "HE1"
                     },
@@ -217,7 +217,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -230,7 +230,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -243,7 +243,7 @@ const timetableData = {
             "4a": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -256,7 +256,7 @@ const timetableData = {
             "4b": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -269,7 +269,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -284,7 +284,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -297,7 +297,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -310,7 +310,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -323,20 +323,20 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
-                        "subject": "",
-                        "room": ""
+                        "subject": "9A",
+                        "room": "A2"
                     }
                 }
             },
             "4a": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -349,7 +349,7 @@ const timetableData = {
             "4b": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -362,7 +362,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8Y",
                         "room": "A1"
                     },
@@ -377,7 +377,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -390,7 +390,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -403,7 +403,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8HM",
                         "room": "A1"
                     },
@@ -416,7 +416,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -429,7 +429,7 @@ const timetableData = {
             "4a": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -442,7 +442,7 @@ const timetableData = {
             "4b": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -455,12 +455,12 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
-                        "subject": "12 / 13 Art",
+                        "subject": "9A",
                         "room": "A2"
                     }
                 }
@@ -472,7 +472,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -485,7 +485,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8Y",
                         "room": "A1"
                     },
@@ -498,7 +498,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9S",
                         "room": "A2"
                     },
@@ -511,7 +511,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:10",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -524,7 +524,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -537,7 +537,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -550,7 +550,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9S Food",
                         "room": "HE1"
                     },
@@ -565,7 +565,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -578,7 +578,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": "A1"
                     },
@@ -591,7 +591,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "PSHE",
                         "room": "A1"
                     },
@@ -604,7 +604,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:10",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -617,7 +617,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -630,7 +630,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -643,7 +643,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -658,7 +658,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -671,7 +671,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -684,7 +684,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -697,7 +697,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:10",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8Y",
                         "room": "A1"
                     },
@@ -710,7 +710,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9M",
                         "room": "A1"
                     },
@@ -723,7 +723,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -736,7 +736,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -751,7 +751,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -764,7 +764,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9S Food",
                         "room": "HE1"
                     },
@@ -777,8 +777,8 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
-                        "subject": "12 / 13 Art",
+                    "K. Arakelian": {
+                        "subject": "9A",
                         "room": "A2"
                     },
                     "Ms N Jenkins": {
@@ -790,7 +790,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:10",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -803,7 +803,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -816,7 +816,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8HM",
                         "room": "A1"
                     },
@@ -829,7 +829,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -844,7 +844,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -857,7 +857,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -870,7 +870,7 @@ const timetableData = {
             "2": {
                 "time": "10:20 - 10:40",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -883,7 +883,7 @@ const timetableData = {
             "3": {
                 "time": "10:40 - 11:10",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "8MH",
                         "room": "A1"
                     },
@@ -896,7 +896,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -909,7 +909,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -922,7 +922,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Miss K. Arakelian": {
+                    "K. Arakelian": {
                         "subject": "9HM Food",
                         "room": "HE1"
                     },
@@ -977,7 +977,7 @@ const schoolTerms = [
     }
 ];
 
-const teachers = ['Miss K. Arakelian', 'Ms N Jenkins'];
+const teachers = ['K. Arakelian', 'Ms N Jenkins'];
 const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
 const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
 
@@ -1289,7 +1289,7 @@ function generateTimetable() {
     html += '<th class="time-cell"></th>';
     
     days.forEach(() => {
-        html += '<th class="period-header">Miss K. Arakelian</th>';
+        html += '<th class="period-header">K. Arakelian</th>';
         html += '<th class="period-header">Ms N. Jenkins</th>';
     });
     
@@ -1334,14 +1334,13 @@ function generateTimetable() {
                     }
                 }
                 
-                // Check if this lesson has a request using the database system
-                // This is the key fix for the blinking functionality
+                // Check if this lesson has a request or communication using the database system
                 try {
                     if (window.teacherRequestDB) {
                         const requestData = window.teacherRequestDB.getRequest(week, day, period, teacher);
-                        if (requestData && requestData.hasRequest && requestData.status === 'active') {
-                            cellClass += ' has-request';
-                            console.log(`Adding blinking to: ${teacher} - ${day} - ${period} - Week ${week}`);
+                        if (requestData && (requestData.hasRequest || (requestData.communications && requestData.communications.trim() !== "")) && requestData.status === 'active') {
+                            cellContent += '<div class="blinking-dot"></div>';
+                            console.log(`Adding blinking dot to: ${teacher} - ${day} - ${period} - Week ${week}`);
                         }
                     }
                 } catch (error) {
@@ -1398,7 +1397,7 @@ function updateTeacherBoxes() {
     }
     
     teachers.forEach(teacher => {
-        const teacherKey = teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins';
+        const teacherKey = teacher === 'K. Arakelian' ? 'arakelian' : 'jenkins';
         let currentLesson = 'No Lesson Now';
         let nextLesson = 'No Lesson Next';
         
@@ -1483,7 +1482,7 @@ function canModifyLesson(teacherName) {
     }
     
     // Teachers can only modify their own lessons
-    if (currentUser === 'Katie Arakelian' && teacherName === 'Ms K Arakelian') {
+    if (currentUser === 'Katie Arakalian' && teacherName === 'Ms K Arakalian') {
         return true;
     }
     
@@ -1551,6 +1550,7 @@ function showModal(data) {
     // Load existing request data from database
     const requestData = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
     
+    // Handle request checkbox and notes
     if (requestData && requestData.hasRequest) {
         checkbox.checked = true;
         notesField.value = requestData.notes || '';
@@ -1559,6 +1559,36 @@ function showModal(data) {
         checkbox.checked = false;
         notesField.value = '';
         charCount.textContent = '0';
+    }
+    
+    // Handle communications checkbox and field
+    const communicationsCheckbox = document.getElementById('communications-checkbox');
+    const communicationsField = document.getElementById('communications-field');
+    const wordCount = document.getElementById('word-count');
+    
+    if (communicationsCheckbox && communicationsField && wordCount) {
+        if (requestData && requestData.communications && requestData.communications.trim() !== '') {
+            communicationsCheckbox.checked = true;
+            communicationsField.value = requestData.communications;
+            const words = requestData.communications.trim().split(/\s+/).filter(word => word.length > 0);
+            wordCount.textContent = words.length;
+        } else {
+            communicationsCheckbox.checked = false;
+            communicationsField.value = '';
+            wordCount.textContent = '0';
+        }
+        
+        // Enable/disable communications controls based on permissions
+        communicationsCheckbox.disabled = !canModify;
+        communicationsField.disabled = !canModify;
+        
+        if (!canModify) {
+            communicationsCheckbox.style.opacity = '0.5';
+            communicationsField.style.opacity = '0.5';
+        } else {
+            communicationsCheckbox.style.opacity = '1';
+            communicationsField.style.opacity = '1';
+        }
     }
     
     // Show modal with animation
@@ -1578,19 +1608,37 @@ function hideModal() {
 function saveRequest() {
     if (!currentModalData) return;
     
-    const currentUser = sessionStorage.getItem('currentUser');
-    const checkbox = document.getElementById('request-checkbox');
-    const notesField = document.getElementById('notes-field');
-    const hasRequest = checkbox.checked;
+    const currentUser = sessionStorage.getItem("currentUser");
+    const requestCheckbox = document.getElementById("request-checkbox");
+    const notesField = document.getElementById("notes-field");
+    const communicationsCheckbox = document.getElementById("communications-checkbox");
+    const communicationsField = document.getElementById("communications-field");
+
+    if (!requestCheckbox || !notesField || !communicationsCheckbox || !communicationsField) {
+        console.error("Modal elements not found");
+        return;
+    }
+
+    const hasRequest = requestCheckbox.checked;
     const notes = notesField.value.trim();
+    const hasCommunication = communicationsCheckbox.checked;
+    const communications = communicationsField.value.trim();
     
     // Check permissions
     if (!window.teacherRequestDB.canModifyRequest(currentModalData.teacher, currentUser)) {
-        alert('You do not have permission to modify this request.');
+        alert("You do not have permission to modify this request.");
         return;
     }
-    
+
+    if (!hasRequest && !hasCommunication) {
+        alert("Please select at least one option (Request or Communication) to save.");
+        return;
+    }
+
+    const existingRequest = window.teacherRequestDB.getRequest(currentModalData.week, currentModalData.day, currentModalData.period, currentModalData.teacher);
+
     const requestData = {
+        id: existingRequest ? existingRequest.id : generateUniqueId(),
         week: currentModalData.week,
         day: currentModalData.day,
         period: currentModalData.period,
@@ -1599,9 +1647,15 @@ function saveRequest() {
         subject: currentModalData.subject,
         room: currentModalData.room,
         hasRequest: hasRequest,
-        notes: notes,
-        createdBy: currentUser
+        notes: hasRequest ? notes : (existingRequest && existingRequest.notes ? existingRequest.notes : ""),
+        communications: hasCommunication ? communications : (existingRequest && existingRequest.communications ? existingRequest.communications : ""),
+        createdBy: currentUser,
+        createdAt: existingRequest ? existingRequest.createdAt : new Date().toISOString(),
+        modifiedAt: new Date().toISOString(),
+        status: "active"
     };
+    
+    console.log("Saving request data:", requestData);
     
     const success = window.teacherRequestDB.saveRequest(requestData);
     
@@ -1611,9 +1665,9 @@ function saveRequest() {
         hideModal();
         
         // Show success message
-        showNotification('Request saved successfully!', 'success');
+        showNotification("Request saved successfully!", "success");
     } else {
-        showNotification('Error saving request. Please try again.', 'error');
+        showNotification("Error saving request. Please try again.", "error");
     }
 }
 
@@ -1638,9 +1692,19 @@ function clearRequest() {
     
     if (success) {
         // Reset form
-        document.getElementById('request-checkbox').checked = false;
-        document.getElementById('notes-field').value = '';
-        document.getElementById('char-count').textContent = '0';
+        const requestCheckbox = document.getElementById('request-checkbox');
+        const notesField = document.getElementById('notes-field');
+        const communicationsCheckbox = document.getElementById('communications-checkbox');
+        const communicationsField = document.getElementById('communications-field');
+        const charCount = document.getElementById('char-count');
+        const wordCount = document.getElementById('word-count');
+        
+        if (requestCheckbox) requestCheckbox.checked = false;
+        if (notesField) notesField.value = '';
+        if (communicationsCheckbox) communicationsCheckbox.checked = false;
+        if (communicationsField) communicationsField.value = '';
+        if (charCount) charCount.textContent = '0';
+        if (wordCount) wordCount.textContent = '0';
         
         // Refresh the timetable to remove the blinking effect
         generateTimetable();
@@ -1828,6 +1892,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (notesField && charCount) {
         notesField.addEventListener('input', function() {
             charCount.textContent = this.value.length;
+        });
+    }
+    
+    // Communications field word count
+    const communicationsField = document.getElementById('communications-field');
+    const wordCount = document.getElementById('word-count');
+    
+    if (communicationsField && wordCount) {
+        communicationsField.addEventListener('input', function() {
+            const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+            wordCount.textContent = this.value.trim() === '' ? '0' : words.length;
         });
     }
     

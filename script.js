@@ -943,6 +943,16 @@ let currentModalData = null;
 const weekAStartDate = new Date(2025, 8, 1); // September 1, 2025 (month is 0-indexed)
 const weekBStartDate = new Date(2025, 8, 8); // September 8, 2025 (month is 0-indexed)
 
+// Function to check if a date is within a holiday period
+function isHoliday(date) {
+    for (const term of schoolTerms) {
+        if (date >= term.startDate && date <= term.endDate) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // School term dates with corrected dates
 const schoolTerms = [
     {
@@ -1016,9 +1026,34 @@ function clearLessonRequest(week, day, period, teacher) {
 
 // Utility functions
 function isWeekA(date) {
-    const diffTime = date.getTime() - weekAStartDate.getTime();
-    const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
-    return diffWeeks % 2 === 0;
+    let currentDate = new Date(weekAStartDate);
+    let weekType = 'A';
+
+    while (currentDate <= date) {
+        if (!isHoliday(currentDate)) {
+            const dayOfWeek = currentDate.getDay();
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) { // Monday to Friday
+                // Switch week type every Monday
+                if (dayOfWeek === 1) {
+                    if (currentDate > weekAStartDate) {
+                        weekType = weekType === 'A' ? 'B' : 'A';
+                    }
+                }
+            }
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // If the date is in a holiday, we need to determine the week type based on the last school day
+    if (isHoliday(date)) {
+        let lastSchoolDay = new Date(date);
+        while (isHoliday(lastSchoolDay)) {
+            lastSchoolDay.setDate(lastSchoolDay.getDate() - 1);
+        }
+        return isWeekA(lastSchoolDay);
+    }
+
+    return weekType === 'A';
 }
 
 function getCurrentWeek() {
@@ -1048,10 +1083,29 @@ function formatTime(date) {
 }
 
 function getWeekStartDate(week, referenceDate = new Date()) {
-    if (week === 'A') {
-        return new Date(weekAStartDate);
+    let date = new Date(referenceDate);
+    let dayOfWeek = date.getDay();
+    let diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust to Monday
+    let monday = new Date(date.setDate(diff));
+
+    // If the current Monday is in a holiday, find the next non-holiday Monday
+    while (isHoliday(monday)) {
+        monday.setDate(monday.getDate() + 7);
+    }
+
+    // Determine if this Monday is Week A or Week B
+    let isCurrentMondayWeekA = isWeekA(monday);
+
+    if ((week === 'A' && isCurrentMondayWeekA) || (week === 'B' && !isCurrentMondayWeekA)) {
+        return monday;
     } else {
-        return new Date(weekBStartDate);
+        // If the current Monday is not the desired week type, find the next Monday that is
+        let nextMonday = new Date(monday);
+        nextMonday.setDate(monday.getDate() + 7);
+        while (isHoliday(nextMonday)) {
+            nextMonday.setDate(nextMonday.getDate() + 7);
+        }
+        return nextMonday;
     }
 }
 

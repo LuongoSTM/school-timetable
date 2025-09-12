@@ -778,8 +778,8 @@ const timetableData = {
                 "time": "10:20 - 10:40",
                 "teachers": {
                     "K. Arakelian": {
-                        "subject": "9A",
-                        "room": "A2"
+                        "subject": "12 / 13 Art",
+                        "room": "A1"
                     },
                     "Ms N Jenkins": {
                         "subject": "11 Photography",

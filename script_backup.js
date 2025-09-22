@@ -486,7 +486,7 @@ const timetableData = {
                 "time": "09:30 - 10:20",
                 "teachers": {
                     "K. Arakelian": {
-                        "subject": "8S",
+                        "subject": "8Y",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
@@ -631,7 +631,7 @@ const timetableData = {
                 "time": "13:30 - 14:30",
                 "teachers": {
                     "K. Arakelian": {
-                        "subject": "Lunch",
+                        "subject": "",
                         "room": ""
                     },
                     "Ms N Jenkins": {
@@ -698,7 +698,7 @@ const timetableData = {
                 "time": "10:40 - 11:10",
                 "teachers": {
                     "K. Arakelian": {
-                        "subject": "8S",
+                        "subject": "8Y",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
@@ -778,7 +778,7 @@ const timetableData = {
                 "time": "10:20 - 10:40",
                 "teachers": {
                     "K. Arakelian": {
-                        "subject": "12 / 13 Art",
+                        "subject": "9A",
                         "room": "A2"
                     },
                     "Ms N Jenkins": {

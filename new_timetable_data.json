@@ -1,0 +1,174 @@
+{
+    "WEEK A": {
+        "Ms K Arakelian": {
+            "MONDAY": {
+                "1": "12 DT Textile",
+                "2": "12 / 13 Art",
+                "3": "9M",
+                "4a": "",
+                "4b": "Lunch",
+                "5": "12 DT Textile"
+            },
+            "TUESDAY": {
+                "1": "9S",
+                "2": "7AC",
+                "3": "11 Art",
+                "4a": "Lunch",
+                "4b": "8AC",
+                "5": "9AC DT"
+            },
+            "WEDNESDAY": {
+                "1": "9HM  Food",
+                "2": "7AC",
+                "3": "",
+                "4a": "Lunch",
+                "4b": "7H",
+                "5": "11 Art"
+            },
+            "THURSDAY": {
+                "1": "10 Art",
+                "2": "10 Art",
+                "3": "11 Art",
+                "4a": "Lunch",
+                "4b": "",
+                "5": "8S"
+            },
+            "FRIDAY": {
+                "1": "7MS",
+                "2": "8HM",
+                "3": "8AC",
+                "4a": "Lunch",
+                "4b": "7H",
+                "5": "9AC DT"
+            }
+        },
+        "Ms N Jenkins": {
+            "MONDAY": {
+                "1": "11 Photography",
+                "2": "9S DT",
+                "3": "",
+                "4a": "9A",
+                "4b": "Lunch",
+                "5": "10 Art"
+            },
+            "TUESDAY": {
+                "1": "11 Photography",
+                "2": "7AC DT",
+                "3": "",
+                "4a": "Lunch",
+                "4b": "8AC DT",
+                "5": ""
+            },
+            "WEDNESDAY": {
+                "1": "9C",
+                "2": "7AC DT",
+                "3": "11 Photography",
+                "4a": "Lunch",
+                "4b": "7H DT",
+                "5": ""
+            },
+            "THURSDAY": {
+                "1": "9H",
+                "2": "",
+                "3": "",
+                "4a": "Lunch",
+                "4b": "12 / 13 Art",
+                "5": "8Y DT"
+            },
+            "FRIDAY": {
+                "1": "7MS DT",
+                "2": "8HM DT",
+                "3": "8AC DT",
+                "4a": "Lunch",
+                "4b": "7H DT",
+                "5": "12 / 13 Art"
+            }
+        }
+    },
+    "WEEK B": {
+        "Ms K Arakelian": {
+            "MONDAY": {
+                "1": "8S",
+                "2": "9S",
+                "3": "7MS",
+                "4a": "",
+                "4b": "Lunch",
+                "5": "9S Food"
+            },
+            "TUESDAY": {
+                "1": "",
+                "2": "PSHE",
+                "3": "",
+                "4a": "Lunch",
+                "4b": "",
+                "5": "11 Art"
+            },
+            "WEDNESDAY": {
+                "1": "10 Art",
+                "2": "11 Art",
+                "3": "8S",
+                "4a": "9M",
+                "4b": "Lunch",
+                "5": ""
+            },
+            "THURSDAY": {
+                "1": "9S Food",
+                "2": "12 / 13 Art",
+                "3": "9AC DT",
+                "4a": "Lunch",
+                "4b": "8HM",
+                "5": "7MS"
+            },
+            "FRIDAY": {
+                "1": "7AC",
+                "2": "8AC",
+                "3": "8MH",
+                "4a": "Lunch",
+                "4b": "7H",
+                "5": "9HM Food"
+            }
+        },
+        "Ms N Jenkins": {
+            "MONDAY": {
+                "1": "8Y DT",
+                "2": "12 / 13 Art",
+                "3": "7MS DT",
+                "4a": "Lunch",
+                "4b": "12 / 13 Art",
+                "5": ""
+            },
+            "TUESDAY": {
+                "1": "10 Art",
+                "2": "PSHE",
+                "3": "11 Photography",
+                "4a": "Lunch",
+                "4b": "12 / 13 Art",
+                "5": ""
+            },
+            "WEDNESDAY": {
+                "1": "",
+                "2": "9C",
+                "3": "8Y DT",
+                "4a": "Lunch",
+                "4b": "12 / 13 Art",
+                "5": "9A"
+            },
+            "THURSDAY": {
+                "1": "",
+                "2": "11 Photography",
+                "3": "9H",
+                "4a": "Lunch",
+                "4b": "8HM DT",
+                "5": "7MS DT"
+            },
+            "FRIDAY": {
+                "1": "7AC DT",
+                "2": "8AC DT",
+                "3": "8HM DT",
+                "4a": "Lunch",
+                "4b": "7H DT",
+                "5": "9HM DT"
+            }
+        }
+    }
+}

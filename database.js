@@ -331,7 +331,7 @@ class TeacherRequestDatabase {
         }
         
         // Teachers can only modify their own requests
-        if (currentUser === 'Katie Arakalian' && teacher === 'Miss K. Arakelian') {
+        if (currentUser === 'Katie Arakelian' && teacher === 'Miss K. Arakelian') {
             return true;
         }
         

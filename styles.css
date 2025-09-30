@@ -123,7 +123,7 @@ body {
 }
 
 .clock-label, .countdown-label {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-color);
     text-transform: capitalize;
     opacity: 0.8;
@@ -137,7 +137,7 @@ body {
 }
 
 .title {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 400;
     color: var(--text-color);
     text-align: center;
@@ -174,7 +174,7 @@ body {
 }
 
 .date-info {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-color);
 }
 
@@ -340,12 +340,12 @@ body {
 }
 
 .subject-name {
-    font-weight: bold;
-    font-size: 12px;
+    font-weight: normal;
+    font-size: 13px;
 }
 
 .room-name {
-    font-size: 10px;
+    font-size: 12px;
     opacity: 0.8;
 }
 
@@ -374,7 +374,7 @@ body {
 }
 
 .teacher-name {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: var(--header-bg);
     margin-bottom: 10px;

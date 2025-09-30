@@ -363,11 +363,11 @@ const timetableData = {
                 "time": "14:30 - 15:30",
                 "teachers": {
                     "Ms K Arakalian": {
-                        "subject": "8Y",
+                        "subject": "8S",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
-                        "subject": "8Y DT",
+                        "subject": "8S DT",
                         "room": "A2"
                     }
                 }
@@ -486,11 +486,11 @@ const timetableData = {
                 "time": "09:30 - 10:20",
                 "teachers": {
                     "Ms K Arakalian": {
-                        "subject": "8Y",
+                        "subject": "8S",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
-                        "subject": "8Y DT",
+                        "subject": "8S DT",
                         "room": "A2"
                     }
                 }
@@ -698,11 +698,11 @@ const timetableData = {
                 "time": "10:40 - 11:10",
                 "teachers": {
                     "Ms K Arakalian": {
-                        "subject": "8Y",
+                        "subject": "8S",
                         "room": "A1"
                     },
                     "Ms N Jenkins": {
-                        "subject": "8Y DT",
+                        "subject": "8S DT",
                         "room": "A2"
                     }
                 }

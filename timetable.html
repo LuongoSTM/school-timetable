@@ -64,7 +64,8 @@
             <div class="nav-main">
                 <a href="index.html" class="nav-item">
                     <span>🏠</span>
-                    <span>Home</sp            <div class="nav-main">
+                    <span>Home</span>
+                </a>
                 <a href="timetable.html" class="nav-item active">
                     <span>📅</span>
                     <span>Timetable</span>
@@ -78,14 +79,11 @@
                     <span>Data</span>
                 </a>
                 <a href="requests.html" class="nav-item">
-                    <span>📝</span>
+                    <span>📋</span>
                     <span>Requests</span>
                 </a>
-                <a href="communications.html" class="nav-item">
-                    <span>💬</span>
-                    <span>Communications</span>
-                </a>
-            </div>   <div class="nav-controls">
+            </div>
+            <div class="nav-controls">
                 <button class="control-btn" data-week="A">Week A</button>
                 <button class="control-btn" data-week="B">Week B</button>
                 <button class="control-btn active" data-week="auto">Automatic</button>
@@ -108,15 +106,15 @@
             <div class="teacher-boxes">
                 <div class="teacher-box">
                     <div class="teacher-header">
-                        <h3>K. Arakelian</h3>
+                        <h3>Ms K Arakelian</h3>
                     </div>
                     <div class="lesson-info">
                         <div class="lesson-label">Current:</div>
-                        <div class="lesson-details" id="current-arakelian">No Lesson Now</div>
+                        <div class="lesson-details" id="current-arakalian">No Lesson Now</div>
                     </div>
                     <div class="lesson-info">
                         <div class="lesson-label">Next:</div>
-                        <div class="lesson-details" id="next-arakelian">No Lesson Next</div>
+                        <div class="lesson-details" id="next-arakalian">No Lesson Next</div>
                     </div>
                 </div>
                 
@@ -171,22 +169,10 @@
                 <div class="char-counter">
                     <span id="char-count">0</span>/500 characters
                 </div>
-            </div>
-            
-            <div class="communications-section">
-                <div class="communications-header">
-                    <input type="checkbox" id="communications-checkbox" class="request-checkbox">
-                    <label for="communications-checkbox" class="request-label">Communications</label>
+                <div class="modal-actions">
+                    <button id="save-request" class="save-btn">Save Request</button>
+                    <button id="clear-request" class="clear-btn">Clear Request</button>
                 </div>
-                <textarea id="communications-field" class="communications-field" placeholder="Add communications message (max 1000 words)..." maxlength="7000"></textarea>
-                <div class="char-counter">
-                    <span id="word-count">0</span>/1000 words
-                </div>
-            </div>
-            
-            <div class="modal-actions">
-                <button id="save-request" class="save-btn">Save</button>
-                <button id="clear-request" class="clear-btn">Clear</button>
             </div>
         </div>
     </div>

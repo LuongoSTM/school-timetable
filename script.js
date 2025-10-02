@@ -5,7 +5,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -18,7 +18,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "12 DT Textile",
                         "room": "T1"
                     },
@@ -31,7 +31,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "12 / 13 Art",
                         "room": "A1"
                     },
@@ -44,7 +44,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9M",
                         "room": "A1"
                     },
@@ -57,7 +57,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": ""
                     },
@@ -70,7 +70,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -83,7 +83,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "12 DT Textile",
                         "room": "T1"
                     },
@@ -98,7 +98,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -111,7 +111,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9S",
                         "room": "A2"
                     },
@@ -124,7 +124,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -137,7 +137,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -150,7 +150,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -163,7 +163,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -176,7 +176,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -191,7 +191,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -204,7 +204,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9HM Food",
                         "room": "HE1"
                     },
@@ -217,7 +217,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -230,7 +230,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": ""
                     },
@@ -243,7 +243,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -256,7 +256,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -269,7 +269,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -284,7 +284,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -297,7 +297,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -310,7 +310,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -323,7 +323,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -336,7 +336,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -349,7 +349,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": ""
                     },
@@ -362,7 +362,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8S",
                         "room": "A1"
                     },
@@ -377,7 +377,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -390,7 +390,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -403,7 +403,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8HM",
                         "room": "A1"
                     },
@@ -416,7 +416,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -429,7 +429,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -442,7 +442,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -455,7 +455,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -472,7 +472,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -485,7 +485,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8S",
                         "room": "A1"
                     },
@@ -498,7 +498,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9S",
                         "room": "A2"
                     },
@@ -511,7 +511,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -524,7 +524,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": ""
                     },
@@ -537,7 +537,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -550,7 +550,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9S Food",
                         "room": "HE1"
                     },
@@ -565,7 +565,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -578,7 +578,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": "A1"
                     },
@@ -591,7 +591,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "PSHE",
                         "room": "A1"
                     },
@@ -604,7 +604,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": ""
                     },
@@ -617,7 +617,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -630,7 +630,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": ""
                     },
@@ -643,7 +643,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -658,7 +658,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -671,7 +671,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -684,7 +684,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -697,7 +697,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8S",
                         "room": "A1"
                     },
@@ -710,7 +710,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9M",
                         "room": "A1"
                     },
@@ -723,7 +723,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -736,7 +736,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "",
                         "room": ""
                     },
@@ -751,7 +751,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -764,7 +764,7 @@ const timetableData = {
             "1": {
                 "time": "09:20 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9S Food",
                         "room": "HE1"
                     },
@@ -777,7 +777,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "12 / 13 Art",
                         "room": "A2"
                     },
@@ -790,7 +790,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -803,7 +803,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -816,7 +816,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8HM",
                         "room": "A1"
                     },
@@ -829,7 +829,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -844,7 +844,7 @@ const timetableData = {
             "Form Time": {
                 "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -857,7 +857,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -870,7 +870,7 @@ const timetableData = {
             "2": {
                 "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -883,7 +883,7 @@ const timetableData = {
             "3": {
                 "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "8MH",
                         "room": "A1"
                     },
@@ -896,7 +896,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -909,7 +909,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -922,7 +922,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakelian": {
+                    "Ms K Arakalian": {
                         "subject": "9HM Food",
                         "room": "HE1"
                     },

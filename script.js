@@ -3,9 +3,9 @@ const timetableData = {
     "weekA": {
         "MONDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -16,9 +16,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "12 DT Textile",
                         "room": "T1"
                     },
@@ -29,9 +29,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "12 / 13 Art",
                         "room": "A1"
                     },
@@ -42,9 +42,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:20",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9M",
                         "room": "A1"
                     },
@@ -55,9 +55,9 @@ const timetableData = {
                 }
             },
             "4a": {
-                "time": "11:30 - 12:30",
+                "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -68,9 +68,9 @@ const timetableData = {
                 }
             },
             "4b": {
-                "time": "12:30 - 13:30",
+                "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -83,7 +83,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "12 DT Textile",
                         "room": "T1"
                     },
@@ -96,9 +96,9 @@ const timetableData = {
         },
         "TUESDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -109,9 +109,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9S",
                         "room": "A2"
                     },
@@ -122,9 +122,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -135,9 +135,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:20",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -148,9 +148,9 @@ const timetableData = {
                 }
             },
             "4a": {
-                "time": "11:30 - 12:30",
+                "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -161,9 +161,9 @@ const timetableData = {
                 }
             },
             "4b": {
-                "time": "12:30 - 13:30",
+                "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -176,7 +176,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -189,9 +189,9 @@ const timetableData = {
         },
         "WEDNESDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -202,9 +202,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9HM Food",
                         "room": "HE1"
                     },
@@ -215,9 +215,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -228,9 +228,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:20",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -241,9 +241,9 @@ const timetableData = {
                 }
             },
             "4a": {
-                "time": "11:30 - 12:30",
+                "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -254,9 +254,9 @@ const timetableData = {
                 }
             },
             "4b": {
-                "time": "12:30 - 13:30",
+                "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -269,7 +269,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -282,9 +282,9 @@ const timetableData = {
         },
         "THURSDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -297,7 +297,7 @@ const timetableData = {
             "1": {
                 "time": "09:30 - 10:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -308,9 +308,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -321,9 +321,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:20",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -334,9 +334,9 @@ const timetableData = {
                 }
             },
             "4a": {
-                "time": "11:30 - 12:30",
+                "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -347,9 +347,9 @@ const timetableData = {
                 }
             },
             "4b": {
-                "time": "12:30 - 13:30",
+                "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -362,7 +362,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8S",
                         "room": "A1"
                     },
@@ -375,9 +375,9 @@ const timetableData = {
         },
         "FRIDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -388,9 +388,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -401,9 +401,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8HM",
                         "room": "A1"
                     },
@@ -414,9 +414,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:20",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -427,9 +427,9 @@ const timetableData = {
                 }
             },
             "4a": {
-                "time": "11:30 - 12:30",
+                "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -440,9 +440,9 @@ const timetableData = {
                 }
             },
             "4b": {
-                "time": "12:30 - 13:30",
+                "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -455,7 +455,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -470,9 +470,9 @@ const timetableData = {
     "weekB": {
         "MONDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -483,9 +483,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8S",
                         "room": "A1"
                     },
@@ -496,9 +496,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9S",
                         "room": "A2"
                     },
@@ -509,9 +509,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:10",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -524,7 +524,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -537,7 +537,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -550,7 +550,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9S Food",
                         "room": "HE1"
                     },
@@ -563,9 +563,9 @@ const timetableData = {
         },
         "TUESDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -576,9 +576,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": "A1"
                     },
@@ -589,9 +589,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "PSHE",
                         "room": "A1"
                     },
@@ -602,9 +602,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:10",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -617,7 +617,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -630,7 +630,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -643,7 +643,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -656,9 +656,9 @@ const timetableData = {
         },
         "WEDNESDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -669,9 +669,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "10 Art",
                         "room": "A1"
                     },
@@ -682,9 +682,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "11 Art",
                         "room": "A1"
                     },
@@ -695,9 +695,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:10",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8S",
                         "room": "A1"
                     },
@@ -710,7 +710,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9M",
                         "room": "A1"
                     },
@@ -723,7 +723,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -736,7 +736,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "",
                         "room": ""
                     },
@@ -749,9 +749,9 @@ const timetableData = {
         },
         "THURSDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -762,9 +762,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:20 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9S Food",
                         "room": "HE1"
                     },
@@ -775,9 +775,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "12 / 13 Art",
                         "room": "A2"
                     },
@@ -788,9 +788,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:10",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9AC DT",
                         "room": "A1"
                     },
@@ -803,7 +803,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -816,7 +816,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8HM",
                         "room": "A1"
                     },
@@ -829,7 +829,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7MS",
                         "room": "A1"
                     },
@@ -842,9 +842,9 @@ const timetableData = {
         },
         "FRIDAY": {
             "Form Time": {
-                "time": "09:00 - 09:30",
+                "time": "09:00 - 09:20",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Form Time",
                         "room": "A1"
                     },
@@ -855,9 +855,9 @@ const timetableData = {
                 }
             },
             "1": {
-                "time": "09:30 - 10:20",
+                "time": "09:30 - 10:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7AC",
                         "room": "A1"
                     },
@@ -868,9 +868,9 @@ const timetableData = {
                 }
             },
             "2": {
-                "time": "10:20 - 10:40",
+                "time": "10:30 - 11:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8AC",
                         "room": "A1"
                     },
@@ -881,9 +881,9 @@ const timetableData = {
                 }
             },
             "3": {
-                "time": "10:40 - 11:10",
+                "time": "11:30 - 12:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "8MH",
                         "room": "A1"
                     },
@@ -896,7 +896,7 @@ const timetableData = {
             "4a": {
                 "time": "12:30 - 13:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "Lunch",
                         "room": ""
                     },
@@ -909,7 +909,7 @@ const timetableData = {
             "4b": {
                 "time": "13:30 - 14:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "7H",
                         "room": "A1"
                     },
@@ -922,7 +922,7 @@ const timetableData = {
             "5": {
                 "time": "14:30 - 15:30",
                 "teachers": {
-                    "Ms K Arakalian": {
+                    "Ms K Arakelian": {
                         "subject": "9HM Food",
                         "room": "HE1"
                     },
@@ -1288,7 +1288,7 @@ function generateTimetable() {
     html += '<th class="time-cell"></th>';
     
     days.forEach(() => {
-        html += '<th class="period-header">Ms K Arakelian</th>';
+        html += '<th class="period-header">Ms K Arakalian</th>';
         html += '<th class="period-header">Ms N. Jenkins</th>';
     });
     
@@ -1326,10 +1326,7 @@ function generateTimetable() {
                         cellContent = '<div class="subject-name">Lunch</div>';
                     } else if (subject) {
                         cellClass += ` ${getSubjectClass(subject)}`;
-                        cellContent = `
-                            <div class="subject-name">${subject}</div>
-                            ${room ? `<div class="room-name">${room}</div>` : ''}
-                        `;
+                        cellContent = `\n                            <div class="subject-name">${subject}</div>\n                            ${room ? `<div class="room-name">${room}</div>` : ''}\n                        `;
                     }
                 }
                 
@@ -1351,7 +1348,27 @@ function generateTimetable() {
                     week: week
                 });
                 
-                html += `<td class="${cellClass}" data-cell='${cellData}'>${cellContent}</td>`;
+                let breakOverlay = "";
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentMinute = now.getMinutes();
+
+                // Break 1: 10:20 - 10:40 for lessons 7, 8
+                if (period === '7' || period === '8') {
+                    if ((currentHour === 10 && currentMinute >= 20 && currentMinute < 40)) {
+                        cellClass += ' break-active';
+                        breakOverlay = '<div class="break-overlay">Break</div>';
+                    }
+                }
+                // Break 2: 10:40 - 11:30 for lessons 9, 10, 11, 12, 13
+                if (period === '9' || period === '10' || period === '11' || period === '12' || period === '13') {
+                    if ((currentHour === 10 && currentMinute >= 40) || (currentHour === 11 && currentMinute < 30)) {
+                        cellClass += ' break-active';
+                        breakOverlay = '<div class="break-overlay">Break</div>';
+                    }
+                }
+
+                html += `<td class="${cellClass}" data-cell=\'${cellData}\' style="position: relative;">${cellContent}${breakOverlay}</td>`;
             });
         });
         
@@ -1407,7 +1424,8 @@ function updateTeacherBoxes() {
                         currentLesson = 'Form Time';
                     } else if (teacherData.subject === 'Lunch') {
                         currentLesson = 'Lunch';
-                    } else {
+                    }
+                    else {
                         currentLesson = `${teacherData.subject}${teacherData.room ? ` - ${teacherData.room}` : ''}`;
                     }
                 }
@@ -1425,422 +1443,271 @@ function updateTeacherBoxes() {
                         nextLesson = 'Form Time';
                     } else if (nextTeacherData.subject === 'Lunch') {
                         nextLesson = 'Lunch';
-                    } else {
+                    }
+                    else {
                         nextLesson = `${nextTeacherData.subject}${nextTeacherData.room ? ` - ${nextTeacherData.room}` : ''}`;
                     }
                 }
             }
-        } else {
-            // No current lesson, find the next one
-            periods.forEach((period, index) => {
-                if (nextLesson === 'No Lesson Next') {
-                    const periodData = todayData[period];
-                    if (periodData) {
-                        const startTime = parseTime(periodData.time.split(' - ')[0]);
-                        if (startTime) {
-                            const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
-                            const startTotalMinutes = startTime.hours * 60 + startTime.minutes;
-                            
-                            if (currentTotalMinutes < startTotalMinutes) {
-                                const teacherData = periodData.teachers[teacher];
-                                if (teacherData && teacherData.subject) {
-                                    if (teacherData.subject === 'Form Time') {
-                                        nextLesson = 'Form Time';
-                                    } else if (teacherData.subject === 'Lunch') {
-                                        nextLesson = 'Lunch';
-                                    } else {
-                                        nextLesson = `${teacherData.subject}${teacherData.room ? ` - ${teacherData.room}` : ''}`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            });
         }
-        
-        const currentElement = document.getElementById(`current-${teacherKey}`);
-        const nextElement = document.getElementById(`next-${teacherKey}`);
-        if (currentElement) currentElement.textContent = currentLesson;
-        if (nextElement) nextElement.textContent = nextLesson;
+
+        document.getElementById(`current-${teacherKey}`).textContent = currentLesson;
+        document.getElementById(`next-${teacherKey}`).textContent = nextLesson;
     });
 }
 
-// Check if current user can modify this lesson
-function canModifyLesson(teacherName) {
-    const currentUser = sessionStorage.getItem('currentUser');
-    
-    // Administrators can modify all lessons
-    if (currentUser === 'Fiore Luongo Administrator' || currentUser === 'Page for Test') {
-        return true;
-    }
-    
-    // Teachers can only modify their own lessons
-    if (currentUser === 'Katie Arakalian' && teacherName === 'Ms K Arakalian') {
-        return true;
-    }
-    
-    if (currentUser === 'Natalie Jenkins' && teacherName === 'Ms N Jenkins') {
-        return true;
-    }
-    
-    return false;
+// Dark mode toggle
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', () => {
+        document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', document.body.dataset.theme);
+    });
 }
+
+// Initialize theme from local storage
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.body.dataset.theme = savedTheme;
+        if (savedTheme === 'dark') {
+            darkModeToggle.classList.add('active');
+        }
+    } else {
+        // Default to light theme if no preference is saved
+        document.body.dataset.theme = 'light';
+    }
+}
+
+// Modal functionality
+const subjectModal = document.getElementById('subject-modal');
+const modalClose = document.getElementById('modal-close');
+const modalTitle = document.getElementById('modal-title');
+const modalYear = document.getElementById('modal-year');
+const modalTeacher = document.getElementById('modal-teacher');
+const modalRoom = document.getElementById('modal-room');
+const modalTime = document.getElementById('modal-time');
+const requestCheckbox = document.getElementById('request-checkbox');
+const notesField = document.getElementById('notes-field');
+const charCount = document.getElementById('char-count');
+const saveRequestBtn = document.getElementById('save-request');
+const clearRequestBtn = document.getElementById('clear-request');
 
 function showModal(data) {
     currentModalData = data;
-    const modal = document.getElementById('subject-modal');
-    document.getElementById('modal-title').textContent = data.subject;
-    
-    // Extract year from subject
-    const yearMatch = data.subject.match(/(\d+)/);
-    const year = yearMatch ? `Year ${yearMatch[1]}` : '-';
-    
-    document.getElementById('modal-year').textContent = year;
-    document.getElementById('modal-teacher').textContent = data.teacher;
-    document.getElementById('modal-room').textContent = data.room || '-';
-    document.getElementById('modal-time').textContent = data.time;
-    
-    // Check if current user can modify this lesson
-    const currentUser = sessionStorage.getItem('currentUser');
-    const canModify = window.teacherRequestDB.canModifyRequest(data.teacher, currentUser);
-    const canDelete = window.teacherRequestDB.canDeleteRequest(currentUser);
-    
-    const checkbox = document.getElementById('request-checkbox');
-    const notesField = document.getElementById('notes-field');
-    const saveButton = document.getElementById('save-request');
-    const clearButton = document.getElementById('clear-request');
-    const charCount = document.getElementById('char-count');
-    
-    // Enable/disable controls based on permissions
-    checkbox.disabled = !canModify;
-    notesField.disabled = !canModify;
-    saveButton.disabled = !canModify;
-    
-    // Clear button is available to administrators for all requests, or to teachers for their own
-    clearButton.disabled = !(canModify || canDelete);
-    
-    // Add visual indication for disabled state
-    if (!canModify) {
-        checkbox.style.opacity = '0.5';
-        notesField.style.opacity = '0.5';
-        saveButton.style.opacity = '0.5';
-        saveButton.style.cursor = 'not-allowed';
+    modalTitle.textContent = data.subject;
+    modalYear.textContent = data.subject.match(/^\d{1,2}/) ? data.subject.match(/^\d{1,2}/)[0] : '-';
+    modalTeacher.textContent = data.teacher;
+    modalRoom.textContent = data.room || 'N/A';
+    modalTime.textContent = data.time;
+
+    // Load existing request data
+    const request = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
+    if (request) {
+        requestCheckbox.checked = request.hasRequest;
+        notesField.value = request.notes;
     } else {
-        checkbox.style.opacity = '1';
-        notesField.style.opacity = '1';
-        saveButton.style.opacity = '1';
-        saveButton.style.cursor = 'pointer';
-    }
-    
-    if (!(canModify || canDelete)) {
-        clearButton.style.opacity = '0.5';
-        clearButton.style.cursor = 'not-allowed';
-    } else {
-        clearButton.style.opacity = '1';
-        clearButton.style.cursor = 'pointer';
-    }
-    
-    // Load existing request data from database
-    const requestData = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
-    
-    if (requestData && requestData.hasRequest) {
-        checkbox.checked = true;
-        notesField.value = requestData.notes || '';
-        charCount.textContent = (requestData.notes || '').length;
-    } else {
-        checkbox.checked = false;
+        requestCheckbox.checked = false;
         notesField.value = '';
-        charCount.textContent = '0';
     }
-    
-    // Show modal with animation
-    modal.classList.add('show');
-    modal.style.display = 'flex';
+    updateCharCount();
+
+    subjectModal.classList.add('show');
 }
 
-function hideModal() {
-    const modal = document.getElementById('subject-modal');
-    modal.classList.remove('show');
-    setTimeout(() => {
-        modal.style.display = 'none';
-    }, 300);
+function closeModal() {
+    subjectModal.classList.remove('show');
     currentModalData = null;
 }
 
-function saveRequest() {
-    if (!currentModalData) return;
-    
-    const currentUser = sessionStorage.getItem('currentUser');
-    const checkbox = document.getElementById('request-checkbox');
-    const notesField = document.getElementById('notes-field');
-    const hasRequest = checkbox.checked;
-    const notes = notesField.value.trim();
-    
-    // Check permissions
-    if (!window.teacherRequestDB.canModifyRequest(currentModalData.teacher, currentUser)) {
-        alert('You do not have permission to modify this request.');
-        return;
+modalClose.addEventListener('click', closeModal);
+window.addEventListener('click', (event) => {
+    if (event.target === subjectModal) {
+        closeModal();
     }
-    
-    const requestData = {
-        week: currentModalData.week,
-        day: currentModalData.day,
-        period: currentModalData.period,
-        time: currentModalData.time,
-        teacher: currentModalData.teacher,
-        subject: currentModalData.subject,
-        room: currentModalData.room,
-        hasRequest: hasRequest,
-        notes: notes,
-        createdBy: currentUser
-    };
-    
-    const success = window.teacherRequestDB.saveRequest(requestData);
-    
-    if (success) {
-        // Refresh the timetable to show/hide the blinking effect
-        generateTimetable();
-        hideModal();
-        
-        // Show success message
-        showNotification('Request saved successfully!', 'success');
-    } else {
-        showNotification('Error saving request. Please try again.', 'error');
-    }
-}
-
-function clearRequest() {
-    if (!currentModalData) return;
-    
-    const currentUser = sessionStorage.getItem('currentUser');
-    const canModify = window.teacherRequestDB.canModifyRequest(currentModalData.teacher, currentUser);
-    const canDelete = window.teacherRequestDB.canDeleteRequest(currentUser);
-    
-    if (!(canModify || canDelete)) {
-        alert('You do not have permission to clear this request.');
-        return;
-    }
-    
-    const success = window.teacherRequestDB.clearRequest(
-        currentModalData.week,
-        currentModalData.day,
-        currentModalData.period,
-        currentModalData.teacher
-    );
-    
-    if (success) {
-        // Reset form
-        document.getElementById('request-checkbox').checked = false;
-        document.getElementById('notes-field').value = '';
-        document.getElementById('char-count').textContent = '0';
-        
-        // Refresh the timetable to remove the blinking effect
-        generateTimetable();
-        hideModal();
-        
-        // Show success message
-        showNotification('Request cleared successfully!', 'success');
-    } else {
-        showNotification('Error clearing request. Please try again.', 'error');
-    }
-}
-
-// Notification system
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
-    
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    // Style the notification
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        font-family: 'DM Serif Text', serif;
-        font-weight: bold;
-        z-index: 10000;
-        animation: slideIn 0.3s ease-out;
-        max-width: 300px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    `;
-    
-    // Set background color based on type
-    switch (type) {
-        case 'success':
-            notification.style.backgroundColor = '#28a745';
-            break;
-        case 'error':
-            notification.style.backgroundColor = '#dc3545';
-            break;
-        case 'warning':
-            notification.style.backgroundColor = '#ffc107';
-            notification.style.color = '#000';
-            break;
-        default:
-            notification.style.backgroundColor = '#007bff';
-    }
-    
-    document.body.appendChild(notification);
-    
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease-in';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 300);
-    }, 3000);
-}
-
-// Add CSS for notification animations
-const notificationStyles = document.createElement('style');
-notificationStyles.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(notificationStyles);
-
-function toggleDarkMode() {
-    const body = document.body;
-    const toggle = document.getElementById('dark-mode-toggle');
-    
-    if (body.hasAttribute('data-theme')) {
-        body.removeAttribute('data-theme');
-        toggle.classList.remove('active');
-        localStorage.setItem('darkMode', 'false');
-    } else {
-        body.setAttribute('data-theme', 'dark');
-        toggle.classList.add('active');
-        localStorage.setItem('darkMode', 'true');
-    }
-}
-
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Load dark mode preference
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.setAttribute('data-theme', 'dark');
-        const toggle = document.getElementById('dark-mode-toggle');
-        if (toggle) toggle.classList.add('active');
-    }
-    
-    // Week button event listeners - Updated for control buttons
-    document.querySelectorAll('.control-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const week = this.dataset.week;
-            if (week === 'auto') {
-                currentMode = 'auto';
-            } else if (week === 'A' || week === 'B') {
-                currentMode = 'manual';
-                currentWeek = week;
-            }
-            updateWeekButtons();
-            generateTimetable();
-            updateTeacherBoxes();
-        });
-    });
-    
-    // Legacy week button event listeners (for backward compatibility)
-    document.querySelectorAll('.week-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const week = this.dataset.week;
-            if (week === 'auto') {
-                currentMode = 'auto';
-            } else {
-                currentMode = 'manual';
-                currentWeek = week;
-            }
-            updateWeekButtons();
-            generateTimetable();
-            updateTeacherBoxes();
-        });
-    });
-    
-    // Dark mode toggle
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener('click', toggleDarkMode);
-    }
-    
-    // Modal event listeners
-    const modalClose = document.getElementById('modal-close');
-    const modal = document.getElementById('subject-modal');
-    const saveBtn = document.getElementById('save-request');
-    const clearBtn = document.getElementById('clear-request');
-    const notesField = document.getElementById('notes-field');
-    const charCount = document.getElementById('char-count');
-    
-    if (modalClose) {
-        modalClose.addEventListener('click', hideModal);
-    }
-    
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideModal();
-            }
-        });
-    }
-    
-    if (saveBtn) {
-        saveBtn.addEventListener('click', saveRequest);
-    }
-    
-    if (clearBtn) {
-        clearBtn.addEventListener('click', clearRequest);
-    }
-    
-    if (notesField && charCount) {
-        notesField.addEventListener('input', function() {
-            charCount.textContent = this.value.length;
-        });
-    }
-    
-    // Initial setup
-    updateWeekButtons();
-    generateTimetable();
-    updateClock();
-    updateTeacherBoxes();
-    
-    // Display current user if logged in
-    const currentUser = sessionStorage.getItem('currentUser');
-    const userInfoElement = document.getElementById('user-info');
-    if (currentUser && userInfoElement) {
-        userInfoElement.textContent = `Logged in as: ${currentUser}`;
-    }
-    
-    // Update every second
-    setInterval(() => {
-        updateClock();
-        updateTeacherBoxes();
-    }, 1000);
 });
+
+notesField.addEventListener('input', updateCharCount);
+
+function updateCharCount() {
+    charCount.textContent = notesField.value.length;
+}
+
+saveRequestBtn.addEventListener('click', () => {
+    if (currentModalData) {
+        window.teacherRequestDB.saveRequest(
+            currentModalData.week,
+            currentModalData.day,
+            currentModalData.period,
+            currentModalData.teacher,
+            requestCheckbox.checked,
+            notesField.value
+        );
+        generateTimetable(); // Re-render timetable to show request status
+        closeModal();
+    }
+});
+
+clearRequestBtn.addEventListener('click', () => {
+    if (currentModalData) {
+        window.teacherRequestDB.clearRequest(
+            currentModalData.week,
+            currentModalData.day,
+            currentModalData.period,
+            currentModalData.teacher
+        );
+        generateTimetable(); // Re-render timetable to clear request status
+        closeModal();
+    }
+});
+
+// Initial calls
+initTheme();
+updateClock();
+generateTimetable();
+updateTeacherBoxes();
+
+// Update every second
+setInterval(() => {
+    updateClock();
+    // Only regenerate timetable and teacher boxes if the minute changes to avoid excessive DOM manipulation
+    const now = new Date();
+    if (now.getSeconds() === 0) {
+        generateTimetable();
+        updateTeacherBoxes();
+    }
+}, 1000);
+
+// Event listeners for week controls
+document.querySelectorAll('.control-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const week = this.dataset.week;
+        if (week === 'auto') {
+            currentMode = 'auto';
+        } else {
+            currentMode = 'manual';
+            currentWeek = week;
+        }
+        updateWeekButtons();
+        generateTimetable();
+        updateTeacherBoxes();
+    });
+});
+
+// Database for teacher requests (using IndexedDB)
+class TeacherRequestDB {
+    constructor() {
+        this.db = null;
+        this.dbName = 'TeacherRequestsDB';
+        this.storeName = 'requests';
+        this.version = 1;
+    }
+
+    open() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.version);
+
+            request.onupgradeneeded = (event) => {
+                this.db = event.target.result;
+                if (!this.db.objectStoreNames.contains(this.storeName)) {
+                    const objectStore = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                    objectStore.createIndex('week_day_period_teacher', ['week', 'day', 'period', 'teacher'], { unique: true });
+                }
+            };
+
+            request.onsuccess = (event) => {
+                this.db = event.target.result;
+                resolve();
+            };
+
+            request.onerror = (event) => {
+                console.error('IndexedDB error:', event.target.errorCode);
+                reject(event.target.errorCode);
+            };
+        });
+    }
+
+    async saveRequest(week, day, period, teacher, hasRequest, notes) {
+        await this.open();
+        const transaction = this.db.transaction([this.storeName], 'readwrite');
+        const store = transaction.objectStore(this.storeName);
+        const index = store.index('week_day_period_teacher');
+
+        const query = index.get([week, day, period, teacher]);
+
+        return new Promise((resolve, reject) => {
+            query.onsuccess = (event) => {
+                const existingRequest = event.target.result;
+                const data = {
+                    week, day, period, teacher, hasRequest, notes,
+                    timestamp: new Date().toISOString(),
+                    status: 'active' // Add status field
+                };
+
+                if (existingRequest) {
+                    data.id = existingRequest.id; // Keep the same ID for update
+                    store.put(data);
+                } else {
+                    store.add(data);
+                }
+
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = (e) => reject(e);
+            };
+            query.onerror = (e) => reject(e);
+        });
+    }
+
+    async getRequest(week, day, period, teacher) {
+        await this.open();
+        const transaction = this.db.transaction([this.storeName], 'readonly');
+        const store = transaction.objectStore(this.storeName);
+        const index = store.index('week_day_period_teacher');
+
+        const query = index.get([week, day, period, teacher]);
+
+        return new Promise((resolve, reject) => {
+            query.onsuccess = (event) => resolve(event.target.result);
+            query.onerror = (e) => reject(e);
+        });
+    }
+
+    async clearRequest(week, day, period, teacher) {
+        await this.open();
+        const transaction = this.db.transaction([this.storeName], 'readwrite');
+        const store = transaction.objectStore(this.storeName);
+        const index = store.index('week_day_period_teacher');
+
+        const query = index.get([week, day, period, teacher]);
+
+        return new Promise((resolve, reject) => {
+            query.onsuccess = (event) => {
+                const existingRequest = event.target.result;
+                if (existingRequest) {
+                    store.delete(existingRequest.id);
+                }
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = (e) => reject(e);
+            };
+            query.onerror = (e) => reject(e);
+        });
+    }
+}
+
+// Initialize the database
+window.teacherRequestDB = new TeacherRequestDB();
+window.teacherRequestDB.open().then(() => {
+    console.log('IndexedDB opened successfully');
+}).catch(error => {
+    console.error('Failed to open IndexedDB:', error);
+});
+
+// Initial render after DB is ready
+window.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    updateClock();
+    generateTimetable();
+    updateTeacherBoxes();
+});
+
 

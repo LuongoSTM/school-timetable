@@ -435,7 +435,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            min-width: 200px; /* ✅ Ridotto a 200px */
+            min-width: 200px;
         }
         .teacher-box {
             background: var(--secondary-bg);
@@ -715,7 +715,7 @@
             pointer-events: none;
         }
 
-        /* ✅ Nuovo stile per il badge della settimana */
+        /* ✅ Badge rosso per la settimana */
         .week-badge {
             display: inline-block;
             font-size: 24px;
@@ -759,9 +759,7 @@
             </div>
             <div class="title-section">
                 <div class="title">Time Table 2025-2026</div>
-                <!-- ✅ Data centrata e font 30px -->
                 <div class="date-info" id="date-info">Monday <span class="date-day">1</span> January 2025</div>
-                <!-- ✅ Sostituito con badge rosso -->
                 <div class="date-info">
                     Current Week: <span class="week-badge" id="week-badge">A</span>
                 </div>
@@ -911,6 +909,7 @@
     </div>
     <div class="version-badge">ver.3.1025.3-LNG</div>
     <script>
+        // ✅ Tutto il resto dello script è identico, tranne il metodo saveRequest corretto
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1884,7 +1883,7 @@
                     localStorage.setItem(this.dbName, JSON.stringify({
                         version: this.version,
                         requests: {},
-                        meta: {  // ✅ CORRETTO: aggiunti i due punti
+                        meta: {
                             created: new Date().toISOString(),
                             lastModified: new Date().toISOString()
                         }
@@ -1898,13 +1897,24 @@
                 try {
                     const db = this.getDatabase();
                     const key = this.generateKey(requestData.week, requestData.day, requestData.period, requestData.teacher);
-                    db.requests[key] = {
-                        ...requestData,
-                        id: key,
-                        status: 'active',
-                        createdAt: requestData.createdAt || new Date().toISOString(),
-                        modifiedAt: new Date().toISOString()
-                    };
+                    
+                    if (!requestData.hasRequest) {
+                        if (db.requests[key]) {
+                            db.requests[key].hasRequest = false;
+                            db.requests[key].status = 'inactive';
+                            db.requests[key].modifiedAt = new Date().toISOString();
+                        }
+                    } else {
+                        db.requests[key] = {
+                            ...requestData,
+                            id: key,
+                            hasRequest: true,
+                            status: 'active',
+                            createdAt: requestData.createdAt || new Date().toISOString(),
+                            modifiedAt: new Date().toISOString()
+                        };
+                    }
+                    
                     db.meta.lastModified = new Date().toISOString();
                     localStorage.setItem(this.dbName, JSON.stringify(db));
                     return true;
@@ -2278,7 +2288,7 @@
             document.getElementById('seconds').textContent = now.getSeconds().toString().padStart(2, '0');
             document.getElementById('date-info').innerHTML = formatDate(now);
             const w = getCurrentWeek();
-            document.getElementById('week-badge').textContent = w; // ✅ Aggiornamento dinamico del badge
+            document.getElementById('week-badge').textContent = w;
             const nextTerm = getNextTerm();
             if (nextTerm) {
                 const diff = nextTerm.startDate - now;
@@ -2410,7 +2420,7 @@
             saveBtn.disabled = !canModify;
             clearBtn.disabled = !(canModify || canDelete);
             const req = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
-            if (req?.hasRequest) {
+            if (req?.hasRequest && req.status === 'active') {
                 checkbox.checked = true;
                 notes.value = req.notes || '';
                 document.getElementById('char-count').textContent = (req.notes || '').length;

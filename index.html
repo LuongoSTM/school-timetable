@@ -214,7 +214,7 @@
             transform: translateY(-1px);
         }
         .requests-badge {
-            background: var(--button-active);
+            background: #ff4d4d; /* più saturo */
             color: white;
             padding: 4px 10px;
             border-radius: 12px;
@@ -225,6 +225,11 @@
             gap: 6px;
             margin: 0 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: pulseIcon 2s infinite;
+        }
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         .nav-controls {
             display: flex;
@@ -501,7 +506,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.75); /* ✅ opacità aumentata */
             align-items: center;
             justify-content: center;
         }
@@ -744,6 +749,14 @@
             z-index: 100;
             pointer-events: none;
         }
+
+        /* SVG icon style */
+        .nav-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -806,23 +819,23 @@
         <nav class="navbar">
             <div class="nav-main">
                 <a href="index.html" class="nav-item">
-                    <span>🏠</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                     <span>Home</span>
                 </a>
                 <a href="timetable.html" class="nav-item active">
-                    <span>📅</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
                     <span id="nav-title">Timetable</span>
                 </a>
                 <a href="exam-clock.html" class="nav-item">
-                    <span>⏰</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg>
                     <span>Exam Clock</span>
                 </a>
                 <a href="data.html" class="nav-item">
-                    <span>📊</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
                     <span>Data</span>
                 </a>
                 <a href="requests.html" class="nav-item">
-                    <span>📋</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
                     <span>Requests</span>
                 </a>
             </div>
@@ -2517,7 +2530,6 @@
             // ✅ Aggiorna versione con giorno corrente
             const today = new Date().getDate().toString().padStart(2, '0');
             document.getElementById('version-badge').textContent = `ver.3.1025.${today}`;
-
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('dark-mode-toggle').classList.add('active');

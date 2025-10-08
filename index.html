@@ -13,7 +13,7 @@
             --border-color: #dee2e6;
             --header-bg: #007bff;
             --header-text: #ffffff;
-            --form-time-bg: #404040;
+            --form-time-bg: #007bff;
             --form-time-text: #ffffff;
             --lunch-bg: #e9ecef;
             --lunch-text: #333333;
@@ -41,7 +41,7 @@
             --border-color: #404040;
             --header-bg: #0056b3;
             --header-text: #ffffff;
-            --form-time-bg: #404040;
+            --form-time-bg: #0056b3;
             --form-time-text: #ffffff;
             --lunch-bg: #404040;
             --lunch-text: #ffffff;
@@ -139,15 +139,6 @@
             text-align: center;
             margin-bottom: 10px;
         }
-        .date-info {
-            font-size: 30px; /* ✅ Aumentato a 30px */
-            color: var(--text-color);
-            font-weight: bold;
-            text-align: center; /* ✅ Centrato */
-        }
-        .date-day {
-            color: #dc3545;
-        }
         .countdown-section {
             display: flex;
             flex-direction: column;
@@ -163,6 +154,55 @@
         .countdown-container {
             display: flex;
             gap: 8px;
+        }
+        .header-right-info {
+            position: static;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .date-info {
+            font-size: 14px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .weekday {
+            color: var(--text-color);
+        }
+        .day-box {
+            background: var(--primary-bg);
+            border: 2px solid black;
+            color: #dc3545;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .month-year {
+            color: var(--text-color);
+        }
+        .week-info {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .week-label {
+            color: var(--text-color);
+        }
+        .week-box {
+            background: var(--primary-bg);
+            border: 2px solid black;
+            color: #dc3545;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 30px;
+            font-weight: bold;
         }
         .navbar {
             background-color: var(--nav-bg);
@@ -314,7 +354,7 @@
         .time-cell {
             background: var(--secondary-bg);
             color: var(--text-color);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             width: 110px;
             min-width: 110px;
@@ -412,7 +452,7 @@
             font-size: 12px;
         }
         .room-name {
-            font-size: 12px;
+            font-size: 10px;
             opacity: 0.8;
         }
         .form-time {
@@ -435,7 +475,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            min-width: 200px;
+            min-width: 280px;
         }
         .teacher-box {
             background: var(--secondary-bg);
@@ -714,19 +754,6 @@
             z-index: 100;
             pointer-events: none;
         }
-
-        /* ✅ Badge rosso per la settimana */
-        .week-badge {
-            display: inline-block;
-            font-size: 24px;
-            font-weight: bold;
-            color: #dc3545;
-            border: 2px solid #dc3545;
-            border-radius: 6px;
-            padding: 2px 8px;
-            min-width: 36px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -759,11 +786,18 @@
             </div>
             <div class="title-section">
                 <div class="title">Time Table 2025-2026</div>
-                <div class="date-info" id="date-info">Monday <span class="date-day">1</span> January 2025</div>
-                <div class="date-info">
-                    Current Week: <span class="week-badge" id="week-badge">A</span>
+                <div class="header-right-info">
+                    <div class="date-info" id="date-info">
+                        <span class="weekday">Monday</span>,
+                        <span class="day-box">1</span>
+                        <span class="month-year">January 2025</span>
+                    </div>
+                    <div class="week-info" id="week-info">
+                        <span class="week-label">Current Week:</span>
+                        <span class="week-box">A</span>
+                    </div>
+                    <div class="user-info" id="user-info" style="font-size: 14px; color: var(--text-color); margin-top: 10px; font-style: italic;"></div>
                 </div>
-                <div class="user-info" id="user-info" style="font-size: 14px; color: var(--text-color); margin-top: 10px; font-style: italic;"></div>
             </div>
             <div class="countdown-section">
                 <div class="countdown-title" id="countdown-title"></div>
@@ -907,9 +941,8 @@
             </div>
         </div>
     </div>
-    <div class="version-badge">ver.3.1025.3-LNG</div>
+    <div class="version-badge">ver.3.1025.2-LNG</div>
     <script>
-        // ✅ Tutto il resto dello script è identico, tranne il metodo saveRequest corretto
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1274,11 +1307,11 @@
                         "time": "14:30 - 15:30",
                         "teachers": {
                             "Ms K Arakelian": {
-                                "subject": "8S",
+                                "subject": "8Y",
                                 "room": "A1"
                             },
                             "Ms N Jenkins": {
-                                "subject": "8S DT",
+                                "subject": "8Y DT",
                                 "room": "A2"
                             }
                         }
@@ -1397,11 +1430,11 @@
                         "time": "09:30 - 10:20",
                         "teachers": {
                             "Ms K Arakelian": {
-                                "subject": "8S",
+                                "subject": "8Y",
                                 "room": "A1"
                             },
                             "Ms N Jenkins": {
-                                "subject": "8S DT",
+                                "subject": "8Y DT",
                                 "room": "A2"
                             }
                         }
@@ -1609,11 +1642,11 @@
                         "time": "11:30 - 12:30",
                         "teachers": {
                             "Ms K Arakelian": {
-                                "subject": "8S",
+                                "subject": "8Y",
                                 "room": "A1"
                             },
                             "Ms N Jenkins": {
-                                "subject": "8S DT",
+                                "subject": "8Y DT",
                                 "room": "A2"
                             }
                         }
@@ -1883,7 +1916,7 @@
                     localStorage.setItem(this.dbName, JSON.stringify({
                         version: this.version,
                         requests: {},
-                        meta: {
+                        metadata: {
                             created: new Date().toISOString(),
                             lastModified: new Date().toISOString()
                         }
@@ -1897,25 +1930,14 @@
                 try {
                     const db = this.getDatabase();
                     const key = this.generateKey(requestData.week, requestData.day, requestData.period, requestData.teacher);
-                    
-                    if (!requestData.hasRequest) {
-                        if (db.requests[key]) {
-                            db.requests[key].hasRequest = false;
-                            db.requests[key].status = 'inactive';
-                            db.requests[key].modifiedAt = new Date().toISOString();
-                        }
-                    } else {
-                        db.requests[key] = {
-                            ...requestData,
-                            id: key,
-                            hasRequest: true,
-                            status: 'active',
-                            createdAt: requestData.createdAt || new Date().toISOString(),
-                            modifiedAt: new Date().toISOString()
-                        };
-                    }
-                    
-                    db.meta.lastModified = new Date().toISOString();
+                    db.requests[key] = {
+                        ...requestData,
+                        id: key,
+                        status: 'active',
+                        createdAt: requestData.createdAt || new Date().toISOString(),
+                        modifiedAt: new Date().toISOString()
+                    };
+                    db.metadata.lastModified = new Date().toISOString();
                     localStorage.setItem(this.dbName, JSON.stringify(db));
                     return true;
                 } catch (e) {
@@ -1937,10 +1959,8 @@
                     const db = this.getDatabase();
                     const key = this.generateKey(week, day, period, teacher);
                     if (db.requests[key]) {
-                        db.requests[key].hasRequest = false;
-                        db.requests[key].notes = '';
-                        db.requests[key].modifiedAt = new Date().toISOString();
-                        db.meta.lastModified = new Date().toISOString();
+                        delete db.requests[key];
+                        db.metadata.lastModified = new Date().toISOString();
                         localStorage.setItem(this.dbName, JSON.stringify(db));
                         return true;
                     }
@@ -1953,7 +1973,7 @@
                 try {
                     const db = this.getDatabase();
                     db.requests = {};
-                    db.meta.lastModified = new Date().toISOString();
+                    db.metadata.lastModified = new Date().toISOString();
                     localStorage.setItem(this.dbName, JSON.stringify(db));
                     return true;
                 } catch (e) {
@@ -2018,9 +2038,10 @@
                 const cellDay = data.day;
                 cell.classList.remove('break-overlay');
                 if (cellDay === today) {
-                    if (isInBreak1 && /^(7|8)/.test(subject)) {
+                    const year = extractYear(subject);
+                    if (isInBreak1 && (year === 7 || year === 8)) {
                         cell.classList.add('break-overlay');
-                    } else if (isInBreak2 && /^(9|10|11|12|13)/.test(subject)) {
+                    } else if (isInBreak2 && year !== null && year >= 9) {
                         cell.classList.add('break-overlay');
                     }
                 }
@@ -2052,9 +2073,10 @@
                 const cellDay = data.day;
                 cell.classList.remove('lunch-overlay');
                 if (cellDay === today) {
-                    if (isInLunch1 && /^(7|8)/.test(subject)) {
+                    const year = extractYear(subject);
+                    if (isInLunch1 && (year === 7 || year === 8)) {
                         cell.classList.add('lunch-overlay');
-                    } else if (isInLunch2 && /^(9|10|11|12|13)/.test(subject)) {
+                    } else if (isInLunch2 && year !== null && year >= 9) {
                         cell.classList.add('lunch-overlay');
                     }
                 }
@@ -2064,24 +2086,21 @@
             const now = new Date();
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             const tableRows = document.querySelectorAll('#timetable tbody tr');
+            tableRows.forEach(row => row.classList.remove('now-row'));
             tableRows.forEach(row => {
-                row.classList.remove('now-row');
-            });
-            for (let i = 0; i < periods.length; i++) {
-                const period = periods[i];
-                const timeRange = timetableData.weekA.MONDAY[period]?.time;
-                if (!timeRange) continue;
+                const timeCell = row.querySelector('.time-cell');
+                if (!timeCell || !timeCell.textContent.includes('-')) return;
+                const timeRange = timeCell.textContent;
                 const [startStr, endStr] = timeRange.split(' - ');
                 const start = parseTime(startStr);
                 const end = parseTime(endStr);
-                if (!start || !end) continue;
+                if (!start || !end) return;
                 const startMinutes = start.hours * 60 + start.minutes;
                 const endMinutes = end.hours * 60 + end.minutes;
                 if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-                    tableRows[i]?.classList.add('now-row');
-                    break;
+                    row.classList.add('now-row');
                 }
-            }
+            });
         }
         function generateTimetable() {
             const week = getCurrentWeek();
@@ -2218,15 +2237,10 @@
             if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
             return currentWeek;
         }
-        function formatDate(date) {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const full = date.toLocaleDateString('en-US', options);
-            const parts = full.split(' ');
-            const weekday = parts[0].replace(',', '');
-            const month = parts[1];
-            const day = parts[2]?.replace(',', '') || parts[3]?.replace(',', '');
-            const year = parts[parts.length - 1];
-            return `${weekday} <span class="date-day">${day}</span> ${month} ${year}`;
+        // ✅ NUOVA FUNZIONE: estrae l'anno in modo robusto
+        function extractYear(subject) {
+            const match = subject.match(/\b(7|8|9|10|11|12|13)\b/);
+            return match ? parseInt(match[1], 10) : null;
         }
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
@@ -2274,21 +2288,33 @@
             }
             return null;
         }
+        // ✅ CORREZIONE: trova il primo termine con startDate nel futuro
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
-                if (now < term.endDate) return term;
+                if (now < term.startDate) {
+                    return term;
+                }
             }
             return null;
         }
+        // ✅ AGGIORNATA: mostra data con giorno della settimana + giorno in box
         function updateClock() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
             document.getElementById('minutes').textContent = now.getMinutes().toString().padStart(2, '0');
             document.getElementById('seconds').textContent = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('date-info').innerHTML = formatDate(now);
+
+            const weekday = now.toLocaleDateString('en-US', { weekday: 'long' });
+            const day = now.getDate();
+            const monthYear = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            document.getElementById('date-info').innerHTML = 
+                `<span class="weekday">${weekday}</span>, <span class="day-box">${day}</span> <span class="month-year">${monthYear}</span>`;
+
             const w = getCurrentWeek();
-            document.getElementById('week-badge').textContent = w;
+            document.getElementById('week-info').innerHTML = 
+                `<span class="week-label">Current Week:</span> <span class="week-box">${w}</span>`;
+
             const nextTerm = getNextTerm();
             if (nextTerm) {
                 const diff = nextTerm.startDate - now;
@@ -2420,7 +2446,7 @@
             saveBtn.disabled = !canModify;
             clearBtn.disabled = !(canModify || canDelete);
             const req = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
-            if (req?.hasRequest && req.status === 'active') {
+            if (req?.hasRequest) {
                 checkbox.checked = true;
                 notes.value = req.notes || '';
                 document.getElementById('char-count').textContent = (req.notes || '').length;
@@ -2510,6 +2536,18 @@
             }
         }
         document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('currentUser')) {
+                document.getElementById('login-modal').style.display = 'none';
+                const user = credentials[Object.keys(credentials).find(k => credentials[k].name === sessionStorage.getItem('currentUser'))];
+                if (user) {
+                    document.getElementById('user-info').textContent = `Logged in as: ${user.displayName}`;
+                    if (user.role === 'admin') {
+                        document.getElementById('clear-all-btn').style.display = 'flex';
+                    }
+                }
+            } else {
+                document.getElementById('login-modal').style.display = 'flex';
+            }
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('dark-mode-toggle').classList.add('active');

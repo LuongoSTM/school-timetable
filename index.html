@@ -165,12 +165,16 @@
         }
         .date-day {
             color: #dc3545;
-            font-size: 35px;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border: 1px solid black;
-            padding: 2px 10px;
             border-radius: 8px;
-            display: inline-block;
             background: var(--primary-bg);
+            text-align: center;
         }
         #week-info {
             font-size: 24px;
@@ -852,7 +856,6 @@
             <div id="login-error" class="login-error">Invalid password. Please try again.</div>
         </div>
     </div>
-
     <!-- Main Content (nascosto finché non autenticato) -->
     <div class="container">
         <div class="header">
@@ -1019,7 +1022,6 @@
             </div>
         </div>
     </div>
-
     <!-- Subject Modal -->
     <div id="subject-modal" class="modal">
         <div class="modal-content">
@@ -1062,7 +1064,6 @@
         </div>
     </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
-
     <script>
         const timetableData = {
             "weekA": {
@@ -2000,13 +2001,11 @@
                 }
             }
         };
-
         const credentials = {
             "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian" },
             "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins" },
             "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator" }
         };
-
         // Variabili globali
         let currentMode = 'auto';
         let currentWeek = 'A';
@@ -2023,7 +2022,6 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-
         // Funzioni di utilità
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
@@ -2114,7 +2112,6 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
-
         // Database richieste
         class TeacherRequestDatabase {
             constructor() {
@@ -2212,7 +2209,6 @@
             }
         }
         window.teacherRequestDB = new TeacherRequestDatabase();
-
         // Funzioni UI
         function generateTimetable() {
             const week = getCurrentWeek();
@@ -2278,7 +2274,6 @@
             });
             updateRequestsCounter();
         }
-
         function showModal(data) {
             currentModalData = data;
             document.getElementById('modal-title').textContent = data.subject;
@@ -2310,12 +2305,10 @@
             }
             document.getElementById('subject-modal').classList.add('show');
         }
-
         function hideModal() {
             document.getElementById('subject-modal').classList.remove('show');
             currentModalData = null;
         }
-
         function saveRequest() {
             if (!currentModalData) return;
             const user = sessionStorage.getItem('currentUser');
@@ -2339,7 +2332,6 @@
                 alert('Error saving request');
             }
         }
-
         function clearRequest() {
             if (!currentModalData) return;
             const user = sessionStorage.getItem('currentUser');
@@ -2366,7 +2358,6 @@
                 alert('Error clearing request');
             }
         }
-
         function clearAllRequests() {
             if (confirm('Are you sure you want to clear ALL active requests? This cannot be undone.')) {
                 const success = window.teacherRequestDB.clearAllRequests();
@@ -2379,7 +2370,6 @@
                 }
             }
         }
-
         function updateRequestsCounter() {
             const count = window.teacherRequestDB.getAllActiveRequests().length;
             const centerEl = document.getElementById('requests-center');
@@ -2393,7 +2383,6 @@
                 navTitle.style.display = 'inline';
             }
         }
-
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2449,7 +2438,6 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
-
         function updateClock() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -2494,7 +2482,6 @@
                 document.getElementById('countdown-seconds').textContent = "00";
             }
         }
-
         function updateBreakOverlay() {
             const now = new Date();
             const currentHour = now.getHours();
@@ -2529,7 +2516,6 @@
                 }
             });
         }
-
         function updateLunchOverlay() {
             const now = new Date();
             const currentHour = now.getHours();
@@ -2564,7 +2550,6 @@
                 }
             });
         }
-
         function highlightCurrentRow() {
             const now = new Date();
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -2588,7 +2573,6 @@
                 }
             }
         }
-
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2619,12 +2603,10 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
-
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement || 
@@ -2636,7 +2618,6 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2645,7 +2626,6 @@
                 );
             });
         }
-
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2659,7 +2639,6 @@
                 localStorage.setItem('darkMode', 'true');
             }
         }
-
         // ✅ LOGIN CORRETTO
         function handleLogin() {
             const password = document.getElementById('password-input').value.trim().toUpperCase();
@@ -2691,7 +2670,6 @@
                 setTimeout(() => errorEl.style.display = 'none', 3000);
             }
         }
-
         // Inizializzazione
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().getDate().toString().padStart(2, '0');
@@ -2700,16 +2678,13 @@
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('dark-mode-toggle').classList.add('active');
             }
-
             // Mostra login
             document.getElementById('login-modal').classList.add('show');
-
             // Eventi login
             document.getElementById('login-btn').addEventListener('click', handleLogin);
             document.getElementById('password-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
-
             // Altri eventi (attivi sempre, ma funzionano solo dopo login)
             document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
             document.getElementById('modal-close').addEventListener('click', hideModal);
@@ -2723,7 +2698,6 @@
                 document.getElementById('char-count').textContent = e.target.value.length;
             });
             document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
-
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const w = btn.dataset.week;
@@ -2740,7 +2714,6 @@
                     }
                 });
             });
-
             updateWeekButtons();
         });
     </script>

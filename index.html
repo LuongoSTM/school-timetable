@@ -33,6 +33,7 @@
             --nav-active-text: #fff;
             --nav-controls-bg: #e9ecef;
             --fullscreen-active-bg: #28a745;
+            --countdown-warning: #dc3545;
         }
         [data-theme="dark"] {
             --primary-bg: #1a1a1a;
@@ -61,6 +62,7 @@
             --nav-active-text: #fff;
             --nav-controls-bg: #404040;
             --fullscreen-active-bg: #28a745;
+            --countdown-warning: #ff6b6b;
         }
         * {
             margin: 0;
@@ -79,11 +81,18 @@
             max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        body.authenticated .container {
+            opacity: 1;
+            pointer-events: auto;
         }
         .header {
             margin-bottom: 20px;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             gap: 30px;
             position: relative;
@@ -129,41 +138,51 @@
         .title-section {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
+            justify-content: center;
             flex-grow: 1;
+            gap: 10px;
         }
         .title {
-            font-size: 2.2rem;
+            font-size: 45px;
             font-weight: 400;
             color: var(--text-color);
-            text-align: center;
-            margin-bottom: 10px;
+            margin: 0;
+            opacity: 0;
+            animation: fadeInTitle 1s forwards;
         }
-        /* ✅ MODIFICHE RICHIESTE */
+        @keyframes fadeInTitle {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .date-info {
             font-size: 25px;
             color: var(--text-color);
             font-weight: bold;
-            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .date-day {
             color: #dc3545;
             font-size: 35px;
             border: 1px solid black;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 2px 10px;
+            border-radius: 8px;
             display: inline-block;
+            background: var(--primary-bg);
         }
         #week-info {
             font-size: 24px;
             color: #dc3545;
             font-weight: bold;
             border: 1px solid black;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 6px 12px;
+            border-radius: 8px;
             display: inline-block;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-top: 8px;
         }
-        /* ✅ FINE MODIFICHE */
         .countdown-section {
             display: flex;
             flex-direction: column;
@@ -179,6 +198,9 @@
         .countdown-container {
             display: flex;
             gap: 8px;
+        }
+        .countdown-warning .countdown-value {
+            color: var(--countdown-warning) !important;
         }
         .navbar {
             background-color: var(--nav-bg);
@@ -214,7 +236,7 @@
             transform: translateY(-1px);
         }
         .requests-badge {
-            background: #ff4d4d; /* più saturo */
+            background: #ff4d4d;
             color: white;
             padding: 4px 10px;
             border-radius: 12px;
@@ -506,7 +528,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.75); /* ✅ opacità aumentata */
+            background-color: rgba(0, 0, 0, 0.75);
             align-items: center;
             justify-content: center;
         }
@@ -659,8 +681,19 @@
             transform: none;
         }
         #login-modal {
-            display: flex;
+            display: none;
+            position: fixed;
             z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            align-items: center;
+            justify-content: center;
+        }
+        #login-modal.show {
+            display: flex;
         }
         .login-content {
             background: var(--secondary-bg);
@@ -749,8 +782,6 @@
             z-index: 100;
             pointer-events: none;
         }
-
-        /* === Nuove icone animate === */
         .icon-wrapper {
             width: 24px;
             height: 24px;
@@ -811,14 +842,18 @@
     </style>
 </head>
 <body>
-    <div id="login-modal" class="modal">
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal show">
         <div class="login-content">
-            <h2 class="login-title">Teacher Login</h2>
-            <input type="password" id="password-input" class="login-input" placeholder="Enter password" autocomplete="off">
+            <h2 class="login-title">🔒 Teacher Login</h2>
+            <p style="margin-bottom: 15px; color: var(--text-color);">Enter your password to access the timetable.</p>
+            <input type="password" id="password-input" class="login-input" placeholder="Password" autocomplete="off">
             <button id="login-btn" class="login-btn">Login</button>
             <div id="login-error" class="login-error">Invalid password. Please try again.</div>
         </div>
     </div>
+
+    <!-- Main Content (nascosto finché non autenticato) -->
     <div class="container">
         <div class="header">
             <div class="clock-section">
@@ -841,8 +876,6 @@
             <div class="title-section">
                 <div class="title">Time Table 2025-2026</div>
                 <div class="date-info" id="date-info">Monday <span class="date-day">1</span> January 2025</div>
-                <div class="date-info" id="week-info">Current Week: A</div>
-                <div class="user-info" id="user-info" style="font-size: 14px; color: var(--text-color); margin-top: 10px; font-style: italic;"></div>
             </div>
             <div class="countdown-section">
                 <div class="countdown-title" id="countdown-title"></div>
@@ -865,6 +898,9 @@
                     </div>
                 </div>
                 <div class="countdown-subtitle" id="countdown-subtitle"></div>
+                <div class="date-info">
+                    <span id="week-info">Current Week: A</span>
+                </div>
             </div>
         </div>
         <nav class="navbar">
@@ -983,6 +1019,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Subject Modal -->
     <div id="subject-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1024,8 +1062,8 @@
         </div>
     </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
+
     <script>
-        // ✅ Tutto lo script originale è mantenuto identico
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1962,32 +2000,122 @@
                 }
             }
         };
+
         const credentials = {
             "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian" },
             "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins" },
             "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator" }
         };
-        function handleLogin() {
-            const password = document.getElementById('password-input').value.trim();
-            const errorEl = document.getElementById('login-error');
-            if (credentials[password]) {
-                const user = credentials[password];
-                sessionStorage.setItem('currentUser', user.name);
-                document.getElementById('user-info').textContent = `Logged in as: ${user.displayName}`;
-                document.getElementById('login-modal').style.display = 'none';
-                if (user.role === 'admin') {
-                    document.getElementById('clear-all-btn').style.display = 'flex';
-                } else {
-                    document.getElementById('clear-all-btn').style.display = 'none';
-                }
-                generateTimetable();
-                updateTeacherBoxes();
-                updateRequestsCounter();
-            } else {
-                errorEl.style.display = 'block';
-                setTimeout(() => errorEl.style.display = 'none', 3000);
-            }
+
+        // Variabili globali
+        let currentMode = 'auto';
+        let currentWeek = 'A';
+        let currentModalData = null;
+        const weekAStartDate = new Date(2025, 8, 1);
+        const schoolTerms = [
+            { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
+            { name: "Christmas Term", startDate: new Date(2025, 11, 22), endDate: new Date(2026, 0, 2) },
+            { name: "February Half Term", startDate: new Date(2026, 1, 16), endDate: new Date(2026, 1, 20) },
+            { name: "Easter Term", startDate: new Date(2026, 2, 30), endDate: new Date(2026, 3, 10) },
+            { name: "May Half Term", startDate: new Date(2026, 4, 25), endDate: new Date(2026, 4, 29) },
+            { name: "Summer Term", startDate: new Date(2026, 6, 20), endDate: new Date(2026, 7, 31) }
+        ];
+        const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
+        const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+        const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
+
+        // Funzioni di utilità
+        function parseTime(timeStr) {
+            const match = timeStr.match(/(\d{1,2}):(\d{2})/);
+            if (!match) return null;
+            return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
+        function isWeekA(date) {
+            const diffTime = date.getTime() - weekAStartDate.getTime();
+            const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+            return diffWeeks % 2 === 0;
+        }
+        function getCurrentWeek() {
+            if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
+            return currentWeek;
+        }
+        function getSubjectClass(subject) {
+            if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
+            return `subject-${subject.toLowerCase().replace(/\s+/g, '-').replace(/[\/]/g, '-').replace(/[^a-z0-9-]/g, '')}`;
+        }
+        function formatDate(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const full = date.toLocaleDateString('en-US', options);
+            const parts = full.split(' ');
+            const weekday = parts[0].replace(',', '');
+            const month = parts[1];
+            const day = parts[2]?.replace(',', '') || parts[3]?.replace(',', '');
+            const year = parts[parts.length - 1];
+            return `${weekday} <span class="date-day">${day}</span> ${month} ${year}`;
+        }
+        function isCurrentTime(timeRange) {
+            if (!timeRange) return false;
+            const now = new Date();
+            const [start, end] = timeRange.split(' - ');
+            const s = parseTime(start);
+            const e = parseTime(end);
+            if (!s || !e) return false;
+            const nowMins = now.getHours() * 60 + now.getMinutes();
+            const startMins = s.hours * 60 + s.minutes;
+            const endMins = e.hours * 60 + e.minutes;
+            return nowMins >= startMins && nowMins < endMins;
+        }
+        function getDayDate(day, week) {
+            const now = new Date();
+            const targetWeekIsA = (week === 'A');
+            const currentMonday = new Date(now);
+            const dayOfWeek = currentMonday.getDay();
+            const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            currentMonday.setDate(currentMonday.getDate() + daysToMonday);
+            const currentWeekIsA = isWeekA(currentMonday);
+            let baseMonday = new Date(currentMonday);
+            if (targetWeekIsA !== currentWeekIsA) {
+                baseMonday.setDate(baseMonday.getDate() + (targetWeekIsA ? -7 : 7));
+            }
+            const dayIndex = days.indexOf(day);
+            const resultDate = new Date(baseMonday);
+            resultDate.setDate(baseMonday.getDate() + dayIndex);
+            return resultDate;
+        }
+        function getNextPeriod(currentPeriodIndex, day, week) {
+            for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
+                const p = periods[i];
+                const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
+                if (wd[day] && wd[day][p]) return { period: p, index: i };
+            }
+            return null;
+        }
+        function getNextTerm() {
+            const now = new Date();
+            for (let term of schoolTerms) {
+                if (now < term.endDate) return term;
+            }
+            return null;
+        }
+        function formatTermDates(term) {
+            const start = term.startDate;
+            const end = term.endDate;
+            const now = new Date();
+            let weeksRemaining = 0;
+            if (now < start) {
+                const diffTime = start - now;
+                weeksRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
+            } else if (now <= end) {
+                const diffTime = end - now;
+                weeksRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
+            }
+            const startDateStr = `${start.getDate()} ${start.toLocaleDateString('en-US', { month: 'short' })}`;
+            const endDateStr = `${end.getDate()} ${end.toLocaleDateString('en-US', { month: 'short' })} ${start.getFullYear()}`;
+            const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
+            return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
+        }
+
+        // Database richieste
         class TeacherRequestDatabase {
             constructor() {
                 this.dbName = 'timetable_teacher_requests';
@@ -2084,110 +2212,8 @@
             }
         }
         window.teacherRequestDB = new TeacherRequestDatabase();
-        function updateRequestsCounter() {
-            const count = window.teacherRequestDB.getAllActiveRequests().length;
-            const centerEl = document.getElementById('requests-center');
-            const navTitle = document.getElementById('nav-title');
-            if (count > 0) {
-                centerEl.innerHTML = `<div class="requests-badge">✉️ ${count} richieste attive</div>`;
-                centerEl.style.display = 'block';
-                navTitle.style.display = 'none';
-            } else {
-                centerEl.style.display = 'none';
-                navTitle.style.display = 'inline';
-            }
-        }
-        function updateBreakOverlay() {
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const totalMinutes = currentHour * 60 + currentMinute;
-            const break1Start = 10 * 60 + 20;
-            const break1End = 10 * 60 + 40;
-            const break2Start = 11 * 60 + 10;
-            const break2End = 11 * 60 + 30;
-            const isInBreak1 = totalMinutes >= break1Start && totalMinutes < break1End;
-            const isInBreak2 = totalMinutes >= break2Start && totalMinutes < break2End;
-            const todayIndex = now.getDay();
-            const dayMap = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-            const today = todayIndex >= 1 && todayIndex <= 5 ? dayMap[todayIndex] : null;
-            if (!today) {
-                document.querySelectorAll('.subject-cell.break-overlay').forEach(cell => {
-                    cell.classList.remove('break-overlay');
-                });
-                return;
-            }
-            document.querySelectorAll('.subject-cell[data-cell]').forEach(cell => {
-                const data = JSON.parse(cell.dataset.cell);
-                const subject = data.subject || '';
-                const cellDay = data.day;
-                cell.classList.remove('break-overlay');
-                if (cellDay === today) {
-                    if (isInBreak1 && /^(7|8)/.test(subject)) {
-                        cell.classList.add('break-overlay');
-                    } else if (isInBreak2 && /^(9|10|11|12|13)/.test(subject)) {
-                        cell.classList.add('break-overlay');
-                    }
-                }
-            });
-        }
-        function updateLunchOverlay() {
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const totalMinutes = currentHour * 60 + currentMinute;
-            const lunch1Start = 12 * 60 + 30;
-            const lunch1End = 13 * 60 + 30;
-            const lunch2Start = 13 * 60 + 30;
-            const lunch2End = 14 * 60 + 30;
-            const isInLunch1 = totalMinutes >= lunch1Start && totalMinutes < lunch1End;
-            const isInLunch2 = totalMinutes >= lunch2Start && totalMinutes < lunch2End;
-            const todayIndex = now.getDay();
-            const dayMap = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-            const today = todayIndex >= 1 && todayIndex <= 5 ? dayMap[todayIndex] : null;
-            if (!today) {
-                document.querySelectorAll('.subject-cell.lunch-overlay').forEach(cell => {
-                    cell.classList.remove('lunch-overlay');
-                });
-                return;
-            }
-            document.querySelectorAll('.subject-cell[data-cell]').forEach(cell => {
-                const data = JSON.parse(cell.dataset.cell);
-                const subject = data.subject || '';
-                const cellDay = data.day;
-                cell.classList.remove('lunch-overlay');
-                if (cellDay === today) {
-                    if (isInLunch1 && /^(7|8)/.test(subject)) {
-                        cell.classList.add('lunch-overlay');
-                    } else if (isInLunch2 && /^(9|10|11|12|13)/.test(subject)) {
-                        cell.classList.add('lunch-overlay');
-                    }
-                }
-            });
-        }
-        function highlightCurrentRow() {
-            const now = new Date();
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            const tableRows = document.querySelectorAll('#timetable tbody tr');
-            tableRows.forEach(row => {
-                row.classList.remove('now-row');
-            });
-            for (let i = 0; i < periods.length; i++) {
-                const period = periods[i];
-                const timeRange = timetableData.weekA.MONDAY[period]?.time;
-                if (!timeRange) continue;
-                const [startStr, endStr] = timeRange.split(' - ');
-                const start = parseTime(startStr);
-                const end = parseTime(endStr);
-                if (!start || !end) continue;
-                const startMinutes = start.hours * 60 + start.minutes;
-                const endMinutes = end.hours * 60 + end.minutes;
-                if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-                    tableRows[i]?.classList.add('now-row');
-                    break;
-                }
-            }
-        }
+
+        // Funzioni UI
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -2204,9 +2230,8 @@
             });
             html += '</tr></thead><tbody>';
             periods.forEach((period, idx) => {
-                let rowClass = '';
                 const time = wd[days[0]]?.[period]?.time || '';
-                html += `<tr class="${rowClass}"><td class="period-cell">${period}</td>`;
+                html += `<tr><td class="period-cell">${period}</td>`;
                 html += `<td class="time-cell">${time}</td>`;
                 days.forEach(day => {
                     teachers.forEach(teacher => {
@@ -2253,203 +2278,122 @@
             });
             updateRequestsCounter();
         }
-        function toggleFullScreen() {
-            const btn = document.getElementById('fullscreen-btn');
-            if (!document.fullscreenElement && !document.mozFullScreenElement && 
-                !document.webkitFullscreenElement && !document.msFullscreenElement) {
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
-                } else if (elem.mozRequestFullScreen) {
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
-                btn.classList.add('active');
-                btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
+
+        function showModal(data) {
+            currentModalData = data;
+            document.getElementById('modal-title').textContent = data.subject;
+            const year = data.subject.match(/\d+/) ? `Year ${data.subject.match(/\d+/)[0]}` : '-';
+            document.getElementById('modal-year').textContent = year;
+            document.getElementById('modal-teacher').textContent = data.teacher;
+            document.getElementById('modal-room').textContent = data.room || '-';
+            document.getElementById('modal-time').textContent = data.time;
+            const user = sessionStorage.getItem('currentUser');
+            const canModify = window.teacherRequestDB.canModifyRequest(data.teacher, user);
+            const canDelete = window.teacherRequestDB.canDeleteRequest(user);
+            const checkbox = document.getElementById('request-checkbox');
+            const notes = document.getElementById('notes-field');
+            const saveBtn = document.getElementById('save-request');
+            const clearBtn = document.getElementById('clear-request');
+            checkbox.disabled = !canModify;
+            notes.disabled = !canModify;
+            saveBtn.disabled = !canModify;
+            clearBtn.disabled = !(canModify || canDelete);
+            const req = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
+            if (req?.hasRequest) {
+                checkbox.checked = true;
+                notes.value = req.notes || '';
+                document.getElementById('char-count').textContent = (req.notes || '').length;
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                }
-                btn.classList.remove('active');
-                btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+                checkbox.checked = false;
+                notes.value = '';
+                document.getElementById('char-count').textContent = '0';
             }
+            document.getElementById('subject-modal').classList.add('show');
         }
-        document.addEventListener('fullscreenchange', updateFullScreenButton);
-        document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
-        document.addEventListener('mozfullscreenchange', updateFullScreenButton);
-        document.addEventListener('MSFullscreenChange', updateFullScreenButton);
-        function updateFullScreenButton() {
-            const btn = document.getElementById('fullscreen-btn');
-            if (document.fullscreenElement || document.mozFullScreenElement || 
-                document.webkitFullscreenElement || document.msFullscreenElement) {
-                btn.classList.add('active');
-                btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
-            } else {
-                btn.classList.remove('active');
-                btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+
+        function hideModal() {
+            document.getElementById('subject-modal').classList.remove('show');
+            currentModalData = null;
+        }
+
+        function saveRequest() {
+            if (!currentModalData) return;
+            const user = sessionStorage.getItem('currentUser');
+            if (!window.teacherRequestDB.canModifyRequest(currentModalData.teacher, user)) {
+                alert('Permission denied');
+                return;
             }
-        }
-        let currentMode = 'auto';
-        let currentWeek = 'A';
-        let currentModalData = null;
-        const weekAStartDate = new Date(2025, 8, 1);
-        const weekBStartDate = new Date(2025, 8, 8);
-        const schoolTerms = [
-            { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
-            { name: "Christmas Term", startDate: new Date(2025, 11, 22), endDate: new Date(2026, 0, 2) },
-            { name: "February Half Term", startDate: new Date(2026, 1, 16), endDate: new Date(2026, 1, 20) },
-            { name: "Easter Term", startDate: new Date(2026, 2, 30), endDate: new Date(2026, 3, 10) },
-            { name: "May Half Term", startDate: new Date(2026, 4, 25), endDate: new Date(2026, 4, 29) },
-            { name: "Summer Term", startDate: new Date(2026, 6, 20), endDate: new Date(2026, 7, 31) }
-        ];
-        const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
-        const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
-        const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-        function isWeekA(date) {
-            const diffTime = date.getTime() - weekAStartDate.getTime();
-            const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
-            return diffWeeks % 2 === 0;
-        }
-        function getCurrentWeek() {
-            if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
-            return currentWeek;
-        }
-        function formatDate(date) {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const full = date.toLocaleDateString('en-US', options);
-            const parts = full.split(' ');
-            const weekday = parts[0].replace(',', '');
-            const month = parts[1];
-            const day = parts[2]?.replace(',', '') || parts[3]?.replace(',', '');
-            const year = parts[parts.length - 1];
-            return `${weekday} <span class="date-day">${day}</span> ${month} ${year}`;
-        }
-        function parseTime(timeStr) {
-            const match = timeStr.match(/(\d{1,2}):(\d{2})/);
-            if (!match) return null;
-            return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
-        }
-        function isCurrentTime(timeRange) {
-            if (!timeRange) return false;
-            const now = new Date();
-            const [start, end] = timeRange.split(' - ');
-            const s = parseTime(start);
-            const e = parseTime(end);
-            if (!s || !e) return false;
-            const nowMins = now.getHours() * 60 + now.getMinutes();
-            const startMins = s.hours * 60 + s.minutes;
-            const endMins = e.hours * 60 + e.minutes;
-            return nowMins >= startMins && nowMins < endMins;
-        }
-        function getDayDate(day, week) {
-            const now = new Date();
-            const targetWeekIsA = (week === 'A');
-            const currentMonday = new Date(now);
-            const dayOfWeek = currentMonday.getDay();
-            const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-            currentMonday.setDate(currentMonday.getDate() + daysToMonday);
-            const currentWeekIsA = isWeekA(currentMonday);
-            let baseMonday = new Date(currentMonday);
-            if (targetWeekIsA !== currentWeekIsA) {
-                baseMonday.setDate(baseMonday.getDate() + (targetWeekIsA ? -7 : 7));
-            }
-            const dayIndex = days.indexOf(day);
-            const resultDate = new Date(baseMonday);
-            resultDate.setDate(baseMonday.getDate() + dayIndex);
-            return resultDate;
-        }
-        function getSubjectClass(subject) {
-            if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
-            return `subject-${subject.toLowerCase().replace(/\s+/g, '-').replace(/[\/]/g, '-').replace(/[^a-z0-9-]/g, '')}`;
-        }
-        function getNextPeriod(currentPeriodIndex, day, week) {
-            for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
-                const p = periods[i];
-                const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
-                if (wd[day] && wd[day][p]) return { period: p, index: i };
-            }
-            return null;
-        }
-        function getNextTerm() {
-            const now = new Date();
-            for (let term of schoolTerms) {
-                if (now < term.endDate) return term;
-            }
-            return null;
-        }
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('date-info').innerHTML = formatDate(now);
-            const w = getCurrentWeek();
-            document.getElementById('week-info').textContent = `Current Week: ${w}`;
-            const nextTerm = getNextTerm();
-            if (nextTerm) {
-                const diff = nextTerm.startDate - now;
-                if (diff > 0) {
-                    const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const secs = Math.floor((diff % (1000 * 60)) / 1000);
-                    document.getElementById('countdown-title').textContent = nextTerm.name;
-                    document.getElementById('countdown-subtitle').textContent = formatTermDates(nextTerm);
-                    document.getElementById('countdown-days').textContent = totalDays.toString().padStart(3, '0');
-                    document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
-                    document.getElementById('countdown-minutes').textContent = mins.toString().padStart(2, '0');
-                    document.getElementById('countdown-seconds').textContent = secs.toString().padStart(2, '0');
-                } else {
-                    document.getElementById('countdown-title').textContent = nextTerm.name;
-                    document.getElementById('countdown-subtitle').textContent = formatTermDates(nextTerm);
-                    document.getElementById('countdown-days').textContent = "000";
-                    document.getElementById('countdown-hours').textContent = "00";
-                    document.getElementById('countdown-minutes').textContent = "00";
-                    document.getElementById('countdown-seconds').textContent = "00";
-                }
-            } else {
-                document.getElementById('countdown-title').textContent = "No More Terms";
-                document.getElementById('countdown-subtitle').textContent = "Academic year completed";
-                document.getElementById('countdown-days').textContent = "000";
-                document.getElementById('countdown-hours').textContent = "00";
-                document.getElementById('countdown-minutes').textContent = "00";
-                document.getElementById('countdown-seconds').textContent = "00";
-            }
-        }
-        function formatTermDates(term) {
-            const start = term.startDate;
-            const end = term.endDate;
-            const now = new Date();
-            let weeksRemaining = 0;
-            if (now < start) {
-                const diffTime = start - now;
-                weeksRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
-            } else if (now <= end) {
-                const diffTime = end - now;
-                weeksRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
-            }
-            const startDateStr = `${start.getDate()} ${start.toLocaleDateString('en-US', { month: 'short' })}`;
-            const endDateStr = `${end.getDate()} ${end.toLocaleDateString('en-US', { month: 'short' })} ${start.getFullYear()}`;
-            const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
-            return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
-        }
-        function updateWeekButtons() {
-            document.querySelectorAll('.control-btn').forEach(btn => {
-                btn.classList.toggle('active', 
-                    (currentMode === 'auto' && btn.dataset.week === 'auto') ||
-                    (currentMode === 'manual' && btn.dataset.week === currentWeek)
-                );
+            const hasReq = document.getElementById('request-checkbox').checked;
+            const notes = document.getElementById('notes-field').value.trim();
+            const success = window.teacherRequestDB.saveRequest({
+                ...currentModalData,
+                hasRequest: hasReq,
+                notes,
+                createdBy: user
             });
+            if (success) {
+                generateTimetable();
+                hideModal();
+                alert('Request saved!');
+            } else {
+                alert('Error saving request');
+            }
         }
+
+        function clearRequest() {
+            if (!currentModalData) return;
+            const user = sessionStorage.getItem('currentUser');
+            const canMod = window.teacherRequestDB.canModifyRequest(currentModalData.teacher, user);
+            const canDel = window.teacherRequestDB.canDeleteRequest(user);
+            if (!(canMod || canDel)) {
+                alert('Permission denied');
+                return;
+            }
+            const success = window.teacherRequestDB.clearRequest(
+                currentModalData.week,
+                currentModalData.day,
+                currentModalData.period,
+                currentModalData.teacher
+            );
+            if (success) {
+                document.getElementById('request-checkbox').checked = false;
+                document.getElementById('notes-field').value = '';
+                document.getElementById('char-count').textContent = '0';
+                generateTimetable();
+                hideModal();
+                alert('Request cleared!');
+            } else {
+                alert('Error clearing request');
+            }
+        }
+
+        function clearAllRequests() {
+            if (confirm('Are you sure you want to clear ALL active requests? This cannot be undone.')) {
+                const success = window.teacherRequestDB.clearAllRequests();
+                if (success) {
+                    generateTimetable();
+                    updateRequestsCounter();
+                    alert('All requests cleared!');
+                } else {
+                    alert('Error clearing requests');
+                }
+            }
+        }
+
+        function updateRequestsCounter() {
+            const count = window.teacherRequestDB.getAllActiveRequests().length;
+            const centerEl = document.getElementById('requests-center');
+            const navTitle = document.getElementById('nav-title');
+            if (count > 0) {
+                centerEl.innerHTML = `<div class="requests-badge">✉️ ${count} richieste attive</div>`;
+                centerEl.style.display = 'block';
+                navTitle.style.display = 'none';
+            } else {
+                centerEl.style.display = 'none';
+                navTitle.style.display = 'inline';
+            }
+        }
+
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2505,102 +2449,203 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
-        function showModal(data) {
-            currentModalData = data;
-            document.getElementById('modal-title').textContent = data.subject;
-            const year = data.subject.match(/\d+/) ? `Year ${data.subject.match(/\d+/)[0]}` : '-';
-            document.getElementById('modal-year').textContent = year;
-            document.getElementById('modal-teacher').textContent = data.teacher;
-            document.getElementById('modal-room').textContent = data.room || '-';
-            document.getElementById('modal-time').textContent = data.time;
-            const user = sessionStorage.getItem('currentUser');
-            const canModify = window.teacherRequestDB.canModifyRequest(data.teacher, user);
-            const canDelete = window.teacherRequestDB.canDeleteRequest(user);
-            const checkbox = document.getElementById('request-checkbox');
-            const notes = document.getElementById('notes-field');
-            const saveBtn = document.getElementById('save-request');
-            const clearBtn = document.getElementById('clear-request');
-            checkbox.disabled = !canModify;
-            notes.disabled = !canModify;
-            saveBtn.disabled = !canModify;
-            clearBtn.disabled = !(canModify || canDelete);
-            const req = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
-            if (req?.hasRequest) {
-                checkbox.checked = true;
-                notes.value = req.notes || '';
-                document.getElementById('char-count').textContent = (req.notes || '').length;
-            } else {
-                checkbox.checked = false;
-                notes.value = '';
-                document.getElementById('char-count').textContent = '0';
-            }
-            document.getElementById('subject-modal').classList.add('show');
-        }
-        function hideModal() {
-            document.getElementById('subject-modal').classList.remove('show');
-            currentModalData = null;
-        }
-        function saveRequest() {
-            if (!currentModalData) return;
-            const user = sessionStorage.getItem('currentUser');
-            if (!window.teacherRequestDB.canModifyRequest(currentModalData.teacher, user)) {
-                alert('Permission denied');
-                return;
-            }
-            const hasReq = document.getElementById('request-checkbox').checked;
-            const notes = document.getElementById('notes-field').value.trim();
-            const success = window.teacherRequestDB.saveRequest({
-                ...currentModalData,
-                hasRequest: hasReq,
-                notes,
-                createdBy: user
-            });
-            if (success) {
-                generateTimetable();
-                hideModal();
-                alert('Request saved!');
-            } else {
-                alert('Error saving request');
-            }
-        }
-        function clearRequest() {
-            if (!currentModalData) return;
-            const user = sessionStorage.getItem('currentUser');
-            const canMod = window.teacherRequestDB.canModifyRequest(currentModalData.teacher, user);
-            const canDel = window.teacherRequestDB.canDeleteRequest(user);
-            if (!(canMod || canDel)) {
-                alert('Permission denied');
-                return;
-            }
-            const success = window.teacherRequestDB.clearRequest(
-                currentModalData.week,
-                currentModalData.day,
-                currentModalData.period,
-                currentModalData.teacher
-            );
-            if (success) {
-                document.getElementById('request-checkbox').checked = false;
-                document.getElementById('notes-field').value = '';
-                document.getElementById('char-count').textContent = '0';
-                generateTimetable();
-                hideModal();
-                alert('Request cleared!');
-            } else {
-                alert('Error clearing request');
-            }
-        }
-        function clearAllRequests() {
-            if (confirm('Are you sure you want to clear ALL active requests? This cannot be undone.')) {
-                const success = window.teacherRequestDB.clearAllRequests();
-                if (success) {
-                    generateTimetable();
-                    updateRequestsCounter();
-                    alert('All requests cleared!');
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('date-info').innerHTML = formatDate(now);
+            const w = getCurrentWeek();
+            document.getElementById('week-info').textContent = `Current Week: ${w}`;
+            const nextTerm = getNextTerm();
+            const countdownContainer = document.getElementById('countdown-container');
+            countdownContainer.classList.remove('countdown-warning');
+            if (nextTerm) {
+                const diff = nextTerm.startDate - now;
+                if (diff > 0) {
+                    const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+                    document.getElementById('countdown-title').textContent = nextTerm.name;
+                    document.getElementById('countdown-subtitle').textContent = formatTermDates(nextTerm);
+                    document.getElementById('countdown-days').textContent = totalDays.toString().padStart(3, '0');
+                    document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('countdown-minutes').textContent = mins.toString().padStart(2, '0');
+                    document.getElementById('countdown-seconds').textContent = secs.toString().padStart(2, '0');
+                    if (totalDays <= 3) {
+                        countdownContainer.classList.add('countdown-warning');
+                    }
                 } else {
-                    alert('Error clearing requests');
+                    document.getElementById('countdown-title').textContent = nextTerm.name;
+                    document.getElementById('countdown-subtitle').textContent = formatTermDates(nextTerm);
+                    document.getElementById('countdown-days').textContent = "000";
+                    document.getElementById('countdown-hours').textContent = "00";
+                    document.getElementById('countdown-minutes').textContent = "00";
+                    document.getElementById('countdown-seconds').textContent = "00";
+                }
+            } else {
+                document.getElementById('countdown-title').textContent = "No More Terms";
+                document.getElementById('countdown-subtitle').textContent = "Academic year completed";
+                document.getElementById('countdown-days').textContent = "000";
+                document.getElementById('countdown-hours').textContent = "00";
+                document.getElementById('countdown-minutes').textContent = "00";
+                document.getElementById('countdown-seconds').textContent = "00";
+            }
+        }
+
+        function updateBreakOverlay() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const totalMinutes = currentHour * 60 + currentMinute;
+            const break1Start = 10 * 60 + 20;
+            const break1End = 10 * 60 + 40;
+            const break2Start = 11 * 60 + 10;
+            const break2End = 11 * 60 + 30;
+            const isInBreak1 = totalMinutes >= break1Start && totalMinutes < break1End;
+            const isInBreak2 = totalMinutes >= break2Start && totalMinutes < break2End;
+            const todayIndex = now.getDay();
+            const dayMap = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+            const today = todayIndex >= 1 && todayIndex <= 5 ? dayMap[todayIndex] : null;
+            if (!today) {
+                document.querySelectorAll('.subject-cell.break-overlay').forEach(cell => {
+                    cell.classList.remove('break-overlay');
+                });
+                return;
+            }
+            document.querySelectorAll('.subject-cell[data-cell]').forEach(cell => {
+                const data = JSON.parse(cell.dataset.cell);
+                const subject = data.subject || '';
+                const cellDay = data.day;
+                cell.classList.remove('break-overlay');
+                if (cellDay === today) {
+                    if (isInBreak1 && /^(7|8)/.test(subject)) {
+                        cell.classList.add('break-overlay');
+                    } else if (isInBreak2 && /^(9|10|11|12|13)/.test(subject)) {
+                        cell.classList.add('break-overlay');
+                    }
+                }
+            });
+        }
+
+        function updateLunchOverlay() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const totalMinutes = currentHour * 60 + currentMinute;
+            const lunch1Start = 12 * 60 + 30;
+            const lunch1End = 13 * 60 + 30;
+            const lunch2Start = 13 * 60 + 30;
+            const lunch2End = 14 * 60 + 30;
+            const isInLunch1 = totalMinutes >= lunch1Start && totalMinutes < lunch1End;
+            const isInLunch2 = totalMinutes >= lunch2Start && totalMinutes < lunch2End;
+            const todayIndex = now.getDay();
+            const dayMap = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+            const today = todayIndex >= 1 && todayIndex <= 5 ? dayMap[todayIndex] : null;
+            if (!today) {
+                document.querySelectorAll('.subject-cell.lunch-overlay').forEach(cell => {
+                    cell.classList.remove('lunch-overlay');
+                });
+                return;
+            }
+            document.querySelectorAll('.subject-cell[data-cell]').forEach(cell => {
+                const data = JSON.parse(cell.dataset.cell);
+                const subject = data.subject || '';
+                const cellDay = data.day;
+                cell.classList.remove('lunch-overlay');
+                if (cellDay === today) {
+                    if (isInLunch1 && /^(7|8)/.test(subject)) {
+                        cell.classList.add('lunch-overlay');
+                    } else if (isInLunch2 && /^(9|10|11|12|13)/.test(subject)) {
+                        cell.classList.add('lunch-overlay');
+                    }
+                }
+            });
+        }
+
+        function highlightCurrentRow() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const tableRows = document.querySelectorAll('#timetable tbody tr');
+            tableRows.forEach(row => {
+                row.classList.remove('now-row');
+            });
+            for (let i = 0; i < periods.length; i++) {
+                const period = periods[i];
+                const timeRange = timetableData.weekA.MONDAY[period]?.time;
+                if (!timeRange) continue;
+                const [startStr, endStr] = timeRange.split(' - ');
+                const start = parseTime(startStr);
+                const end = parseTime(endStr);
+                if (!start || !end) continue;
+                const startMinutes = start.hours * 60 + start.minutes;
+                const endMinutes = end.hours * 60 + end.minutes;
+                if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                    tableRows[i]?.classList.add('now-row');
+                    break;
                 }
             }
         }
+
+        function toggleFullScreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && !document.mozFullScreenElement && 
+                !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+                btn.classList.add('active');
+                btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                btn.classList.remove('active');
+                btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+            }
+        }
+
+        document.addEventListener('fullscreenchange', updateFullScreenButton);
+        document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
+        document.addEventListener('mozfullscreenchange', updateFullScreenButton);
+        document.addEventListener('MSFullscreenChange', updateFullScreenButton);
+
+        function updateFullScreenButton() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement || document.mozFullScreenElement || 
+                document.webkitFullscreenElement || document.msFullscreenElement) {
+                btn.classList.add('active');
+                btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+            }
+        }
+
+        function updateWeekButtons() {
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.toggle('active', 
+                    (currentMode === 'auto' && btn.dataset.week === 'auto') ||
+                    (currentMode === 'manual' && btn.dataset.week === currentWeek)
+                );
+            });
+        }
+
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2614,32 +2659,58 @@
                 localStorage.setItem('darkMode', 'true');
             }
         }
+
+        // ✅ LOGIN CORRETTO
+        function handleLogin() {
+            const password = document.getElementById('password-input').value.trim().toUpperCase();
+            const errorEl = document.getElementById('login-error');
+            if (credentials[password]) {
+                const user = credentials[password];
+                sessionStorage.setItem('currentUser', user.name);
+                document.body.classList.add('authenticated');
+                document.getElementById('login-modal').classList.remove('show');
+                if (user.role === 'admin') {
+                    document.getElementById('clear-all-btn').style.display = 'flex';
+                } else {
+                    document.getElementById('clear-all-btn').style.display = 'none';
+                }
+                generateTimetable();
+                updateTeacherBoxes();
+                updateRequestsCounter();
+                // Avvia aggiornamenti periodici
+                setInterval(() => {
+                    updateClock();
+                    updateTeacherBoxes();
+                    updateBreakOverlay();
+                    updateLunchOverlay();
+                    highlightCurrentRow();
+                }, 1000);
+                updateClock(); // prima chiamata immediata
+            } else {
+                errorEl.style.display = 'block';
+                setTimeout(() => errorEl.style.display = 'none', 3000);
+            }
+        }
+
+        // Inizializzazione
         document.addEventListener('DOMContentLoaded', () => {
-            // ✅ Aggiorna versione con giorno corrente
             const today = new Date().getDate().toString().padStart(2, '0');
             document.getElementById('version-badge').textContent = `ver.3.1025.${today}`;
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('dark-mode-toggle').classList.add('active');
             }
+
+            // Mostra login
+            document.getElementById('login-modal').classList.add('show');
+
+            // Eventi login
             document.getElementById('login-btn').addEventListener('click', handleLogin);
             document.getElementById('password-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
-            document.querySelectorAll('.control-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const w = btn.dataset.week;
-                    if (w === 'auto') {
-                        currentMode = 'auto';
-                    } else {
-                        currentMode = 'manual';
-                        currentWeek = w;
-                    }
-                    updateWeekButtons();
-                    generateTimetable();
-                    updateTeacherBoxes();
-                });
-            });
+
+            // Altri eventi (attivi sempre, ma funzionano solo dopo login)
             document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
             document.getElementById('modal-close').addEventListener('click', hideModal);
             document.getElementById('subject-modal').addEventListener('click', (e) => {
@@ -2652,17 +2723,25 @@
                 document.getElementById('char-count').textContent = e.target.value.length;
             });
             document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
+
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const w = btn.dataset.week;
+                    if (w === 'auto') {
+                        currentMode = 'auto';
+                    } else {
+                        currentMode = 'manual';
+                        currentWeek = w;
+                    }
+                    updateWeekButtons();
+                    if (document.body.classList.contains('authenticated')) {
+                        generateTimetable();
+                        updateTeacherBoxes();
+                    }
+                });
+            });
+
             updateWeekButtons();
-            generateTimetable();
-            updateClock();
-            updateTeacherBoxes();
-            setInterval(() => {
-                updateClock();
-                updateTeacherBoxes();
-                updateBreakOverlay();
-                updateLunchOverlay();
-                highlightCurrentRow();
-            }, 1000);
         });
     </script>
 </body>

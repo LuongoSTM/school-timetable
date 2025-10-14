@@ -26,7 +26,6 @@
             --countdown-bg: #ffffff;
             --countdown-text: #333333;
             --countdown-border: #dee2e6;
-            --request-highlight: #ff6b6b;
             --nav-bg: #f0f0f0;
             --nav-text: #333;
             --nav-active-bg: #007bff;
@@ -55,7 +54,6 @@
             --countdown-bg: #2d2d2d;
             --countdown-text: #ffffff;
             --countdown-border: #404040;
-            --request-highlight: #ff8a80;
             --nav-bg: #2d2d2d;
             --nav-text: #fff;
             --nav-active-bg: #0056b3;
@@ -97,21 +95,22 @@
             gap: 30px;
             position: relative;
         }
-        .clock-section {
+        .clock-section, .countdown-section {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end;
             flex-shrink: 0;
         }
-        .clock-title {
+        .clock-title, .countdown-title-wrapper {
             font-size: 16px;
             font-weight: bold;
             color: var(--text-color);
             margin-bottom: 8px;
+            text-align: center;
         }
-        .clock-container {
+        .clock-container, .countdown-container {
             display: flex;
-            gap: 8px;
+            gap: 11px;
         }
         .clock-box, .countdown-box {
             background: var(--countdown-bg);
@@ -135,6 +134,21 @@
             text-transform: capitalize;
             opacity: 0.8;
         }
+        .logged-in-user-box {
+            margin-top: 12px;
+            background: var(--countdown-bg);
+            border: 1px solid var(--countdown-border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            text-align: center;
+            min-width: 200px;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--countdown-text);
+        }
         .title-section {
             display: flex;
             flex-direction: column;
@@ -144,7 +158,7 @@
             gap: 10px;
         }
         .title {
-            font-size: 45px;
+            font-size: 75px;
             font-weight: 400;
             color: var(--text-color);
             margin: 0;
@@ -172,35 +186,28 @@
             display: inline-block;
             background: var(--primary-bg);
         }
+        .countdown-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            width: 100%;
+        }
         #week-info {
-            font-size: 24px;
+            font-size: 20px;
             color: #dc3545;
-            font-weight: bold;
+            font-weight: normal;
             border: 1px solid black;
-            padding: 6px 12px;
+            padding: 4px 7.5px;
             border-radius: 8px;
             display: inline-block;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            margin-top: 8px;
-        }
-        .countdown-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
         }
         .countdown-title {
+            margin: 0;
             font-size: 16px;
             font-weight: bold;
             color: var(--text-color);
-            margin-bottom: 8px;
-        }
-        .countdown-container {
-            display: flex;
-            gap: 8px;
-        }
-        .countdown-warning .countdown-value {
-            color: var(--countdown-warning) !important;
         }
         .term-info-box {
             margin-top: 12px;
@@ -224,6 +231,42 @@
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
         }
+        .now-summary-box {
+            background: var(--secondary-bg);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        [data-theme="dark"] .now-summary-box {
+            background: #3a3a3a;
+        }
+        .now-summary-highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .now-summary-warning {
+            color: #dc3545;
+        }
+        .progress-bar-container {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #007bff;
+            width: 0%;
+            transition: width 1s linear;
+        }
         .navbar {
             background-color: var(--nav-bg);
             border-radius: 20px;
@@ -239,6 +282,7 @@
             display: flex;
             gap: 5px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .nav-item {
             display: flex;
@@ -257,24 +301,6 @@
             color: var(--nav-active-text);
             transform: translateY(-1px);
         }
-        .requests-badge {
-            background: #ff4d4d;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin: 0 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            animation: pulseIcon 2s infinite;
-        }
-        @keyframes pulseIcon {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
         .nav-controls {
             display: flex;
             align-items: center;
@@ -282,8 +308,9 @@
             background-color: var(--nav-controls-bg);
             padding: 6px 12px;
             border-radius: 15px;
+            flex-wrap: wrap;
         }
-        .control-btn, .fullscreen-btn, .clear-all-btn {
+        .control-btn, .fullscreen-btn, .export-pdf-btn {
             background: none;
             border: none;
             color: var(--text-color);
@@ -299,7 +326,7 @@
         }
         .control-btn:hover, .control-btn.active,
         .fullscreen-btn:hover,
-        .clear-all-btn:hover {
+        .export-pdf-btn:hover {
             background-color: var(--header-bg);
             color: var(--header-text);
             transform: translateY(-1px);
@@ -347,11 +374,14 @@
         }
         .timetable-container {
             flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
         .timetable {
             width: 100%;
             border-collapse: separate;
             border-spacing: 3px;
+            min-width: 800px;
         }
         .timetable th, .timetable td {
             border: none;
@@ -375,6 +405,7 @@
             padding: 0 !important;
             font-weight: bold;
             font-size: 14px;
+            position: relative; /* ✅ Necessario per posizionare il badge */
         }
         .time-cell {
             background: var(--secondary-bg);
@@ -385,7 +416,6 @@
             min-width: 110px;
         }
         .subject-cell {
-            cursor: pointer;
             padding: 5px 5px 5px 5px;
             background: var(--primary-bg);
             position: relative;
@@ -393,62 +423,6 @@
         .subject-cell:hover {
             transform: translateY(-2px);
             box-shadow: var(--cell-shadow-hover);
-        }
-        .subject-cell.has-request {
-            position: relative;
-            animation: none !important;
-            box-shadow: var(--cell-shadow) !important;
-        }
-        .subject-cell.has-request::before {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border: 2px solid var(--request-highlight);
-            border-radius: 12px;
-            z-index: 1;
-            animation: pulseRequest 1.8s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes pulseRequest {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4);
-                opacity: 1;
-            }
-            70% {
-                box-shadow: 0 0 0 8px rgba(255, 107, 107, 0);
-                opacity: 0.6;
-            }
-            100% {
-                box-shadow: 0 0 0 12px rgba(255, 107, 107, 0);
-                opacity: 0;
-            }
-        }
-        .request-indicator {
-            position: absolute;
-            top: 2px;
-            right: 4px;
-            font-size: 14px;
-            color: var(--request-highlight);
-            font-weight: bold;
-            pointer-events: none;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 4px;
-            padding: 0 2px;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.3);
-        }
-        [data-theme="dark"] .request-indicator {
-            background: rgba(45, 45, 45, 0.8);
-        }
-        .subject-name {
-            font-weight: bold;
-            font-size: 12px;
-        }
-        .room-name {
-            font-size: 12px;
-            opacity: 0.8;
         }
         .form-time {
             background: var(--form-time-bg) !important;
@@ -458,13 +432,25 @@
             background: var(--lunch-bg) !important;
             color: var(--lunch-text) !important;
         }
-        .timetable tr.now-row {
-            animation: blinkNow 1.5s infinite;
+        .timetable tr.now-row td {
+            background-color: rgba(0, 123, 255, 0.08) !important;
             position: relative;
         }
-        @keyframes blinkNow {
-            0%, 100% { box-shadow: 0 0 0 2px #007bff; }
-            50% { box-shadow: 0 0 0 4px #dc3545; }
+        .timetable tr.now-row .period-cell {
+            border-left: 4px solid #007bff;
+            font-weight: bold;
+        }
+        .now-badge {
+            position: absolute;
+            top: 2px;
+            left: -4px; /* ✅ Spostato a sinistra */
+            width: 36px;
+            height: 24px;
+            z-index: 10;
+        }
+        .now-badge svg {
+            width: 100%;
+            height: 100%;
         }
         .subject-cell.break-overlay::before {
             content: "BREAK";
@@ -623,85 +609,6 @@
             color: var(--text-color);
             text-align: right;
         }
-        .request-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border-color);
-        }
-        .request-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .request-checkbox {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        .request-label {
-            font-weight: bold;
-            font-size: 16px;
-            color: var(--text-color);
-            cursor: pointer;
-        }
-        .notes-field {
-            width: 100%;
-            height: 100px;
-            margin: 10px 0;
-            padding: 10px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            font-family: 'DM Serif Text', serif;
-            font-size: 14px;
-            resize: vertical;
-            transition: border-color 0.3s ease;
-        }
-        .notes-field:focus {
-            outline: none;
-            border-color: var(--header-bg);
-        }
-        .char-counter {
-            text-align: right;
-            font-size: 12px;
-            color: var(--text-color);
-            opacity: 0.7;
-            margin-bottom: 15px;
-        }
-        .save-btn, .clear-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'DM Serif Text', serif;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 10px;
-        }
-        .save-btn {
-            background-color: var(--header-bg);
-            color: white;
-        }
-        .save-btn:hover {
-            background-color: var(--button-hover);
-            transform: translateY(-1px);
-        }
-        .clear-btn {
-            background-color: var(--button-active);
-            color: white;
-        }
-        .clear-btn:hover {
-            background-color: #c82333;
-            transform: translateY(-1px);
-        }
-        .save-btn:disabled, .clear-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
         #login-modal {
             display: none;
             position: fixed;
@@ -795,7 +702,7 @@
         .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
-        .version-badge {
+        .version-badge, .refresh-badge {
             position: fixed;
             bottom: 10px;
             right: 10px;
@@ -803,6 +710,9 @@
             color: #888888;
             z-index: 100;
             pointer-events: none;
+        }
+        .refresh-badge {
+            bottom: 30px;
         }
         .icon-wrapper {
             width: 24px;
@@ -861,11 +771,38 @@
             stroke-dashoffset: 15;
             transition: stroke-dashoffset 0.4s ease 0.1s;
         }
+        #offline-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #dc3545;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-weight: bold;
+            z-index: 10000;
+            display: none;
+        }
+        #day-filter-select {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--nav-controls-bg);
+            color: var(--text-color);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #day-filter-select:hover {
+            background: var(--header-bg);
+            color: var(--header-text);
+        }
     </style>
 </head>
 <body>
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal show">
+    <div id="offline-banner">⚠️ You are offline. Some features may not work.</div>
+    <div id="login-modal" class="modal">
         <div class="login-content">
             <h2 class="login-title">🔒 Teacher Login</h2>
             <p style="margin-bottom: 15px; color: var(--text-color);">Enter your password to access the timetable.</p>
@@ -874,7 +811,6 @@
             <div id="login-error" class="login-error">Invalid password. Please try again.</div>
         </div>
     </div>
-    <!-- Main Content (nascosto finché non autenticato) -->
     <div class="container">
         <div class="header">
             <div class="clock-section">
@@ -893,13 +829,21 @@
                         <div class="clock-label">Seconds</div>
                     </div>
                 </div>
+                <div class="logged-in-user-box" id="logged-in-user-box">
+                    Logged in as: —
+                </div>
             </div>
             <div class="title-section">
                 <div class="title">Time Table 2025-2026</div>
-                <div class="date-info" id="date-info">Monday <span class="date-day">1</span> January 2025</div>
+                <div class="date-info" id="date-info">Loading...</div>
             </div>
             <div class="countdown-section">
-                <div class="countdown-title" id="countdown-title"></div>
+                <div class="countdown-title-wrapper">
+                    <div class="countdown-title-row">
+                        <div id="week-info">Current Week: A</div>
+                        <div class="countdown-title" id="countdown-title">October Half Term</div>
+                    </div>
+                </div>
                 <div class="countdown-container" id="countdown-container">
                     <div class="countdown-box">
                         <div class="countdown-value" id="countdown-days">000</div>
@@ -918,14 +862,18 @@
                         <div class="countdown-label">Seconds</div>
                     </div>
                 </div>
-                <!-- ✅ Box spostato qui, subito dopo il countdown -->
                 <div class="term-info-box" id="term-info-box">
-                    27 Oct – 31 Oct 2025 (3 weeks remaining)
-                </div>
-                <div class="date-info">
-                    <span id="week-info">Current Week: A</span>
+                    Loading...
                 </div>
             </div>
+        </div>
+        <div id="now-summary-box" class="now-summary-box">
+            <div class="now-summary-content" id="now-summary-content">
+                Loading...
+            </div>
+        </div>
+        <div id="progress-bar-container" class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
         </div>
         <nav class="navbar">
             <div class="nav-main">
@@ -977,18 +925,16 @@
                     </div>
                     <span>Data</span>
                 </a>
-                <a href="requests.html" class="nav-item">
-                    <div class="icon-wrapper">
-                        <svg class="nav-icon request-icon" viewBox="0 0 100 100">
-                            <rect class="paper" x="20" y="20" width="60" height="60" rx="8" stroke-width="8"/>
-                            <path class="check" d="M40,55 L50,65 L70,45" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>Requests</span>
-                </a>
             </div>
-            <div id="requests-center" style="text-align: center; flex: 1; display: none;"></div>
             <div class="nav-controls">
+                <select id="day-filter-select">
+                    <option value="all">All Days</option>
+                    <option value="MONDAY">Monday</option>
+                    <option value="TUESDAY">Tuesday</option>
+                    <option value="WEDNESDAY">Wednesday</option>
+                    <option value="THURSDAY">Thursday</option>
+                    <option value="FRIDAY">Friday</option>
+                </select>
                 <button class="control-btn" data-week="A">Week A</button>
                 <button class="control-btn" data-week="B">Week B</button>
                 <button class="control-btn active" data-week="auto">Automatic</button>
@@ -996,9 +942,9 @@
                     <span>⛶</span>
                     <span>Full Screen</span>
                 </button>
-                <button id="clear-all-btn" class="clear-all-btn" style="display: none;">
-                    <span>🗑️</span>
-                    <span>Clear All Requests</span>
+                <button id="export-pdf-btn" class="export-pdf-btn">
+                    <span>📄</span>
+                    <span>Export PDF</span>
                 </button>
                 <div class="dark-mode-control">
                     <span>🌙</span>
@@ -1043,995 +989,120 @@
             </div>
         </div>
     </div>
-    <!-- Subject Modal -->
-    <div id="subject-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modal-title">Subject Details</h2>
-                <span class="close" id="modal-close">&times;</span>
-            </div>
-            <div class="modal-info">
-                <div class="modal-field">
-                    <span class="field-label">Year:</span>
-                    <span class="field-value" id="modal-year">-</span>
-                </div>
-                <div class="modal-field">
-                    <span class="field-label">Teacher:</span>
-                    <span class="field-value" id="modal-teacher">-</span>
-                </div>
-                <div class="modal-field">
-                    <span class="field-label">Room:</span>
-                    <span class="field-value" id="modal-room">-</span>
-                </div>
-                <div class="modal-field">
-                    <span class="field-label">Time:</span>
-                    <span class="field-value" id="modal-time">-</span>
-                </div>
-            </div>
-            <div class="request-section">
-                <div class="request-header">
-                    <input type="checkbox" id="request-checkbox" class="request-checkbox">
-                    <label for="request-checkbox" class="request-label">Request Teacher Attention</label>
-                </div>
-                <textarea id="notes-field" class="notes-field" placeholder="Add notes for the teacher (optional)..." maxlength="500"></textarea>
-                <div class="char-counter">
-                    <span id="char-count">0</span>/500 characters
-                </div>
-                <div class="modal-actions">
-                    <button id="save-request" class="save-btn">Save Request</button>
-                    <button id="clear-request" class="clear-btn">Clear Request</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
     <script>
-        const timetableData = {
-            "weekA": {
-                "MONDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "12 DT Textile",
-                                "room": "T1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "11 Photography",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "12 / 13 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9S DT",
-                                "room": "T1"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9M",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9A",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "12 DT Textile",
-                                "room": "T1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "10 Art",
-                                "room": "A1"
-                            }
-                        }
-                    }
-                },
-                "TUESDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9S",
-                                "room": "A2"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "11 Photography",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7AC",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7AC DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "11 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8AC",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8AC DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9AC DT",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    }
-                },
-                "WEDNESDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9HM Food",
-                                "room": "HE1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9C",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7AC",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7AC DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "11 Photography",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7H",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7H DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "11 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    }
-                },
-                "THURSDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "10 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9H",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "10 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "11 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "12 / 13 Art",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8S",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8S DT",
-                                "room": "A2"
-                            }
-                        }
-                    }
-                },
-                "FRIDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7MS",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7MS DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8HM",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8HM DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8AC",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8AC DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7H",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7H DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9AC DT",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "12 / 13 Art",
-                                "room": "A2"
-                            }
-                        }
-                    }
-                }
-            },
-            "weekB": {
-                "MONDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8S",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8S DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9S",
-                                "room": "A2"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "12 / 13 Art",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7MS",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7MS DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "12 / 13 Art",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9S Food",
-                                "room": "HE1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    }
-                },
-                "TUESDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "10 Art",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "PSHE",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "PSHE",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "11 Photography",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "12 / 13 Art",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "11 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    }
-                },
-                "WEDNESDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "10 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "11 Art",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9C",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8S",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8S DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9M",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "12 / 13 Art",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9A",
-                                "room": "A2"
-                            }
-                        }
-                    }
-                },
-                "THURSDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9S Food",
-                                "room": "HE1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "12 / 13 Art",
-                                "room": "A2"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "11 Photography",
-                                "room": "A1"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9AC DT",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9H",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8HM",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8HM DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7MS",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7MS DT",
-                                "room": "A2"
-                            }
-                        }
-                    }
-                },
-                "FRIDAY": {
-                    "Form Time": {
-                        "time": "09:00 - 09:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Form Time",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Form Time",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "1": {
-                        "time": "09:30 - 10:20",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7AC",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7AC DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "2": {
-                        "time": "10:20 - 11:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8AC",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8AC DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "3": {
-                        "time": "11:30 - 12:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "8MH",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "8HM DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "4a": {
-                        "time": "12:30 - 13:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "Lunch",
-                                "room": ""
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "Lunch",
-                                "room": ""
-                            }
-                        }
-                    },
-                    "4b": {
-                        "time": "13:30 - 14:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "7H",
-                                "room": "A1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "7H DT",
-                                "room": "A2"
-                            }
-                        }
-                    },
-                    "5": {
-                        "time": "14:30 - 15:30",
-                        "teachers": {
-                            "Ms K Arakelian": {
-                                "subject": "9HM Food",
-                                "room": "HE1"
-                            },
-                            "Ms N Jenkins": {
-                                "subject": "9HM DT",
-                                "room": "A2"
-                            }
-                        }
-                    }
-                }
-            }
-        };
+        window.addEventListener('online', () => {
+            document.getElementById('offline-banner').style.display = 'none';
+        });
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-banner').style.display = 'block';
+        });
         const credentials = {
+            "admin": { name: "Admin User", role: "admin", displayName: "Administrator" },
             "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian" },
             "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins" },
             "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator" }
         };
-        // Variabili globali
+        const timetableData = {
+            "weekA": {
+                "MONDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "12 DT Textile", "room": "T1" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "12 / 13 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "9S DT", "room": "T1" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "9M", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "9A", "room": "A1" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "12 DT Textile", "room": "T1" }, "Ms N Jenkins": { "subject": "10 Art", "room": "A1" } } }
+                },
+                "TUESDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "9S", "room": "A2" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "7AC", "room": "A1" }, "Ms N Jenkins": { "subject": "7AC DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "8AC", "room": "A1" }, "Ms N Jenkins": { "subject": "8AC DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9AC DT", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "WEDNESDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "9HM Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "9C", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "7AC", "room": "A1" }, "Ms N Jenkins": { "subject": "7AC DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "7H", "room": "A1" }, "Ms N Jenkins": { "subject": "7H DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "THURSDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "10 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "9H", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "10 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "8S", "room": "A1" }, "Ms N Jenkins": { "subject": "8S DT", "room": "A2" } } }
+                },
+                "FRIDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "7MS", "room": "A1" }, "Ms N Jenkins": { "subject": "7MS DT", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "8HM", "room": "A1" }, "Ms N Jenkins": { "subject": "8HM DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "8AC", "room": "A1" }, "Ms N Jenkins": { "subject": "8AC DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "7H", "room": "A1" }, "Ms N Jenkins": { "subject": "7H DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9AC DT", "room": "A1" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A2" } } }
+                }
+            },
+            "weekB": {
+                "MONDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "8S", "room": "A1" }, "Ms N Jenkins": { "subject": "8S DT", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "9S", "room": "A2" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "7MS", "room": "A1" }, "Ms N Jenkins": { "subject": "7MS DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9S Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "TUESDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "", "room": "A1" }, "Ms N Jenkins": { "subject": "10 Art", "room": "A1" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "PSHE", "room": "A1" }, "Ms N Jenkins": { "subject": "PSHE", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "WEDNESDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "10 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "9C", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "8S", "room": "A1" }, "Ms N Jenkins": { "subject": "8S DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "9M", "room": "A1" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "9A", "room": "A2" } } }
+                },
+                "THURSDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "9S Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "12 / 13 Art", "room": "A2" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "9AC DT", "room": "A1" }, "Ms N Jenkins": { "subject": "9H", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "8HM", "room": "A1" }, "Ms N Jenkins": { "subject": "8HM DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "7MS", "room": "A1" }, "Ms N Jenkins": { "subject": "7MS DT", "room": "A2" } } }
+                },
+                "FRIDAY": {
+                    "Form Time": { "time": "09:00 - 09:20", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "7AC", "room": "A1" }, "Ms N Jenkins": { "subject": "7AC DT", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "8AC", "room": "A1" }, "Ms N Jenkins": { "subject": "8AC DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "8MH", "room": "A1" }, "Ms N Jenkins": { "subject": "8HM DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "7H", "room": "A1" }, "Ms N Jenkins": { "subject": "7H DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9HM Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "9HM DT", "room": "A2" } } }
+                }
+            }
+        };
         let currentMode = 'auto';
         let currentWeek = 'A';
-        let currentModalData = null;
-        const weekAStartDate = new Date(2025, 8, 1);
+        let currentViewDay = 'all';
+        const weekAStartDate = new Date(2025, 8, 1); // 1 Settembre 2025
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
             { name: "Christmas Term", startDate: new Date(2025, 11, 22), endDate: new Date(2026, 0, 2) },
@@ -2043,7 +1114,6 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-        // Funzioni di utilità
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
@@ -2133,116 +1203,22 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
-        // Database richieste
-        class TeacherRequestDatabase {
-            constructor() {
-                this.dbName = 'timetable_teacher_requests';
-                this.version = '1.0';
-                this.init();
-            }
-            init() {
-                if (!localStorage.getItem(this.dbName)) {
-                    localStorage.setItem(this.dbName, JSON.stringify({
-                        version: this.version,
-                        requests: {},
-                        meta: {
-                            created: new Date().toISOString(),
-                            lastModified: new Date().toISOString()
-                        }
-                    }));
-                }
-            }
-            generateKey(week, day, period, teacher) {
-                return `${week}_${day}_${period}_${teacher.replace(/[.\s]/g, '_')}`;
-            }
-            saveRequest(requestData) {
-                try {
-                    const db = this.getDatabase();
-                    const key = this.generateKey(requestData.week, requestData.day, requestData.period, requestData.teacher);
-                    db.requests[key] = {
-                        ...requestData,
-                        id: key,
-                        status: 'active',
-                        createdAt: requestData.createdAt || new Date().toISOString(),
-                        modifiedAt: new Date().toISOString()
-                    };
-                    db.meta.lastModified = new Date().toISOString();
-                    localStorage.setItem(this.dbName, JSON.stringify(db));
-                    return true;
-                } catch (e) {
-                    console.error(e);
-                    return false;
-                }
-            }
-            getRequest(week, day, period, teacher) {
-                try {
-                    const db = this.getDatabase();
-                    const key = this.generateKey(week, day, period, teacher);
-                    return db.requests[key] || null;
-                } catch (e) {
-                    return null;
-                }
-            }
-            clearRequest(week, day, period, teacher) {
-                try {
-                    const db = this.getDatabase();
-                    const key = this.generateKey(week, day, period, teacher);
-                    if (db.requests[key]) {
-                        db.requests[key].hasRequest = false;
-                        db.requests[key].notes = '';
-                        db.requests[key].modifiedAt = new Date().toISOString();
-                        db.meta.lastModified = new Date().toISOString();
-                        localStorage.setItem(this.dbName, JSON.stringify(db));
-                        return true;
-                    }
-                    return false;
-                } catch (e) {
-                    return false;
-                }
-            }
-            clearAllRequests() {
-                try {
-                    const db = this.getDatabase();
-                    db.requests = {};
-                    db.meta.lastModified = new Date().toISOString();
-                    localStorage.setItem(this.dbName, JSON.stringify(db));
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-            getDatabase() {
-                return JSON.parse(localStorage.getItem(this.dbName) || '{}');
-            }
-            getAllActiveRequests() {
-                const db = this.getDatabase();
-                return Object.values(db.requests || {}).filter(req => req.hasRequest && req.status === 'active');
-            }
-            canModifyRequest(teacher, currentUser) {
-                if (!currentUser) return false;
-                if (currentUser === 'Fiore Luongo Administrator') return true;
-                if (currentUser === 'Katie Arakelian' && teacher === 'Ms K Arakelian') return true;
-                if (currentUser === 'Natalie Jenkins' && teacher === 'Ms N Jenkins') return true;
-                return false;
-            }
-            canDeleteRequest(currentUser) {
-                return currentUser === 'Fiore Luongo Administrator';
-            }
-        }
-        window.teacherRequestDB = new TeacherRequestDatabase();
-        // Funzioni UI
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
             const table = document.getElementById('timetable');
+            let visibleDays = days;
+            if (currentViewDay !== 'all') {
+                visibleDays = [currentViewDay];
+            }
             let html = '<thead><tr><th class="period-cell">Period</th><th class="time-cell">Time</th>';
-            days.forEach(day => {
+            visibleDays.forEach(day => {
                 const d = getDayDate(day, week);
                 const formattedDate = `${d.getDate()} ${d.toLocaleDateString('en-US', { month: 'long' })} ${d.getFullYear()}`;
                 html += `<th colspan="2">${day}<br><small>${formattedDate}</small></th>`;
             });
             html += '</tr><tr><th class="period-cell"></th><th class="time-cell"></th>';
-            days.forEach(() => {
+            visibleDays.forEach(() => {
                 html += '<th>Ms K. Arakelian</th><th>Ms N. Jenkins</th>';
             });
             html += '</tr></thead><tbody>';
@@ -2250,7 +1226,7 @@
                 const time = wd[days[0]]?.[period]?.time || '';
                 html += `<tr><td class="period-cell">${period}</td>`;
                 html += `<td class="time-cell">${time}</td>`;
-                days.forEach(day => {
+                visibleDays.forEach(day => {
                     teachers.forEach(teacher => {
                         const data = wd[day]?.[period]?.teachers?.[teacher];
                         let cls = 'subject-cell';
@@ -2267,11 +1243,6 @@
                                 content = `<div class="subject-name">${data.subject}</div>${data.room ? `<div class="room-name">${data.room}</div>` : ''}`;
                             }
                         }
-                        const req = window.teacherRequestDB.getRequest(week, day, period, teacher);
-                        if (req?.hasRequest && req.status === 'active') {
-                            cls += ' has-request';
-                            content += '<span class="request-indicator">✉️</span>';
-                        }
                         const cellData = JSON.stringify({
                             subject: data?.subject || '',
                             room: data?.room || '',
@@ -2287,121 +1258,61 @@
                 html += '</tr>';
             });
             table.innerHTML = html;
-            document.querySelectorAll('.subject-cell').forEach(cell => {
-                cell.addEventListener('click', () => {
-                    const d = JSON.parse(cell.dataset.cell);
-                    if (d.subject && d.subject !== 'Lunch') showModal(d);
+        }
+        async function exportPDF() {
+            if (typeof html2canvas === 'undefined' || typeof jsPDF === 'undefined') {
+                const script1 = document.createElement('script');
+                script1.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                document.head.appendChild(script1);
+                const script2 = document.createElement('script');
+                script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+                document.head.appendChild(script2);
+                await new Promise(resolve => {
+                    let loaded = 0;
+                    const check = () => {
+                        loaded++;
+                        if (loaded === 2) resolve();
+                    };
+                    script1.onload = check;
+                    script2.onload = check;
                 });
-            });
-            updateRequestsCounter();
-        }
-        function showModal(data) {
-            currentModalData = data;
-            document.getElementById('modal-title').textContent = data.subject;
-            const year = data.subject.match(/\d+/) ? `Year ${data.subject.match(/\d+/)[0]}` : '-';
-            document.getElementById('modal-year').textContent = year;
-            document.getElementById('modal-teacher').textContent = data.teacher;
-            document.getElementById('modal-room').textContent = data.room || '-';
-            document.getElementById('modal-time').textContent = data.time;
-            const user = sessionStorage.getItem('currentUser');
-            const canModify = window.teacherRequestDB.canModifyRequest(data.teacher, user);
-            const canDelete = window.teacherRequestDB.canDeleteRequest(user);
-            const checkbox = document.getElementById('request-checkbox');
-            const notes = document.getElementById('notes-field');
-            const saveBtn = document.getElementById('save-request');
-            const clearBtn = document.getElementById('clear-request');
-            checkbox.disabled = !canModify;
-            notes.disabled = !canModify;
-            saveBtn.disabled = !canModify;
-            clearBtn.disabled = !(canModify || canDelete);
-            const req = window.teacherRequestDB.getRequest(data.week, data.day, data.period, data.teacher);
-            if (req?.hasRequest) {
-                checkbox.checked = true;
-                notes.value = req.notes || '';
-                document.getElementById('char-count').textContent = (req.notes || '').length;
-            } else {
-                checkbox.checked = false;
-                notes.value = '';
-                document.getElementById('char-count').textContent = '0';
+                window.jsPDF = window.jspdf.jsPDF;
             }
-            document.getElementById('subject-modal').classList.add('show');
-        }
-        function hideModal() {
-            document.getElementById('subject-modal').classList.remove('show');
-            currentModalData = null;
-        }
-        function saveRequest() {
-            if (!currentModalData) return;
-            const user = sessionStorage.getItem('currentUser');
-            if (!window.teacherRequestDB.canModifyRequest(currentModalData.teacher, user)) {
-                alert('Permission denied');
-                return;
-            }
-            const hasReq = document.getElementById('request-checkbox').checked;
-            const notes = document.getElementById('notes-field').value.trim();
-            const success = window.teacherRequestDB.saveRequest({
-                ...currentModalData,
-                hasRequest: hasReq,
-                notes,
-                createdBy: user
-            });
-            if (success) {
-                generateTimetable();
-                hideModal();
-                alert('Request saved!');
-            } else {
-                alert('Error saving request');
-            }
-        }
-        function clearRequest() {
-            if (!currentModalData) return;
-            const user = sessionStorage.getItem('currentUser');
-            const canMod = window.teacherRequestDB.canModifyRequest(currentModalData.teacher, user);
-            const canDel = window.teacherRequestDB.canDeleteRequest(user);
-            if (!(canMod || canDel)) {
-                alert('Permission denied');
-                return;
-            }
-            const success = window.teacherRequestDB.clearRequest(
-                currentModalData.week,
-                currentModalData.day,
-                currentModalData.period,
-                currentModalData.teacher
-            );
-            if (success) {
-                document.getElementById('request-checkbox').checked = false;
-                document.getElementById('notes-field').value = '';
-                document.getElementById('char-count').textContent = '0';
-                generateTimetable();
-                hideModal();
-                alert('Request cleared!');
-            } else {
-                alert('Error clearing request');
-            }
-        }
-        function clearAllRequests() {
-            if (confirm('Are you sure you want to clear ALL active requests? This cannot be undone.')) {
-                const success = window.teacherRequestDB.clearAllRequests();
-                if (success) {
-                    generateTimetable();
-                    updateRequestsCounter();
-                    alert('All requests cleared!');
-                } else {
-                    alert('Error clearing requests');
+            const element = document.getElementById('timetable').cloneNode(true);
+            element.style.width = '100%';
+            element.style.transform = 'scale(1)';
+            element.style.transformOrigin = 'top left';
+            const container = document.createElement('div');
+            container.style.width = '1200px';
+            container.style.padding = '20px';
+            container.appendChild(element);
+            document.body.appendChild(container);
+            try {
+                const canvas = await html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: null
+                });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('landscape', 'mm', 'a4');
+                const imgWidth = 297;
+                const pageHeight = 210;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
                 }
-            }
-        }
-        function updateRequestsCounter() {
-            const count = window.teacherRequestDB.getAllActiveRequests().length;
-            const centerEl = document.getElementById('requests-center');
-            const navTitle = document.getElementById('nav-title');
-            if (count > 0) {
-                centerEl.innerHTML = `<div class="requests-badge">✉️ ${count} richieste attive</div>`;
-                centerEl.style.display = 'block';
-                navTitle.style.display = 'none';
-            } else {
-                centerEl.style.display = 'none';
-                navTitle.style.display = 'inline';
+                pdf.save(`Timetable_Week${getCurrentWeek()}.pdf`);
+            } catch (e) {
+                alert('Error generating PDF: ' + e.message);
+            } finally {
+                document.body.removeChild(container);
             }
         }
         function updateTeacherBoxes() {
@@ -2467,6 +1378,9 @@
             document.getElementById('date-info').innerHTML = formatDate(now);
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
+            const user = sessionStorage.getItem('currentUser');
+            const displayName = credentials[Object.keys(credentials).find(k => credentials[k].name === user)]?.displayName || user || '—';
+            document.getElementById('logged-in-user-box').textContent = `Logged in as: ${displayName}`;
             const nextTerm = getNextTerm();
             const countdownContainer = document.getElementById('countdown-container');
             countdownContainer.classList.remove('countdown-warning');
@@ -2478,7 +1392,6 @@
                     const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                     const secs = Math.floor((diff % (1000 * 60)) / 1000);
                     document.getElementById('countdown-title').textContent = nextTerm.name;
-                    // ✅ countdown-subtitle rimosso
                     document.getElementById('countdown-days').textContent = totalDays.toString().padStart(3, '0');
                     document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
                     document.getElementById('countdown-minutes').textContent = mins.toString().padStart(2, '0');
@@ -2486,11 +1399,9 @@
                     if (totalDays <= 3) {
                         countdownContainer.classList.add('countdown-warning');
                     }
-                    // ✅ Aggiorna il box 3D con l'informazione del termine
                     document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
                 } else {
                     document.getElementById('countdown-title').textContent = nextTerm.name;
-                    // ✅ countdown-subtitle rimosso
                     document.getElementById('countdown-days').textContent = "000";
                     document.getElementById('countdown-hours').textContent = "00";
                     document.getElementById('countdown-minutes').textContent = "00";
@@ -2499,7 +1410,6 @@
                 }
             } else {
                 document.getElementById('countdown-title').textContent = "No More Terms";
-                // ✅ countdown-subtitle rimosso
                 document.getElementById('countdown-days').textContent = "000";
                 document.getElementById('countdown-hours').textContent = "00";
                 document.getElementById('countdown-minutes').textContent = "00";
@@ -2577,25 +1487,117 @@
         }
         function highlightCurrentRow() {
             const now = new Date();
+            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            
+            // ✅ Verifica se il giorno odierno è visibile
+            const isTodayVisible = (currentViewDay === 'all') || (currentViewDay === today);
+            
+            const currentDayData = (getCurrentWeek() === 'A' ? timetableData.weekA : timetableData.weekB)[today];
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            const tableRows = document.querySelectorAll('#timetable tbody tr');
-            tableRows.forEach(row => {
+
+            // Reset
+            document.querySelectorAll('#timetable tbody tr').forEach(row => {
                 row.classList.remove('now-row');
+                row.querySelectorAll('.now-badge').forEach(b => b.remove());
             });
-            for (let i = 0; i < periods.length; i++) {
-                const period = periods[i];
-                const timeRange = timetableData.weekA.MONDAY[period]?.time;
-                if (!timeRange) continue;
-                const [startStr, endStr] = timeRange.split(' - ');
-                const start = parseTime(startStr);
-                const end = parseTime(endStr);
-                if (!start || !end) continue;
-                const startMinutes = start.hours * 60 + start.minutes;
-                const endMinutes = end.hours * 60 + end.minutes;
-                if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-                    tableRows[i]?.classList.add('now-row');
-                    break;
+
+            let summaryText = "No scheduled activity";
+            let inPeriod = false;
+
+            // ✅ Solo se il giorno è visibile
+            if (isTodayVisible && currentDayData) {
+                for (let i = 0; i < periods.length; i++) {
+                    const period = periods[i];
+                    const timeRange = currentDayData[period]?.time;
+                    if (!timeRange) continue;
+                    const [startStr, endStr] = timeRange.split(' - ');
+                    const start = parseTime(startStr);
+                    const end = parseTime(endStr);
+                    if (!start || !end) continue;
+                    const startMinutes = start.hours * 60 + start.minutes;
+                    const endMinutes = end.hours * 60 + end.minutes;
+                    if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                        const row = document.querySelectorAll('#timetable tbody tr')[i];
+                        if (row) {
+                            row.classList.add('now-row');
+                            const periodCell = row.querySelector('.period-cell');
+                            if (periodCell) {
+                                // ✅ Crea l'icona SVG NOW
+                                const badge = document.createElement('div');
+                                badge.className = 'now-badge';
+                                badge.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+</svg>
+                                `;
+                                periodCell.appendChild(badge);
+                            }
+                        }
+                        const periodLabel = period === 'Form Time' ? 'Form Time' : `Period ${period}`;
+                        summaryText = `<span class="now-summary-highlight">${periodLabel}</span> • ${timeRange} • Lessons`;
+                        inPeriod = true;
+                        break;
+                    }
                 }
+
+                if (!inPeriod) {
+                    const break1Start = 10 * 60 + 20;
+                    const break1End = 10 * 60 + 40;
+                    const break2Start = 11 * 60 + 10;
+                    const break2End = 11 * 60 + 30;
+                    const lunch1Start = 12 * 60 + 30;
+                    const lunch1End = 13 * 60 + 30;
+                    const lunch2Start = 13 * 60 + 30;
+                    const lunch2End = 14 * 60 + 30;
+
+                    if (currentMinutes >= break1Start && currentMinutes < break1End) {
+                        summaryText = `<span class="now-summary-warning">Break time</span> – Years 7–8`;
+                    } else if (currentMinutes >= break2Start && currentMinutes < break2End) {
+                        summaryText = `<span class="now-summary-warning">Break time</span> – Years 9–13`;
+                    } else if (currentMinutes >= lunch1Start && currentMinutes < lunch1End) {
+                        summaryText = `<span class="now-summary-warning">Lunch</span> – Years 7–8`;
+                    } else if (currentMinutes >= lunch2Start && currentMinutes < lunch2End) {
+                        summaryText = `<span class="now-summary-warning">Lunch</span> – Years 9–13`;
+                    }
+                }
+            }
+
+            document.getElementById('now-summary-content').innerHTML = summaryText;
+
+            // Gestione barra di avanzamento
+            const progressBarContainer = document.getElementById('progress-bar-container');
+            const progressBar = document.getElementById('progress-bar');
+            if (isTodayVisible && inPeriod && currentDayData) {
+                const currentPeriod = periods.find(p => {
+                    const tr = currentDayData[p]?.time;
+                    if (!tr) return false;
+                    const [s, e] = tr.split(' - ');
+                    const st = parseTime(s);
+                    const en = parseTime(e);
+                    if (!st || !en) return false;
+                    return currentMinutes >= st.hours * 60 + st.minutes && currentMinutes < en.hours * 60 + en.minutes;
+                });
+                if (currentPeriod) {
+                    const timeRange = currentDayData[currentPeriod].time;
+                    const [startStr, endStr] = timeRange.split(' - ');
+                    const start = parseTime(startStr);
+                    const end = parseTime(endStr);
+                    if (start && end) {
+                        const startMins = start.hours * 60 + start.minutes;
+                        const endMins = end.hours * 60 + end.minutes;
+                        const totalTime = endMins - startMins;
+                        const timeLeft = endMins - currentMinutes;
+                        const percent = totalTime > 0 ? 100 - (timeLeft / totalTime) * 100 : 0;
+                        progressBar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+                        progressBarContainer.style.display = 'block';
+                    } else {
+                        progressBarContainer.style.display = 'none';
+                    }
+                } else {
+                    progressBarContainer.style.display = 'none';
+                }
+            } else {
+                progressBarContainer.style.display = 'none';
             }
         }
         function toggleFullScreen() {
@@ -2664,24 +1666,17 @@
                 localStorage.setItem('darkMode', 'true');
             }
         }
-        // ✅ LOGIN CORRETTO
         function handleLogin() {
-            const password = document.getElementById('password-input').value.trim().toUpperCase();
+            const password = document.getElementById('password-input').value.trim();
             const errorEl = document.getElementById('login-error');
             if (credentials[password]) {
                 const user = credentials[password];
                 sessionStorage.setItem('currentUser', user.name);
                 document.body.classList.add('authenticated');
                 document.getElementById('login-modal').classList.remove('show');
-                if (user.role === 'admin') {
-                    document.getElementById('clear-all-btn').style.display = 'flex';
-                } else {
-                    document.getElementById('clear-all-btn').style.display = 'none';
-                }
-                generateTimetable();
+                generateTimetable(); // ✅ Genera subito la tabella
                 updateTeacherBoxes();
-                updateRequestsCounter();
-                // Avvia aggiornamenti periodici
+                // Avvia gli aggiornamenti
                 setInterval(() => {
                     updateClock();
                     updateTeacherBoxes();
@@ -2689,40 +1684,51 @@
                     updateLunchOverlay();
                     highlightCurrentRow();
                 }, 1000);
-                updateClock(); // prima chiamata immediata
+                updateClock();
+                highlightCurrentRow();
             } else {
                 errorEl.style.display = 'block';
                 setTimeout(() => errorEl.style.display = 'none', 3000);
             }
         }
-        // Inizializzazione
-        document.addEventListener('DOMContentLoaded', () => {
+        // ✅ Gestione iniziale: verifica se l'utente è già loggato
+        function initApp() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser && credentials[Object.keys(credentials).find(k => credentials[k].name === currentUser)]) {
+                document.body.classList.add('authenticated');
+                generateTimetable();
+                updateTeacherBoxes();
+                setInterval(() => {
+                    updateClock();
+                    updateTeacherBoxes();
+                    updateBreakOverlay();
+                    updateLunchOverlay();
+                    highlightCurrentRow();
+                }, 1000);
+                updateClock();
+                highlightCurrentRow();
+            } else {
+                document.getElementById('login-modal').classList.add('show');
+            }
             const today = new Date().getDate().toString().padStart(2, '0');
             document.getElementById('version-badge').textContent = `ver.3.1025.${today}`;
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('dark-mode-toggle').classList.add('active');
             }
-            // Mostra login
-            document.getElementById('login-modal').classList.add('show');
-            // Eventi login
             document.getElementById('login-btn').addEventListener('click', handleLogin);
             document.getElementById('password-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
-            // Altri eventi (attivi sempre, ma funzionano solo dopo login)
             document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
-            document.getElementById('modal-close').addEventListener('click', hideModal);
-            document.getElementById('subject-modal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('subject-modal')) hideModal();
+            document.getElementById('export-pdf-btn').addEventListener('click', exportPDF);
+            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen); // ✅ CORREZIONE QUI
+            document.getElementById('day-filter-select').addEventListener('change', (e) => {
+                currentViewDay = e.target.value;
+                if (document.body.classList.contains('authenticated')) {
+                    generateTimetable();
+                }
             });
-            document.getElementById('save-request').addEventListener('click', saveRequest);
-            document.getElementById('clear-request').addEventListener('click', clearRequest);
-            document.getElementById('clear-all-btn').addEventListener('click', clearAllRequests);
-            document.getElementById('notes-field').addEventListener('input', (e) => {
-                document.getElementById('char-count').textContent = e.target.value.length;
-            });
-            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const w = btn.dataset.week;
@@ -2740,7 +1746,8 @@
                 });
             });
             updateWeekButtons();
-        });
+        }
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>

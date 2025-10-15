@@ -33,9 +33,7 @@
             --nav-controls-bg: #e9ecef;
             --fullscreen-active-bg: #28a745;
             --countdown-warning: #dc3545;
-            /* ✅ NUOVA VARIABILE: sfondo barra "Now Context" */
             --now-context-bg: #f0f0f0;
-            /* ✅ Nuove variabili per contesto attività */
             --now-context-lesson: #d4edda;
             --now-context-break: #fff3cd;
             --now-context-lunch: #cce5ff;
@@ -68,7 +66,6 @@
             --nav-controls-bg: #404040;
             --fullscreen-active-bg: #28a745;
             --countdown-warning: #ff6b6b;
-            /* ✅ NUOVA VARIABILE in dark mode */
             --now-context-bg: #252525;
             --now-context-lesson: #2d4a35;
             --now-context-break: #4a422d;
@@ -244,31 +241,66 @@
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
         }
-        /* ✅ MODIFICA: Barra "Now Context" con colore dinamico */
+
+        /* ✅ SISTEMA "NOW" MIGLIORATO - PUNTI 1-8 */
+        
+        /* 1. Indicatore Visivo Più Evidente */
         .now-context-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--now-context-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 8px 20px;
-            margin-bottom: 15px;
-            box-shadow: none;
-            border-radius: 0;
-            height: 45px;
+            position: relative;
+            background: linear-gradient(135deg, var(--now-context-bg) 0%, #e9ecef 100%);
+            border-radius: 15px;
+            margin: 0 20px 20px 20px;
+            padding: 18px 25px;
+            box-shadow: 
+                0 8px 25px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            border-left: 6px solid var(--header-bg);
+            border-right: 2px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            height: auto;
             font-size: 14px;
             color: var(--now-context-text);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: all 0.3s ease;
         }
+
+        .now-context-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                #ff6b6b, #ffd93d, #6bcf7f, #4d96ff, #9b51e0);
+            background-size: 200% 100%;
+            animation: rainbowBorder 3s linear infinite;
+        }
+
+        @keyframes rainbowBorder {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
         .now-context-bar.lesson {
-            background: var(--now-context-lesson);
+            background: linear-gradient(135deg, var(--now-context-lesson) 0%, #d4edda 100%);
+            border-left-color: #28a745;
         }
+
         .now-context-bar.break {
-            background: var(--now-context-break);
+            background: linear-gradient(135deg, var(--now-context-break) 0%, #fff3cd 100%);
+            border-left-color: #ffc107;
         }
+
         .now-context-bar.lunch {
-            background: var(--now-context-lunch);
+            background: linear-gradient(135deg, var(--now-context-lunch) 0%, #cce5ff 100%);
+            border-left-color: #17a2b8;
         }
+
         .now-summary-box {
             display: flex;
             align-items: center;
@@ -277,56 +309,249 @@
             flex: 1;
             overflow: hidden;
         }
+
+        /* 4. Icona Animata Contestuale */
         .now-summary-icon {
-            animation: rotateClock 20s linear infinite;
+            font-size: 24px;
+            animation: iconPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
-        @keyframes rotateClock {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+
+        @keyframes iconPulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            }
+            50% { 
+                transform: scale(1.1) rotate(5deg);
+                filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            }
         }
+
+        /* Icone specifiche per contesto */
+        .now-context-bar.lesson .now-summary-icon {
+            animation: lessonIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes lessonIcon {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(5deg); }
+            50% { transform: scale(1.05) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(3deg); }
+        }
+
+        .now-context-bar.break .now-summary-icon {
+            animation: breakIcon 2s ease-in-out infinite;
+        }
+
+        @keyframes breakIcon {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+        }
+
+        /* 7. Contenuto Testuale Migliorato */
         .now-summary-content {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
+
         .now-summary-highlight {
-            color: #007bff;
-            font-weight: bold;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 4px;
+            animation: textShine 3s ease-in-out infinite;
         }
+
         .now-summary-warning {
-            color: #dc3545;
-            font-weight: bold;
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            animation: warningText 2s ease-in-out infinite;
         }
+
+        @keyframes textShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes warningText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* 8. Indicatore di Stato "Live" */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 15px;
+            padding: 4px 8px;
+            background: rgba(220,53,69,0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(220,53,69,0.3);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #dc3545;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220,53,69,0.7);
+            }
+            50% { 
+                transform: scale(1.2);
+                box-shadow: 0 0 0 4px rgba(220,53,69,0);
+            }
+        }
+
+        /* 6. Timeline Visuale del Periodo Corrente */
+        .now-timeline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-color);
+            opacity: 0.8;
+            position: absolute;
+            bottom: 8px;
+            left: 25px;
+        }
+
+        .timeline-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        .timeline-dot:nth-child(2) { animation-delay: 0.3s; }
+        .timeline-dot:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes dotPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            50% { 
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        /* 5. Progress Bar con Indicatori Visivi Avanzati */
         .progress-bar-container {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            min-width: 160px;
-            margin-left: 15px;
+            min-width: 180px;
+            margin-left: 20px;
             position: relative;
+            background: rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
         }
+
         .progress-label {
             font-size: 12px;
             color: var(--text-color);
             margin-bottom: 2px;
+            font-weight: 600;
         }
+
         .progress-bar {
             width: 100%;
-            height: 6px;
-            background: #e9ecef;
-            border-radius: 3px;
+            height: 10px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+            border-radius: 8px;
             overflow: hidden;
             position: relative;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.1),
+                0 1px 0 rgba(255,255,255,0.5);
         }
+
         .progress-fill {
             height: 100%;
             width: 0;
-            background: #007bff;
-            border-radius: 3px;
-            transition: width 0.5s ease, background-color 0.5s ease;
+            border-radius: 8px;
+            background: linear-gradient(90deg, 
+                #007bff 0%, 
+                #0056b3 50%, 
+                #007bff 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite, progressGradient 3s ease-in-out infinite;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            box-shadow: 
+                0 0 10px rgba(0,123,255,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.3);
         }
-        /* ✅ Indicatore numerico sovrapposto */
+
+        @keyframes progressGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Indicatori di tempo critico */
+        .progress-fill.warning {
+            background: linear-gradient(90deg, 
+                #ffc107 0%, 
+                #e0a800 50%, 
+                #ffc107 100%);
+            animation: warningPulse 1s ease-in-out infinite, progressGradient 3s ease-in-out infinite;
+        }
+
+        .progress-fill.critical {
+            background: linear-gradient(90deg, 
+                #dc3545 0%, 
+                #c82333 50%, 
+                #dc3545 100%);
+            animation: criticalPulse 0.5s ease-in-out infinite, progressGradient 3s ease-in-out infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { 
+                transform: scaleX(1);
+                box-shadow: 0 0 20px rgba(220,53,69,0.6);
+            }
+            50% { 
+                transform: scaleX(1.02);
+                box-shadow: 0 0 30px rgba(220,53,69,0.8);
+            }
+        }
+
         .progress-overlay-text {
             position: absolute;
             top: -20px;
@@ -336,60 +561,126 @@
             color: var(--text-color);
             white-space: nowrap;
         }
+
         @keyframes blinkRed {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
+
         .progress-fill.blink {
             animation: blinkRed 1s infinite;
         }
+
+        /* 2. Badge "NOW" Animato e Visibile */
         .now-badge {
             position: absolute;
-            top: -6px;
-            right: -6px;
-            background: #dc3545;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #dc3545, #c82333);
             color: white;
-            font-size: 10px;
-            font-weight: bold;
-            width: 24px;
-            height: 24px;
+            font-size: 11px;
+            font-weight: 800;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 20;
+            box-shadow: 
+                0 4px 12px rgba(220,53,69,0.4),
+                0 0 0 3px rgba(255,255,255,0.9);
+            animation: 
+                pulse 2s infinite,
+                bounce 1s ease-in-out infinite alternate;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
+
+        @keyframes bounce {
+            from { transform: scale(1) translateY(0); }
+            to { transform: scale(1.1) translateY(-2px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 12px rgba(220,53,69,0.4), 0 0 0 3px rgba(255,255,255,0.9); }
+            50% { box-shadow: 0 6px 20px rgba(220,53,69,0.6), 0 0 0 3px rgba(255,255,255,0.9); }
+        }
+
+        /* 3. Highlight Celle con Effetto "Glow" Avanzato */
         .subject-cell.now-lesson {
-            box-shadow: 0 0 12px #28a745 !important;
             position: relative;
-            z-index: 2;
+            z-index: 5;
+            animation: advancedGlow 2s ease-in-out infinite alternate;
+            transform: translateZ(0);
+            box-shadow: 
+                0 0 30px rgba(40,167,69,0.4),
+                0 8px 25px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.6) !important;
+            border: 2px solid rgba(40,167,69,0.8) !important;
         }
+
+        @keyframes advancedGlow {
+            0% {
+                box-shadow: 
+                    0 0 20px rgba(40,167,69,0.4),
+                    0 6px 20px rgba(0,0,0,0.15),
+                    inset 0 1px 0 rgba(255,255,255,0.6);
+                transform: scale(1);
+            }
+            100% {
+                box-shadow: 
+                    0 0 40px rgba(40,167,69,0.8),
+                    0 10px 30px rgba(0,0,0,0.2),
+                    inset 0 1px 0 rgba(255,255,255,0.8);
+                transform: scale(1.02);
+            }
+        }
+
         .subject-cell.now-break {
-            box-shadow: 0 0 12px #dc3545 !important;
-            position: relative;
-            z-index: 2;
+            animation: breakGlow 2s ease-in-out infinite alternate;
+            box-shadow: 
+                0 0 30px rgba(255,193,7,0.4),
+                0 8px 25px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.6) !important;
+            border: 2px solid rgba(255,193,7,0.8) !important;
         }
-        /* ✅ Miglioramento leggibilità celle: bordo leggero e ombra interna */
+
+        @keyframes breakGlow {
+            0% {
+                box-shadow: 
+                    0 0 20px rgba(255,193,7,0.4),
+                    0 6px 20px rgba(0,0,0,0.15);
+            }
+            100% {
+                box-shadow: 
+                    0 0 40px rgba(255,193,7,0.8),
+                    0 10px 30px rgba(0,0,0,0.2);
+            }
+        }
+
         .subject-cell {
             padding: 5px 5px 5px 5px;
             background: var(--primary-bg);
             position: relative;
-            border: 1px solid rgba(0,0,0,0.05); /* ✅ Bordo leggero */
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05), var(--cell-shadow); /* ✅ Ombra interna */
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05), var(--cell-shadow);
         }
+
         .subject-cell:hover {
             transform: translateY(-2px);
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.08), var(--cell-shadow-hover);
         }
+
         .form-time {
             background: var(--form-time-bg) !important;
             color: var(--form-time-text) !important;
         }
+
         .lunch {
             background: var(--lunch-bg) !important;
             color: var(--lunch-text) !important;
         }
+
         /* Resto dello stile identico */
         .navbar {
             background-color: var(--nav-bg);
@@ -402,12 +693,14 @@
             box-shadow: 0 2px 8px var(--card-shadow);
             height: 50px;
         }
+
         .nav-main {
             display: flex;
             gap: 5px;
             align-items: center;
             flex-wrap: wrap;
         }
+
         .nav-item {
             display: flex;
             align-items: center;
@@ -420,11 +713,13 @@
             transition: all 0.3s ease;
             font-weight: 500;
         }
+
         .nav-item:hover, .nav-item.active {
             background-color: var(--nav-active-bg);
             color: var(--nav-active-text);
             transform: translateY(-1px);
         }
+
         .nav-controls {
             display: flex;
             align-items: center;
@@ -434,6 +729,7 @@
             border-radius: 15px;
             flex-wrap: wrap;
         }
+
         .control-btn, .fullscreen-btn, .export-pdf-btn {
             background: none;
             border: none;
@@ -448,6 +744,7 @@
             align-items: center;
             gap: 4px;
         }
+
         .control-btn:hover, .control-btn.active,
         .fullscreen-btn:hover,
         .export-pdf-btn:hover {
@@ -455,16 +752,19 @@
             color: var(--header-text);
             transform: translateY(-1px);
         }
+
         .fullscreen-btn.active {
             background-color: var(--fullscreen-active-bg) !important;
             color: white !important;
         }
+
         .dark-mode-control {
             display: flex;
             align-items: center;
             gap: 5px;
             margin-left: 8px;
         }
+
         .toggle-switch {
             position: relative;
             width: 40px;
@@ -474,9 +774,11 @@
             cursor: pointer;
             transition: background 0.3s ease;
         }
+
         .toggle-switch.active {
             background: var(--header-bg);
         }
+
         .toggle-slider {
             position: absolute;
             top: 2px;
@@ -487,41 +789,49 @@
             border-radius: 50%;
             transition: transform 0.3s ease;
         }
+
         .toggle-switch.active .toggle-slider {
             transform: translateX(20px);
         }
+
         .main-content {
             display: flex;
             gap: 20px;
             align-items: flex-start;
             margin-left: 30px;
         }
+
         .timetable-container {
             flex: 1;
             overflow-x: auto;
             overflow-y: hidden;
         }
+
         .timetable {
             width: 100%;
             border-collapse: separate;
             border-spacing: 3px;
             min-width: 800px;
         }
+
         .timetable th, .timetable td {
             border: none;
             text-align: center;
             vertical-align: middle;
             border-radius: 8px;
         }
+
         .timetable th {
             background: var(--header-bg);
             color: var(--header-text);
             height: 50px;
         }
+
         .timetable td {
             height: 50px;
             box-shadow: var(--cell-shadow);
         }
+
         .period-cell {
             width: 50px !important;
             min-width: 50px !important;
@@ -531,6 +841,7 @@
             font-size: 14px;
             position: relative;
         }
+
         .time-cell {
             background: var(--secondary-bg);
             color: var(--text-color);
@@ -539,31 +850,37 @@
             width: 110px;
             min-width: 110px;
         }
+
         .teacher-boxes {
             display: flex;
             flex-direction: column;
             gap: 20px;
             min-width: 200px;
         }
+
         .teacher-box {
             background: var(--secondary-bg);
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0 4px 8px var(--card-shadow);
         }
+
         .teacher-header h3 {
             font-size: 16px;
             font-weight: bold;
             color: var(--header-bg);
             margin-bottom: 10px;
         }
+
         .lesson-info {
             margin-bottom: 8px;
         }
+
         .lesson-label {
             font-weight: bold;
             font-size: 12px;
         }
+
         .lesson-details {
             font-size: 12px;
             padding: 5px;
@@ -571,6 +888,7 @@
             border-radius: 5px;
             border: 1px solid var(--border-color);
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -583,9 +901,11 @@
             align-items: center;
             justify-content: center;
         }
+
         .modal.show {
             display: flex;
         }
+
         .modal-content {
             background-color: var(--secondary-bg);
             padding: 25px;
@@ -596,6 +916,7 @@
             animation: modalFadeIn 0.3s ease-out;
             position: relative;
         }
+
         @keyframes modalFadeIn {
             from {
                 opacity: 0;
@@ -606,6 +927,7 @@
                 transform: scale(1) translateY(0);
             }
         }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -614,11 +936,13 @@
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 15px;
         }
+
         .modal-title {
             font-size: 22px;
             font-weight: bold;
             color: var(--header-bg);
         }
+
         .close {
             font-size: 28px;
             cursor: pointer;
@@ -626,32 +950,39 @@
             transition: color 0.3s ease;
             line-height: 1;
         }
+
         .close:hover {
             color: var(--button-active);
         }
+
         .modal-info {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 20px;
         }
+
         .modal-field {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
             border-bottom: 1px solid var(--border-color);
         }
+
         .modal-field:last-child {
             border-bottom: none;
         }
+
         .field-label {
             font-weight: bold;
             color: var(--text-color);
         }
+
         .field-value {
             color: var(--text-color);
             text-align: right;
         }
+
         #login-modal {
             display: none;
             position: fixed;
@@ -664,9 +995,11 @@
             align-items: center;
             justify-content: center;
         }
+
         #login-modal.show {
             display: flex;
         }
+
         .login-content {
             background: var(--secondary-bg);
             padding: 30px;
@@ -676,11 +1009,13 @@
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
+
         .login-title {
             font-size: 24px;
             margin-bottom: 20px;
             color: var(--header-bg);
         }
+
         .login-input {
             width: 100%;
             padding: 12px;
@@ -691,10 +1026,12 @@
             background: var(--primary-bg);
             color: var(--text-color);
         }
+
         .login-input:focus {
             outline: none;
             border-color: var(--header-bg);
         }
+
         .login-btn {
             background: var(--header-bg);
             color: white;
@@ -707,15 +1044,18 @@
             width: 100%;
             font-weight: bold;
         }
+
         .login-btn:hover {
             background: var(--button-hover);
         }
+
         .login-error {
             color: var(--button-active);
             margin-top: 10px;
             font-size: 14px;
             display: none;
         }
+
         .subject-12-dt-textile { background-color: #ff9500 !important; color: white !important; }
         .subject-11-art { background-color: #34c759 !important; color: white !important; }
         .subject-12-13-art { background-color: #34c759 !important; color: white !important; }
@@ -910,23 +1250,36 @@
                 </div>
             </div>
         </div>
-        <!-- ✅ BARRA "Now Context" migliorata con colore dinamico -->
+        
+        <!-- ✅ SISTEMA "NOW" MIGLIORATO -->
         <div class="now-context-bar" id="now-context-bar">
             <div id="now-summary-box" class="now-summary-box">
                 <span class="now-summary-icon" id="now-summary-icon">🕒</span>
                 <div class="now-summary-content" id="now-summary-content">
                     Loading...
                 </div>
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span>LIVE</span>
+                </div>
             </div>
+            
+            <div class="now-timeline">
+                <div class="timeline-dot"></div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-dot"></div>
+                <span id="timeline-text">Current period</span>
+            </div>
+            
             <div id="progress-bar-container" class="progress-bar-container">
                 <div class="progress-label" id="progress-label">--:-- left</div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
-                    <!-- ✅ Indicatore numerico sovrapposto -->
                     <div class="progress-overlay-text" id="progress-overlay-text">0:00</div>
                 </div>
             </div>
         </div>
+
         <nav class="navbar">
             <div class="nav-main">
                 <a href="index.html" class="nav-item">
@@ -1544,7 +1897,8 @@
                 }
             });
         }
-        /* ✅ FUNZIONE highlightCurrentRow AGGIORNATA */
+
+        /* ✅ FUNZIONE highlightCurrentRow AGGIORNATA con i nuovi miglioramenti */
         function highlightCurrentRow() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1707,7 +2061,7 @@
             document.getElementById('now-summary-content').innerHTML = summaryText;
             document.getElementById('now-summary-icon').textContent = summaryIcon;
 
-            // ✅ Aggiorna progress bar con indicatore numerico
+            // ✅ Aggiorna progress bar con i nuovi stati
             const progressBarContainer = document.getElementById('progress-bar-container');
             const progressFill = document.getElementById('progress-fill');
             const progressLabel = document.getElementById('progress-label');
@@ -1741,17 +2095,19 @@
                         progressLabel.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')} left`;
                         progressOverlayText.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')}`;
 
-                        progressFill.classList.remove('blink');
-                        if (timeLeft < 5 * 60) {
-                            progressFill.style.backgroundColor = '#dc3545';
-                            if (timeLeft < 30) {
-                                progressFill.classList.add('blink');
-                            }
-                        } else if (timeLeft < 10 * 60) {
-                            progressFill.style.backgroundColor = '#ffc107';
-                        } else {
-                            progressFill.style.backgroundColor = '#007bff';
+                        // ✅ Aggiorna stati della progress bar
+                        progressFill.classList.remove('warning', 'critical', 'blink');
+                        
+                        if (timeLeft < 5 * 60) { // Meno di 5 minuti
+                            progressFill.classList.add('warning');
                         }
+                        if (timeLeft < 2 * 60) { // Meno di 2 minuti
+                            progressFill.classList.add('critical');
+                        }
+                        if (timeLeft < 30) { // Meno di 30 secondi
+                            progressFill.classList.add('blink');
+                        }
+
                         progressBarContainer.style.display = 'block';
                         return;
                     }

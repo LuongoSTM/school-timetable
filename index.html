@@ -231,41 +231,158 @@
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
         }
-        .now-summary-box {
+
+        /* ✅ NUOVO STILE PER LA BARRA "NOW" */
+        .now-context-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: var(--secondary-bg);
             border-radius: 12px;
             padding: 12px 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 8px var(--card-shadow);
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--text-color);
+            box-shadow: 0 4px 10px var(--card-shadow);
+            border: 1px solid var(--border-color);
             transition: all 0.3s ease;
         }
-        [data-theme="dark"] .now-summary-box {
-            background: #3a3a3a;
+
+        .now-summary-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-color);
         }
+
+        .now-summary-box:hover {
+            opacity: 0.9;
+        }
+
         .now-summary-highlight {
             color: #007bff;
             font-weight: bold;
         }
+
         .now-summary-warning {
             color: #dc3545;
+            font-weight: bold;
         }
+
         .progress-bar-container {
-            height: 6px;
-            background: var(--border-color);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            display: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            min-width: 200px;
         }
+
+        .progress-label {
+            font-size: 13px;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
         .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             height: 100%;
-            background: #007bff;
             width: 0%;
-            transition: width 1s linear;
+            background: #007bff;
+            border-radius: 4px;
+            transition: width 0.5s ease, background-color 0.3s ease;
+        }
+
+        /* ✅ NUOVO STILE MIGLIORATO PER LA LABEL "Now" */
+        .now-label {
+            position: absolute;
+            top: 2px;
+            left: -4px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            padding: 12px 6px;
+            font-weight: bold;
+            font-size: 12px;
+            z-index: 10;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            animation: pulseNow 2s infinite;
+        }
+        @keyframes pulseNow {
+            0%, 100% { opacity: 1; transform: rotate(180deg) scale(1); }
+            50% { opacity: 0.9; transform: rotate(180deg) scale(1.03); }
+        }
+        /* ✅ NUOVE CLASSI PER BORDO "Now" */
+        .subject-cell.now-lesson {
+            border: 3px solid #28a745 !important;
+            position: relative;
+            z-index: 2;
+        }
+        .subject-cell.now-break {
+            border: 3px solid #dc3545 !important;
+            position: relative;
+            z-index: 2;
+        }
+        .subject-cell.break-overlay::before {
+            content: "BREAK";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 215, 0, 0.95);
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            z-index: 5;
+            animation: pulseBreak 1.5s infinite alternate;
+        }
+        @keyframes pulseBreak {
+            from { opacity: 0.7; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .subject-cell.lunch-overlay::before {
+            content: "LUNCH";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(100, 180, 255, 0.92);
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            z-index: 5;
+            animation: pulseLunch 1.5s infinite alternate;
+        }
+        @keyframes pulseLunch {
+            from { opacity: 0.7; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
         .navbar {
             background-color: var(--nav-bg);
@@ -405,7 +522,7 @@
             padding: 0 !important;
             font-weight: bold;
             font-size: 14px;
-            position: relative; /* ✅ Necessario per posizionare il badge */
+            position: relative;
         }
         .time-cell {
             background: var(--secondary-bg);
@@ -431,70 +548,6 @@
         .lunch {
             background: var(--lunch-bg) !important;
             color: var(--lunch-text) !important;
-        }
-        .timetable tr.now-row td {
-            background-color: rgba(0, 123, 255, 0.08) !important;
-            position: relative;
-        }
-        .timetable tr.now-row .period-cell {
-            border-left: 4px solid #007bff;
-            font-weight: bold;
-        }
-        .now-badge {
-            position: absolute;
-            top: 2px;
-            left: -4px; /* ✅ Spostato a sinistra */
-            width: 36px;
-            height: 24px;
-            z-index: 10;
-        }
-        .now-badge svg {
-            width: 100%;
-            height: 100%;
-        }
-        .subject-cell.break-overlay::before {
-            content: "BREAK";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 215, 0, 0.95);
-            color: #000;
-            font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            z-index: 5;
-            animation: pulseBreak 1.5s infinite alternate;
-        }
-        @keyframes pulseBreak {
-            from { opacity: 0.7; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .subject-cell.lunch-overlay::before {
-            content: "LUNCH";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(100, 180, 255, 0.92);
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            z-index: 5;
-            animation: pulseLunch 1.5s infinite alternate;
-        }
-        @keyframes pulseLunch {
-            from { opacity: 0.7; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
         }
         .teacher-boxes {
             display: flex;
@@ -867,13 +920,18 @@
                 </div>
             </div>
         </div>
-        <div id="now-summary-box" class="now-summary-box">
-            <div class="now-summary-content" id="now-summary-content">
-                Loading...
+        <!-- ✅ NUOVO BLOCCO UNIFICATO -->
+        <div class="now-context-bar">
+            <div id="now-summary-box" class="now-summary-box">
+                <span class="now-summary-icon" id="now-summary-icon">🕒</span>
+                <div class="now-summary-content" id="now-summary-content">
+                    Loading...
+                </div>
             </div>
-        </div>
-        <div id="progress-bar-container" class="progress-bar-container">
-            <div id="progress-bar" class="progress-bar"></div>
+            <div id="progress-bar-container" class="progress-bar-container">
+                <div class="progress-label" id="progress-label">--:-- left</div>
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
         </div>
         <nav class="navbar">
             <div class="nav-main">
@@ -1417,95 +1475,113 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
+        // ✅ FUNZIONI AGGIORNATE
         function updateBreakOverlay() {
             const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const totalMinutes = currentHour * 60 + currentMinute;
-            const break1Start = 10 * 60 + 20;
-            const break1End = 10 * 60 + 40;
-            const break2Start = 11 * 60 + 10;
-            const break2End = 11 * 60 + 30;
-            const isInBreak1 = totalMinutes >= break1Start && totalMinutes < break1End;
-            const isInBreak2 = totalMinutes >= break2Start && totalMinutes < break2End;
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
             const todayIndex = now.getDay();
             const dayMap = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-            const today = todayIndex >= 1 && todayIndex <= 5 ? dayMap[todayIndex] : null;
-            if (!today) {
-                document.querySelectorAll('.subject-cell.break-overlay').forEach(cell => {
-                    cell.classList.remove('break-overlay');
-                });
-                return;
-            }
+            const today = (todayIndex >= 1 && todayIndex <= 5) ? dayMap[todayIndex] : null;
+            // Definizione intervalli break
+            const breakIntervals = [
+                { start: 10 * 60 + 20, end: 10 * 60 + 40, yearRegex: /^(7|8)/ }, // Break 7–8
+                { start: 11 * 60 + 10, end: 11 * 60 + 30, yearRegex: /^(9|10|11|12|13)/ } // Break 9–13
+            ];
+            // Rimuovi overlay esistenti
+            document.querySelectorAll('.subject-cell.break-overlay').forEach(cell => {
+                cell.classList.remove('break-overlay');
+            });
+            if (!today) return;
+            // Per ogni cella con dati
             document.querySelectorAll('.subject-cell[data-cell]').forEach(cell => {
                 const data = JSON.parse(cell.dataset.cell);
                 const subject = data.subject || '';
                 const cellDay = data.day;
-                cell.classList.remove('break-overlay');
-                if (cellDay === today) {
-                    if (isInBreak1 && /^(7|8)/.test(subject)) {
+                const timeRange = data.time;
+                if (cellDay !== today || !timeRange || !subject) return;
+                // Estrai orario della cella
+                const [startStr, endStr] = timeRange.split(' - ');
+                const cellStart = parseTime(startStr);
+                const cellEnd = parseTime(endStr);
+                if (!cellStart || !cellEnd) return;
+                const cellStartMins = cellStart.hours * 60 + cellStart.minutes;
+                const cellEndMins = cellEnd.hours * 60 + cellEnd.minutes;
+                // Controlla se questa cella si sovrappone a un break attivo per il suo anno
+                for (const interval of breakIntervals) {
+                    const isBreakActiveNow = currentMinutes >= interval.start && currentMinutes < interval.end;
+                    const cellOverlapsBreak = !(cellEndMins <= interval.start || cellStartMins >= interval.end);
+                    const matchesYear = interval.yearRegex.test(subject);
+                    if (isBreakActiveNow && cellOverlapsBreak && matchesYear) {
                         cell.classList.add('break-overlay');
-                    } else if (isInBreak2 && /^(9|10|11|12|13)/.test(subject)) {
-                        cell.classList.add('break-overlay');
+                        return; // Una sola overlay per cella
                     }
                 }
             });
         }
         function updateLunchOverlay() {
             const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const totalMinutes = currentHour * 60 + currentMinute;
-            const lunch1Start = 12 * 60 + 30;
-            const lunch1End = 13 * 60 + 30;
-            const lunch2Start = 13 * 60 + 30;
-            const lunch2End = 14 * 60 + 30;
-            const isInLunch1 = totalMinutes >= lunch1Start && totalMinutes < lunch1End;
-            const isInLunch2 = totalMinutes >= lunch2Start && totalMinutes < lunch2End;
+            const currentMinutes = now.getHours()  * 60 + now.getMinutes();
             const todayIndex = now.getDay();
             const dayMap = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-            const today = todayIndex >= 1 && todayIndex <= 5 ? dayMap[todayIndex] : null;
-            if (!today) {
-                document.querySelectorAll('.subject-cell.lunch-overlay').forEach(cell => {
-                    cell.classList.remove('lunch-overlay');
-                });
-                return;
-            }
+            const today = (todayIndex >= 1 && todayIndex <= 5) ? dayMap[todayIndex] : null;
+            // Definizione intervalli lunch
+            const lunchIntervals = [
+                { start: 12 * 60 + 30, end: 13 * 60 + 30, yearRegex: /^(7|8)/ }, // Lunch 7–8
+                { start: 13 * 60 + 30, end: 14 * 60 + 30, yearRegex: /^(9|10|11|12|13)/ } // Lunch 9–13
+            ];
+            // Rimuovi overlay esistenti
+            document.querySelectorAll('.subject-cell.lunch-overlay').forEach(cell => {
+                cell.classList.remove('lunch-overlay');
+            });
+            if (!today) return;
+            // Per ogni cella con dati
             document.querySelectorAll('.subject-cell[data-cell]').forEach(cell => {
                 const data = JSON.parse(cell.dataset.cell);
                 const subject = data.subject || '';
                 const cellDay = data.day;
-                cell.classList.remove('lunch-overlay');
-                if (cellDay === today) {
-                    if (isInLunch1 && /^(7|8)/.test(subject)) {
+                const timeRange = data.time;
+                if (cellDay !== today || !timeRange || !subject) return;
+                // Estrai orario della cella
+                const [startStr, endStr] = timeRange.split(' - ');
+                const cellStart = parseTime(startStr);
+                const cellEnd = parseTime(endStr);
+                if (!cellStart || !cellEnd) return;
+                const cellStartMins = cellStart.hours * 60 + cellStart.minutes;
+                const cellEndMins = cellEnd.hours * 60 + cellEnd.minutes;
+                // Controlla se questa cella si sovrappone a un lunch attivo per il suo anno
+                for (const interval of lunchIntervals) {
+                    const isLunchActiveNow = currentMinutes >= interval.start && currentMinutes < interval.end;
+                    const cellOverlapsLunch = !(cellEndMins <= interval.start || cellStartMins >= interval.end);
+                    const matchesYear = interval.yearRegex.test(subject);
+                    if (isLunchActiveNow && cellOverlapsLunch && matchesYear) {
                         cell.classList.add('lunch-overlay');
-                    } else if (isInLunch2 && /^(9|10|11|12|13)/.test(subject)) {
-                        cell.classList.add('lunch-overlay');
+                        return; // Una sola overlay per cella
                     }
                 }
             });
         }
+        /* ✅ FUNZIONE MODIFICATA COME RICHIESTO */
         function highlightCurrentRow() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-            
-            // ✅ Verifica se il giorno odierno è visibile
             const isTodayVisible = (currentViewDay === 'all') || (currentViewDay === today);
-            
             const currentDayData = (getCurrentWeek() === 'A' ? timetableData.weekA : timetableData.weekB)[today];
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-            // Reset
-            document.querySelectorAll('#timetable tbody tr').forEach(row => {
-                row.classList.remove('now-row');
-                row.querySelectorAll('.now-badge').forEach(b => b.remove());
+            // Rimuovi tutte le label "Now" esistenti
+            document.querySelectorAll('.now-label').forEach(el => el.remove());
+            // Rimuovi evidenziazione precedente
+            document.querySelectorAll('.subject-cell.now-lesson, .subject-cell.now-break').forEach(el => {
+                el.classList.remove('now-lesson', 'now-break');
             });
-
             let summaryText = "No scheduled activity";
+            let summaryIcon = "🕒";
             let inPeriod = false;
-
-            // ✅ Solo se il giorno è visibile
+            let isBreakOrLunch = false;
             if (isTodayVisible && currentDayData) {
+                const visibleDays = currentViewDay === 'all' ? days : [currentViewDay];
+                const todayIndexInVisible = visibleDays.indexOf(today);
+                if (todayIndexInVisible === -1) return;
+                const todayColumnOffset = 2 + (todayIndexInVisible * 2);
                 for (let i = 0; i < periods.length; i++) {
                     const period = periods[i];
                     const timeRange = currentDayData[period]?.time;
@@ -1517,29 +1593,61 @@
                     const startMinutes = start.hours * 60 + start.minutes;
                     const endMinutes = end.hours * 60 + end.minutes;
                     if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                        // Aggiungi label "Now"
+                        const periodCells = document.querySelectorAll('#timetable tbody tr')[i]?.querySelectorAll('.period-cell');
+                        if (periodCells.length > 0) {
+                            const periodCell = periodCells[0];
+                            if (!periodCell.querySelector('.now-label')) {
+                                const nowLabel = document.createElement('div');
+                                nowLabel.className = 'now-label';
+                                nowLabel.textContent = 'Now';
+                                periodCell.appendChild(nowLabel);
+                            }
+                        }
+                        // Applica bordo alle celle del giorno odierno
                         const row = document.querySelectorAll('#timetable tbody tr')[i];
                         if (row) {
-                            row.classList.add('now-row');
-                            const periodCell = row.querySelector('.period-cell');
-                            if (periodCell) {
-                                // ✅ Crea l'icona SVG NOW
-                                const badge = document.createElement('div');
-                                badge.className = 'now-badge';
-                                badge.innerHTML = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-</svg>
-                                `;
-                                periodCell.appendChild(badge);
+                            const cells = row.querySelectorAll('td');
+                            for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
+                                if (cells[j]) {
+                                    // Determina se è break/lunch o lezione normale
+                                    const cellData = JSON.parse(cells[j].dataset.cell || '{}');
+                                    const subject = cellData.subject || '';
+                                    if (subject === 'Lunch' || subject === 'Form Time' || 
+                                        (subject && (subject.includes('Break') || subject.includes('LUNCH')))) {
+                                        cells[j].classList.add('now-break');
+                                    } else {
+                                        cells[j].classList.add('now-lesson');
+                                    }
+                                }
                             }
                         }
                         const periodLabel = period === 'Form Time' ? 'Form Time' : `Period ${period}`;
-                        summaryText = `<span class="now-summary-highlight">${periodLabel}</span> • ${timeRange} • Lessons`;
+                        let teacherDetails = [];
+
+                        // Recupera i dati dei docenti per oggi e il periodo corrente
+                        const currentPeriodData = currentDayData[period];
+                        if (currentPeriodData && currentPeriodData.teachers) {
+                            for (const teacher of teachers) {
+                                const lesson = currentPeriodData.teachers[teacher];
+                                if (lesson && lesson.subject && !['Lunch', ''].includes(lesson.subject)) {
+                                    const displaySubject = lesson.subject === 'Form Time' ? 'Form Time' : lesson.subject;
+                                    const room = lesson.room ? `(${lesson.room})` : '';
+                                    teacherDetails.push(`<span style="color:#007bff;font-weight:bold;">${teacher.split(' ')[1]}</span>: ${displaySubject} ${room}`);
+                                }
+                            }
+                        }
+
+                        if (teacherDetails.length > 0) {
+                            summaryText = `<span class="now-summary-highlight">${periodLabel}</span> • ${timeRange}<br><small>${teacherDetails.join(' | ')}</small>`;
+                        } else {
+                            summaryText = `<span class="now-summary-highlight">${periodLabel}</span> • ${timeRange}`;
+                        }
+                        summaryIcon = "📚";
                         inPeriod = true;
                         break;
                     }
                 }
-
                 if (!inPeriod) {
                     const break1Start = 10 * 60 + 20;
                     const break1End = 10 * 60 + 40;
@@ -1549,24 +1657,47 @@
                     const lunch1End = 13 * 60 + 30;
                     const lunch2Start = 13 * 60 + 30;
                     const lunch2End = 14 * 60 + 30;
-
                     if (currentMinutes >= break1Start && currentMinutes < break1End) {
                         summaryText = `<span class="now-summary-warning">Break time</span> – Years 7–8`;
+                        summaryIcon = "☕";
+                        isBreakOrLunch = true;
                     } else if (currentMinutes >= break2Start && currentMinutes < break2End) {
                         summaryText = `<span class="now-summary-warning">Break time</span> – Years 9–13`;
+                        summaryIcon = "☕";
+                        isBreakOrLunch = true;
                     } else if (currentMinutes >= lunch1Start && currentMinutes < lunch1End) {
                         summaryText = `<span class="now-summary-warning">Lunch</span> – Years 7–8`;
+                        summaryIcon = "🍽️";
+                        isBreakOrLunch = true;
                     } else if (currentMinutes >= lunch2Start && currentMinutes < lunch2End) {
                         summaryText = `<span class="now-summary-warning">Lunch</span> – Years 9–13`;
+                        summaryIcon = "🍽️";
+                        isBreakOrLunch = true;
+                    }
+                    // Se è break/lunch globale, applica bordo rosso a tutte le celle oggi
+                    if (isBreakOrLunch) {
+                        const visibleDays = currentViewDay === 'all' ? days : [currentViewDay];
+                        const todayIndexInVisible = visibleDays.indexOf(today);
+                        if (todayIndexInVisible !== -1) {
+                            const todayColumnOffset = 2 + (todayIndexInVisible * 2);
+                            document.querySelectorAll('#timetable tbody tr').forEach(row => {
+                                const cells = row.querySelectorAll('td');
+                                for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
+                                    if (cells[j]) {
+                                        cells[j].classList.add('now-break');
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             }
-
             document.getElementById('now-summary-content').innerHTML = summaryText;
-
-            // Gestione barra di avanzamento
+            document.getElementById('now-summary-icon').textContent = summaryIcon;
+            // Barra di avanzamento
             const progressBarContainer = document.getElementById('progress-bar-container');
             const progressBar = document.getElementById('progress-bar');
+            const progressLabel = document.getElementById('progress-label');
             if (isTodayVisible && inPeriod && currentDayData) {
                 const currentPeriod = periods.find(p => {
                     const tr = currentDayData[p]?.time;
@@ -1588,8 +1719,13 @@
                         const totalTime = endMins - startMins;
                         const timeLeft = endMins - currentMinutes;
                         const percent = totalTime > 0 ? 100 - (timeLeft / totalTime) * 100 : 0;
-                        progressBar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
-                        progressBarContainer.style.display = 'block';
+                        const minsLeft = Math.floor(timeLeft / 60);
+                        const secsLeft = timeLeft % 60;
+                        // Aggiorna la barra usando ::after
+                        progressBar.style.setProperty('--progress-width', `${Math.max(0, Math.min(100, percent))}%`);
+                        progressBar.style.setProperty('--progress-bg', timeLeft < 5 * 60 ? '#dc3545' : timeLeft < 10 * 60 ? '#ffc107' : '#007bff');
+                        progressLabel.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')} left`;
+                        progressBarContainer.style.display = 'flex';
                     } else {
                         progressBarContainer.style.display = 'none';
                     }
@@ -1600,6 +1736,45 @@
                 progressBarContainer.style.display = 'none';
             }
         }
+
+        // ✅ Aggiorna lo stile della barra di avanzamento con CSS variables
+        const style = document.createElement('style');
+        style.textContent = `
+            .progress-bar::after {
+                width: var(--progress-width, 0%);
+                background: var(--progress-bg, #007bff);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ✅ Rendi la now-summary-box cliccabile per scorrere alla lezione corrente
+        document.getElementById('now-summary-box').addEventListener('click', () => {
+            const now = new Date();
+            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            const isTodayVisible = (currentViewDay === 'all') || (currentViewDay === today);
+            if (!isTodayVisible) return;
+            const currentDayData = (getCurrentWeek() === 'A' ? timetableData.weekA : timetableData.weekB)[today];
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            if (!currentDayData) return;
+            for (let i = 0; i < periods.length; i++) {
+                const period = periods[i];
+                const timeRange = currentDayData[period]?.time;
+                if (!timeRange) continue;
+                const [startStr, endStr] = timeRange.split(' - ');
+                const start = parseTime(startStr);
+                const end = parseTime(endStr);
+                if (!start || !end) continue;
+                const startMinutes = start.hours * 60 + start.minutes;
+                const endMinutes = end.hours * 60 + end.minutes;
+                if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                    const row = document.querySelectorAll('#timetable tbody tr')[i];
+                    if (row) {
+                        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+            }
+        });
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -1674,9 +1849,8 @@
                 sessionStorage.setItem('currentUser', user.name);
                 document.body.classList.add('authenticated');
                 document.getElementById('login-modal').classList.remove('show');
-                generateTimetable(); // ✅ Genera subito la tabella
+                generateTimetable();
                 updateTeacherBoxes();
-                // Avvia gli aggiornamenti
                 setInterval(() => {
                     updateClock();
                     updateTeacherBoxes();
@@ -1691,7 +1865,6 @@
                 setTimeout(() => errorEl.style.display = 'none', 3000);
             }
         }
-        // ✅ Gestione iniziale: verifica se l'utente è già loggato
         function initApp() {
             const currentUser = sessionStorage.getItem('currentUser');
             if (currentUser && credentials[Object.keys(credentials).find(k => credentials[k].name === currentUser)]) {
@@ -1722,7 +1895,7 @@
             });
             document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
             document.getElementById('export-pdf-btn').addEventListener('click', exportPDF);
-            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen); // ✅ CORREZIONE QUI
+            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
             document.getElementById('day-filter-select').addEventListener('change', (e) => {
                 currentViewDay = e.target.value;
                 if (document.body.classList.contains('authenticated')) {

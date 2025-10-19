@@ -84,7 +84,35 @@
             transition: all 0.3s ease;
             min-height: 100vh;
             position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            overflow: hidden; /* Elimina le barre di scorrimento */
         }
+        
+        /* === 1. EFFETTO DI ILLUMINAZIONE GLOBALE === */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%);
+            pointer-events: none;
+            z-index: 1000;
+            mix-blend-mode: overlay;
+            animation: lightMove 20s infinite linear;
+        }
+        
+        @keyframes lightMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5%, 5%) rotate(90deg); }
+            50% { transform: translate(0, 10%) rotate(180deg); }
+            75% { transform: translate(-5%, 5%) rotate(270deg); }
+        }
+        
         .container {
             max-width: 1600px;
             margin: 0 auto;
@@ -92,6 +120,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
+            overflow: hidden; /* Elimina le barre di scorrimento */
         }
         body.authenticated .container {
             opacity: 1;
@@ -122,6 +151,42 @@
             display: flex;
             gap: 11px;
         }
+        
+        /* === 3. EFFETTI 3D PER GLI HEADER E BOX INFORMATIVI === */
+        .clock-box, .countdown-box, .term-info-box {
+            transform-style: preserve-3d;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        [data-theme="dark"] .clock-box,
+        [data-theme="dark"] .countdown-box,
+        [data-theme="dark"] .term-info-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        
+        .clock-box::before, .countdown-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        
+        .clock-box:hover, .countdown-box:hover {
+            transform: translateY(-3px) translateZ(5px);
+        }
+        
         .clock-box, .countdown-box {
             background: var(--countdown-bg);
             border: 1px solid var(--countdown-border);
@@ -167,18 +232,43 @@
             flex-grow: 1;
             gap: 10px;
         }
+        
+        /* === 3. EFFETTO "FLOATING" PER IL TITOLO PRINCIPALE === */
         .title {
-            font-size: 75px;
+            font-size: 50px;
             font-weight: 400;
             color: var(--text-color);
             margin: 0;
+			margin: 0;
+    margin-top: 25px;
+    margin-bottom: 10px;
             opacity: 0;
             animation: fadeInTitle 1s forwards;
+            text-shadow: 
+                0 1px 0 #ccc, 
+                0 2px 0 #c9c9c9,
+                0 3px 0 #bbb,
+                0 4px 0 #b9b9b9,
+                0 5px 0 #aaa,
+                0 6px 1px rgba(0,0,0,.1),
+                0 0 5px rgba(0,0,0,.1),
+                0 1px 3px rgba(0,0,0,.3),
+                0 3px 5px rgba(0,0,0,.2),
+                0 5px 10px rgba(0,0,0,.25);
+            transform: translateZ(20px);
         }
+        
         @keyframes fadeInTitle {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(-10px) translateZ(-50px) rotateX(10deg);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) translateZ(0) rotateX(0);
+            }
         }
+        
         .date-info {
             font-size: 25px;
             color: var(--text-color);
@@ -241,8 +331,8 @@
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
         }
-        /* ✅ SISTEMA "NOW" MIGLIORATO - PUNTI 1-8 */
-        /* 1. Indicatore Visivo Più Evidente */
+        
+        /* === 2. MIGLIORA LA BARRA "NOW" CON EFFETTI 3D === */
         .now-context-bar {
             display: flex;
             justify-content: space-between;
@@ -250,8 +340,8 @@
             position: relative;
             background: linear-gradient(135deg, var(--now-context-bg) 0%, #e9ecef 100%);
             border-radius: 15px;
-            margin: 0 20px 20px 20px;
-            padding: 18px 25px;
+            margin: 0 5px 5px 20px;
+            padding: 10px 10px;
             box-shadow: 
                 0 8px 25px rgba(0,0,0,0.15),
                 inset 0 1px 0 rgba(255,255,255,0.8);
@@ -264,7 +354,23 @@
             font-size: 14px;
             color: var(--now-context-text);
             transition: all 0.3s ease;
+            transform-style: preserve-3d;
         }
+        
+        .now-context-bar::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            width: 90%;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+            border-radius: 0 0 10px 10px;
+            transform: translateZ(-5px) rotateX(85deg);
+            filter: blur(5px);
+            opacity: 0.7;
+        }
+        
         .now-context-bar::before {
             content: '';
             position: absolute;
@@ -301,7 +407,6 @@
             flex: 1;
             overflow: hidden;
         }
-        /* 4. Icona Animata Contestuale */
         .now-summary-icon {
             font-size: 24px;
             animation: iconPulse 2s ease-in-out infinite;
@@ -317,7 +422,6 @@
                 filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
             }
         }
-        /* Icone specifiche per contesto */
         .now-context-bar.lesson .now-summary-icon {
             animation: lessonIcon 3s ease-in-out infinite;
         }
@@ -334,7 +438,6 @@
             0%, 100% { transform: scale(1) rotate(0deg); }
             50% { transform: scale(1.2) rotate(10deg); }
         }
-        /* 7. Contenuto Testuale Migliorato */
         .now-summary-content {
             white-space: nowrap;
             overflow: hidden;
@@ -373,7 +476,6 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.8; }
         }
-        /* 8. Indicatore di Stato "Live" */
         .live-indicator {
             display: flex;
             align-items: center;
@@ -403,11 +505,9 @@
                 box-shadow: 0 0 0 4px rgba(220,53,69,0);
             }
         }
-        /* 6. Timeline Visuale del Periodo Corrente */
         .now-timeline {
-            display: none; /* Nascosto perché non più usato nel nuovo layout inline */
+            display: none;
         }
-        /* 5. Progress Bar con Indicatori Visivi Avanzati */
         .progress-bar-container {
             display: flex;
             flex-direction: column;
@@ -461,7 +561,6 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
-        /* Indicatori di tempo critico */
         .progress-fill.warning {
             background: linear-gradient(90deg, 
                 #ffc107 0%, 
@@ -506,25 +605,26 @@
         .progress-fill.blink {
             animation: blinkRed 1s infinite;
         }
-        /* 2. Badge "NOW" Animato e Visibile – MIGLIORATO */
+        
+        /* === MODIFICA: NOW BADGE POSIZIONATO ALL'INTERNO DELLA CELLA === */
         .now-badge {
             position: absolute;
-            top: -10px;
-            right: -10px;
+            top: 5px;
+            right: 5px;
             background: linear-gradient(135deg, #dc3545, #c82333);
             color: white;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 800;
-            width: 34px;
-            height: 34px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 20;
             box-shadow: 
-                0 4px 15px rgba(220,53,69,0.6),
-                0 0 0 3px rgba(255,255,255,0.95);
+                0 2px 8px rgba(220,53,69,0.6),
+                0 0 0 2px rgba(255,255,255,0.95);
             animation: 
                 pulse 2s infinite,
                 bounce 1s ease-in-out infinite alternate;
@@ -532,22 +632,54 @@
         }
         @keyframes bounce {
             from { transform: scale(1) translateY(0); }
-            to { transform: scale(1.15) translateY(-3px); }
+            to { transform: scale(1.1) translateY(-2px); }
         }
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 4px 15px rgba(220,53,69,0.6), 0 0 0 3px rgba(255,255,255,0.95); }
-            50% { box-shadow: 0 6px 25px rgba(220,53,69,0.8), 0 0 0 3px rgba(255,255,255,0.95); }
+            0%, 100% { box-shadow: 0 2px 8px rgba(220,53,69,0.6), 0 0 0 2px rgba(255,255,255,0.95); }
+            50% { box-shadow: 0 4px 15px rgba(220,53,69,0.8), 0 0 0 2px rgba(255,255,255,0.95); }
         }
-        /* 3. Highlight Celle con Effetto "Glow" Avanzato */
+        
+        /* === 1. EFFETTI 3D SUBTILI ALLE CELLE === */
+        .subject-cell {
+            padding: 5px 5px 5px 5px;
+            background: var(--primary-bg);
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05), var(--cell-shadow);
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            animation: cellEntrance 0.6s ease-out backwards;
+        }
+        
+        @keyframes cellEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px) translateZ(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0) scale(1);
+            }
+        }
+        
+        .subject-cell:hover {
+            transform: translateY(-2px) translateZ(10px) rotateX(2deg);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.15),
+                0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Effetto di profondità per le celle "NOW" */
         .subject-cell.now-lesson {
             position: relative;
             z-index: 5;
             animation: advancedGlow 2s ease-in-out infinite alternate;
-            transform: translateZ(0);
+            transform: translateZ(15px) scale(1.02);
             box-shadow: 
                 0 0 30px rgba(40,167,69,0.4),
-                0 8px 25px rgba(0,0,0,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.6) !important;
+                0 10px 30px rgba(0,0,0,0.2),
+                0 5px 15px rgba(0,0,0,0.1) !important;
             border: 2px solid rgba(40,167,69,0.8) !important;
         }
         @keyframes advancedGlow {
@@ -586,17 +718,7 @@
                     0 10px 30px rgba(0,0,0,0.2);
             }
         }
-        .subject-cell {
-            padding: 5px 5px 5px 5px;
-            background: var(--primary-bg);
-            position: relative;
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05), var(--cell-shadow);
-        }
-        .subject-cell:hover {
-            transform: translateY(-2px);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.08), var(--cell-shadow-hover);
-        }
+        
         .form-time {
             background: var(--form-time-bg) !important;
             color: var(--form-time-text) !important;
@@ -605,7 +727,8 @@
             background: var(--lunch-bg) !important;
             color: var(--lunch-text) !important;
         }
-        /* Resto dello stile identico */
+        
+        /* === 4. EFFETTI DI PROFONDITÀ PER LA NAVBAR === */
         .navbar {
             background-color: var(--nav-bg);
             border-radius: 20px;
@@ -616,7 +739,31 @@
             align-items: center;
             box-shadow: 0 2px 8px var(--card-shadow);
             height: 50px;
+            position: relative;
+            transform-style: preserve-3d;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
         }
+        
+        [data-theme="dark"] .navbar {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        
+        .navbar::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 5%;
+            width: 90%;
+            height: 8px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.15), transparent);
+            border-radius: 0 0 20px 20px;
+            transform: translateZ(-8px) rotateX(75deg);
+            filter: blur(4px);
+            opacity: 0.6;
+        }
+        
         .nav-main {
             display: flex;
             gap: 5px;
@@ -634,11 +781,13 @@
             font-size: 14px;
             transition: all 0.3s ease;
             font-weight: 500;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .nav-item:hover, .nav-item.active {
             background-color: var(--nav-active-bg);
             color: var(--nav-active-text);
-            transform: translateY(-1px);
+            transform: translateY(-2px) translateZ(8px);
         }
         .nav-controls {
             display: flex;
@@ -710,10 +859,11 @@
             gap: 20px;
             align-items: flex-start;
             margin-left: 30px;
+            overflow: hidden; /* Elimina le barre di scorrimento */
         }
         .timetable-container {
             flex: 1;
-            overflow-x: hidden; /* ✅ Rimosso lo scroll orizzontale */
+            overflow-x: hidden;
             overflow-y: hidden;
             width: 100%;
         }
@@ -721,7 +871,7 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 3px;
-            table-layout: auto; /* ✅ Permette al browser di adattare le colonne */
+            table-layout: auto;
         }
         .timetable th, .timetable td {
             border: none;
@@ -736,7 +886,10 @@
         }
         .timetable td {
             height: 50px;
-            box-shadow: var(--cell-shadow);
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.1),
+                0 1px 2px rgba(0,0,0,0.08),
+                inset 0 1px 1px rgba(255,255,255,0.5);
         }
         .period-cell {
             width: 50px !important;
@@ -755,6 +908,8 @@
             width: 110px;
             min-width: 110px;
         }
+        
+        /* === 5. EFFETTI 3D PER LE TEACHER BOX === */
         .teacher-boxes {
             display: flex;
             flex-direction: column;
@@ -766,7 +921,40 @@
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0 4px 8px var(--card-shadow);
+            transform-style: preserve-3d;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
         }
+        
+        [data-theme="dark"] .teacher-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        
+        .teacher-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        
+        .teacher-box:hover {
+            transform: translateY(-3px) translateZ(10px) rotateY(2deg);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.15),
+                0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        
         .teacher-header h3 {
             font-size: 16px;
             font-weight: bold;
@@ -1126,7 +1314,6 @@
                 </div>
             </div>
         </div>
-        <!-- ✅ SISTEMA "NOW" MIGLIORATO -->
         <div class="now-context-bar" id="now-context-bar">
             <div id="now-summary-box" class="now-summary-box">
                 <span class="now-summary-icon" id="now-summary-icon">🕒</span>
@@ -1257,8 +1444,9 @@
         </div>
     </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
+    
     <script>
-        // ... (tutto il codice JS rimane identico)
+        // Il resto del codice JavaScript rimane identico
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
@@ -1759,14 +1947,12 @@
                 }
             });
         }
-        /* ✅ FUNZIONE highlightCurrentRow AGGIORNATA con i nuovi miglioramenti */
         function highlightCurrentRow() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
             const isTodayVisible = (currentViewDay === 'all') || (currentViewDay === today);
             const currentDayData = (getCurrentWeek() === 'A' ? timetableData.weekA : timetableData.weekB)[today];
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            // ✅ Reset barra contesto
             const nowContextBar = document.getElementById('now-context-bar');
             nowContextBar.className = 'now-context-bar';
             document.querySelectorAll('.now-badge').forEach(el => el.remove());
@@ -1784,7 +1970,6 @@
                 const todayIndexInVisible = visibleDays.indexOf(today);
                 if (todayIndexInVisible === -1) return;
                 const todayColumnOffset = 2 + (todayIndexInVisible * 2);
-                // ✅ Cerca periodo corrente
                 for (let i = 0; i < periods.length; i++) {
                     const period = periods[i];
                     const timeRange = currentDayData[period]?.time;
@@ -1830,7 +2015,6 @@
                                 }
                             }
                         }
-                        // ✅ Nuovo formato inline: LIVE • Periodo • Orario • Docenti
                         let liveIndicator = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div>`;
                         if (teacherDetails.length > 0) {
                             summaryText = `${liveIndicator} • <span class="now-summary-highlight">${periodLabel}</span> • ${timeRange} • ${teacherDetails.join(' | ')}`;
@@ -1844,7 +2028,6 @@
                     }
                 }
                 if (!inPeriod) {
-                    // Cerca prossima lezione oggi
                     for (let i = 0; i < periods.length; i++) {
                         const period = periods[i];
                         const timeRange = currentDayData[period]?.time;
@@ -1914,7 +2097,6 @@
             }
             document.getElementById('now-summary-content').innerHTML = summaryText;
             document.getElementById('now-summary-icon').textContent = summaryIcon;
-            // ✅ Aggiorna progress bar con i nuovi stati
             const progressBarContainer = document.getElementById('progress-bar-container');
             const progressFill = document.getElementById('progress-fill');
             const progressLabel = document.getElementById('progress-label');
@@ -1945,15 +2127,14 @@
                         progressFill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
                         progressLabel.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')} left`;
                         progressOverlayText.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')}`;
-                        // ✅ Aggiorna stati della progress bar
                         progressFill.classList.remove('warning', 'critical', 'blink');
-                        if (timeLeft < 5 * 60) { // Meno di 5 minuti
+                        if (timeLeft < 5 * 60) {
                             progressFill.classList.add('warning');
                         }
-                        if (timeLeft < 2 * 60) { // Meno di 2 minuti
+                        if (timeLeft < 2 * 60) {
                             progressFill.classList.add('critical');
                         }
-                        if (timeLeft < 30) { // Meno di 30 secondi
+                        if (timeLeft < 30) {
                             progressFill.classList.add('blink');
                         }
                         progressBarContainer.style.display = 'block';

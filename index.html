@@ -79,10 +79,12 @@
             --now-context-lunch: #2d3a4a;
             --now-context-text: #ffffff;
         }
+        /* === Transizione fluida tema === */
         body.theme-transition {
             transition: background-color 0.5s ease, color 0.5s ease !important;
             opacity: 0.9;
         }
+        /* === Sfondo contestuale dinamico === */
         .dynamic-bg {
             position: fixed;
             top: 0;
@@ -112,6 +114,7 @@
             perspective: 1000px;
             overflow: hidden;
         }
+        /* === Luce direzionale migliorata === */
         body::before {
             content: '';
             position: fixed;
@@ -628,8 +631,6 @@
         }
         .now-badge.arakelian { background: linear-gradient(135deg, var(--teacher-arakelian-color), #2a9d4a); }
         .now-badge.jenkins { background: linear-gradient(135deg, var(--teacher-jenkins-color), #9a47c2); }
-        .now-badge.break { background: linear-gradient(135deg, #ffc107, #e0a800); }
-        .now-badge.lunch { background: linear-gradient(135deg, #17a2b8, #138496); }
         @keyframes bounce {
             from { transform: scale(1) translateY(0); }
             to { transform: scale(1.1) translateY(-2px); }
@@ -665,6 +666,7 @@
                 0 8px 25px rgba(0, 0, 0, 0.15),
                 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+        /* Ombre dinamiche */
         .time-morning .subject-cell { box-shadow: var(--cell-shadow-morning), inset 0 1px 2px rgba(0,0,0,0.05); }
         .time-afternoon .subject-cell { box-shadow: var(--cell-shadow-afternoon), inset 0 1px 2px rgba(0,0,0,0.05); }
         .time-evening .subject-cell { box-shadow: var(--cell-shadow-evening), inset 0 1px 2px rgba(0,0,0,0.05); }
@@ -1264,6 +1266,7 @@
         <div class="now-context-bar" id="now-context-bar">
             <div id="now-summary-box" class="now-summary-box">
                 <div class="now-summary-icon" id="now-summary-icon">
+                    <!-- Default icon placeholder -->
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
                 <div class="now-summary-content" id="now-summary-content">
@@ -1394,18 +1397,20 @@
     </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
     <script>
+        // === SVG ICONS ===
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
-
+        // === Gestione sfondo e ombre dinamiche ===
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
             const bg = document.getElementById('dynamic-bg');
             const body = document.body;
+            // Rimuovi classi precedenti
             body.classList.remove('time-morning', 'time-afternoon', 'time-evening');
             bg.className = 'dynamic-bg';
             if (hour >= 5 && hour < 12) {
@@ -1419,21 +1424,18 @@
                 body.classList.add('time-evening');
             }
         }
-
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
-
         const credentials = {
             "admin": { name: "Admin User", role: "admin", displayName: "Administrator" },
             "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian" },
             "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins" },
             "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator" }
         };
-
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1530,7 +1532,6 @@
                 }
             }
         };
-
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
@@ -1546,29 +1547,24 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
-
         function isWeekA(date) {
             const diffTime = date.getTime() - weekAStartDate.getTime();
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0;
         }
-
         function getCurrentWeek() {
             if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
             return currentWeek;
         }
-
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
             return `subject-${subject.toLowerCase().replace(/\s+/g, '-').replace(/[\/]/g, '-').replace(/[^a-z0-9-]/g, '')}`;
         }
-
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -1579,7 +1575,6 @@
             const year = parts[parts.length - 1];
             return `${weekday} <span class="date-day">${day}</span> ${month} ${year}`;
         }
-
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -1592,7 +1587,6 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
-
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -1610,7 +1604,6 @@
             resultDate.setDate(baseMonday.getDate() + dayIndex);
             return resultDate;
         }
-
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -1619,7 +1612,6 @@
             }
             return null;
         }
-
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -1627,7 +1619,6 @@
             }
             return null;
         }
-
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -1645,18 +1636,6 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
-
-        function extractYearGroup(subject) {
-            if (!subject || subject === '' || ['Form Time', 'Lunch'].includes(subject)) return null;
-            const match = subject.match(/^(\d+)/);
-            if (match) {
-                let year = parseInt(match[1]);
-                if (year >= 12) return '12-13';
-                return year.toString();
-            }
-            return null;
-        }
-
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -1713,7 +1692,6 @@
             });
             table.innerHTML = html;
         }
-
         async function exportPDF() {
             if (typeof html2canvas === 'undefined' || typeof jsPDF === 'undefined') {
                 const script1 = document.createElement('script');
@@ -1770,7 +1748,6 @@
                 document.body.removeChild(container);
             }
         }
-
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1826,7 +1803,7 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
-
+        // === Clock & Countdown sincronizzati ===
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -1839,7 +1816,6 @@
             const displayName = credentials[Object.keys(credentials).find(k => credentials[k].name === user)]?.displayName || user || '—';
             document.getElementById('logged-in-user-box').textContent = `Logged in as: ${displayName}`;
         }
-
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -1878,7 +1854,6 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
-
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1891,28 +1866,17 @@
             document.querySelectorAll('.subject-cell.now-lesson, .subject-cell.now-break').forEach(el => {
                 el.classList.remove('now-lesson', 'now-break');
             });
-
-            // === Break/Lunch time ranges ===
-            const break78Start = 10 * 60 + 20;   // 10:20
-            const break78End = 10 * 60 + 40;     // 10:40
-            const break9plusStart = 11 * 60 + 10; // 11:10
-            const break9plusEnd = 11 * 60 + 30;   // 11:30
-            const lunch78Start = 12 * 60 + 30;    // 12:30
-            const lunch78End = 13 * 60 + 30;      // 13:30
-            const lunch9plusStart = 13 * 60 + 30; // 13:30
-            const lunch9plusEnd = 14 * 60 + 30;   // 14:30
-
             let summaryText = "No scheduled activity";
             let iconType = 'default';
             let inPeriod = false;
             let isBreakOrLunch = false;
-
+            let nextLessonTime = null;
+            let nextLessonStartTime = null;
             if (isTodayVisible && currentDayData) {
                 const visibleDays = currentViewDay === 'all' ? days : [currentViewDay];
                 const todayIndexInVisible = visibleDays.indexOf(today);
+                if (todayIndexInVisible === -1) return;
                 const todayColumnOffset = 2 + (todayIndexInVisible * 2);
-
-                // === Check if inside a regular lesson period ===
                 for (let i = 0; i < periods.length; i++) {
                     const period = periods[i];
                     const timeRange = currentDayData[period]?.time;
@@ -1923,17 +1887,6 @@
                     if (!start || !end) continue;
                     const startMinutes = start.hours * 60 + start.minutes;
                     const endMinutes = end.hours * 60 + end.minutes;
-
-                    // Skip if current time is in break/lunch override zones
-                    if (
-                        (currentMinutes >= break78Start && currentMinutes < break78End) ||
-                        (currentMinutes >= break9plusStart && currentMinutes < break9plusEnd) ||
-                        (currentMinutes >= lunch78Start && currentMinutes < lunch78End) ||
-                        (currentMinutes >= lunch9plusStart && currentMinutes < lunch9plusEnd)
-                    ) {
-                        continue;
-                    }
-
                     if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
                         const row = document.querySelectorAll('#timetable tbody tr')[i];
                         if (row) {
@@ -1946,6 +1899,20 @@
                                     let teacherClass = '';
                                     if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                     else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
+
+                                    // === LOGICA SPECIALE PER LUNCH 10:20–10:40 ===
+                                    let badgeText = 'Now';
+                                    if (period === '2' && timeRange === '10:20 - 11:30') {
+                                        // Controlla se la classe inizia con 7 o 8
+                                        if (/^7|^8/.test(subject) && currentMinutes < (10 * 60 + 40)) {
+                                            badgeText = 'Lunch';
+                                        }
+                                        // Ma se è "12 / 13 Art", rimane "Now"
+                                        if (subject === '12 / 13 Art') {
+                                            badgeText = 'Now';
+                                        }
+                                    }
+
                                     if (subject === 'Lunch' || subject === 'Form Time') {
                                         cells[j].classList.add('now-break');
                                     } else {
@@ -1953,7 +1920,7 @@
                                         if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
                                             const badge = document.createElement('div');
                                             badge.className = `now-badge ${teacherClass}`;
-                                            badge.textContent = 'NOW';
+                                            badge.textContent = badgeText;
                                             cells[j].appendChild(badge);
                                         }
                                     }
@@ -1988,106 +1955,123 @@
                         break;
                     }
                 }
-
-                // === Handle Break/Lunch overrides ===
                 if (!inPeriod) {
-                    if (currentMinutes >= break78Start && currentMinutes < break78End) {
-                        // Apply "Break" only to year 7–8
-                        document.querySelectorAll('#timetable tbody tr').forEach(row => {
-                            const cells = row.querySelectorAll('td');
-                            for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
-                                if (cells[j]) {
-                                    const cellData = JSON.parse(cells[j].dataset.cell || '{}');
-                                    const year = extractYearGroup(cellData.subject);
-                                    if (year && (year === '7' || year === '8')) {
-                                        cells[j].classList.add('now-break');
-                                        const badge = document.createElement('div');
-                                        badge.className = 'now-badge break';
-                                        badge.textContent = 'Break';
-                                        cells[j].appendChild(badge);
-                                    }
-                                }
+                    for (let i = 0; i < periods.length; i++) {
+                        const period = periods[i];
+                        const timeRange = currentDayData[period]?.time;
+                        if (!timeRange) continue;
+                        const start = parseTime(timeRange.split(' - ')[0]);
+                        if (start) {
+                            const startMins = start.hours * 60 + start.minutes;
+                            if (currentMinutes < startMins) {
+                                const diffMins = startMins - currentMinutes;
+                                const h = Math.floor(diffMins / 60);
+                                const m = diffMins % 60;
+                                nextLessonTime = `${h > 0 ? h + 'h ' : ''}${m}m`;
+                                nextLessonStartTime = timeRange.split(' - ')[0];
+                                break;
                             }
-                        });
+                        }
+                    }
+                    const break1Start = 10 * 60 + 20;
+                    const break1End = 10 * 60 + 40;
+                    const break2Start = 11 * 60 + 10;
+                    const break2End = 11 * 60 + 30;
+                    const lunch1Start = 12 * 60 + 30;
+                    const lunch1End = 13 * 60 + 30;
+                    const lunch2Start = 13 * 60 + 30;
+                    const lunch2End = 14 * 60 + 30;
+                    if (currentMinutes >= break1Start && currentMinutes < break1End) {
                         summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 7–8`;
                         iconType = 'break';
                         nowContextBar.classList.add('break');
                         isBreakOrLunch = true;
-                    } else if (currentMinutes >= break9plusStart && currentMinutes < break9plusEnd) {
-                        // Apply "Break" only to year 9–13
-                        document.querySelectorAll('#timetable tbody tr').forEach(row => {
-                            const cells = row.querySelectorAll('td');
-                            for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
-                                if (cells[j]) {
-                                    const cellData = JSON.parse(cells[j].dataset.cell || '{}');
-                                    const year = extractYearGroup(cellData.subject);
-                                    if (year && (year === '9' || year === '10' || year === '11' || year === '12-13')) {
-                                        cells[j].classList.add('now-break');
-                                        const badge = document.createElement('div');
-                                        badge.className = 'now-badge break';
-                                        badge.textContent = 'Break';
-                                        cells[j].appendChild(badge);
-                                    }
-                                }
-                            }
-                        });
+                    } else if (currentMinutes >= break2Start && currentMinutes < break2End) {
                         summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 9–13`;
                         iconType = 'break';
                         nowContextBar.classList.add('break');
                         isBreakOrLunch = true;
-                    } else if (currentMinutes >= lunch78Start && currentMinutes < lunch78End) {
-                        document.querySelectorAll('#timetable tbody tr').forEach(row => {
-                            const cells = row.querySelectorAll('td');
-                            for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
-                                if (cells[j]) {
-                                    const cellData = JSON.parse(cells[j].dataset.cell || '{}');
-                                    const year = extractYearGroup(cellData.subject);
-                                    if (year && (year === '7' || year === '8')) {
-                                        cells[j].classList.add('now-break');
-                                        const badge = document.createElement('div');
-                                        badge.className = 'now-badge lunch';
-                                        badge.textContent = 'Lunch';
-                                        cells[j].appendChild(badge);
-                                    }
-                                }
-                            }
-                        });
+                    } else if (currentMinutes >= lunch1Start && currentMinutes < lunch1End) {
                         summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 7–8`;
                         iconType = 'lunch';
                         nowContextBar.classList.add('lunch');
                         isBreakOrLunch = true;
-                    } else if (currentMinutes >= lunch9plusStart && currentMinutes < lunch9plusEnd) {
-                        document.querySelectorAll('#timetable tbody tr').forEach(row => {
-                            const cells = row.querySelectorAll('td');
-                            for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
-                                if (cells[j]) {
-                                    const cellData = JSON.parse(cells[j].dataset.cell || '{}');
-                                    const year = extractYearGroup(cellData.subject);
-                                    if (year && (year === '9' || year === '10' || year === '11' || year === '12-13')) {
-                                        cells[j].classList.add('now-break');
-                                        const badge = document.createElement('div');
-                                        badge.className = 'now-badge lunch';
-                                        badge.textContent = 'Lunch';
-                                        cells[j].appendChild(badge);
-                                    }
-                                }
-                            }
-                        });
+                    } else if (currentMinutes >= lunch2Start && currentMinutes < lunch2End) {
                         summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 9–13`;
                         iconType = 'lunch';
                         nowContextBar.classList.add('lunch');
                         isBreakOrLunch = true;
+                    } else {
+                        if (nextLessonTime && nextLessonStartTime) {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Next lesson in <span class="now-summary-highlight">${nextLessonTime}</span> at ${nextLessonStartTime}`;
+                        } else {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • No more lessons today`;
+                        }
+                    }
+                    if (isBreakOrLunch) {
+                        const todayColumnOffset = 2 + (todayIndexInVisible * 2);
+                        document.querySelectorAll('#timetable tbody tr').forEach(row => {
+                            const cells = row.querySelectorAll('td');
+                            for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
+                                if (cells[j]) {
+                                    cells[j].classList.add('now-break');
+                                }
+                            }
+                        });
+                    }
+                }
+            } else {
+                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Today not visible`;
+            }
+            document.getElementById('now-summary-content').innerHTML = summaryText;
+            document.getElementById('now-summary-icon').innerHTML = ICONS[iconType] || ICONS.default;
+            const progressBarContainer = document.getElementById('progress-bar-container');
+            const progressFill = document.getElementById('progress-fill');
+            const progressLabel = document.getElementById('progress-label');
+            const progressOverlayText = document.getElementById('progress-overlay-text');
+            if (isTodayVisible && inPeriod && currentDayData) {
+                const currentPeriod = periods.find(p => {
+                    const tr = currentDayData[p]?.time;
+                    if (!tr) return false;
+                    const [s, e] = tr.split(' - ');
+                    const st = parseTime(s);
+                    const en = parseTime(e);
+                    if (!st || !en) return false;
+                    return currentMinutes >= st.hours * 60 + st.minutes && currentMinutes < en.hours * 60 + en.minutes;
+                });
+                if (currentPeriod) {
+                    const timeRange = currentDayData[currentPeriod].time;
+                    const [startStr, endStr] = timeRange.split(' - ');
+                    const start = parseTime(startStr);
+                    const end = parseTime(endStr);
+                    if (start && end) {
+                        const startMins = start.hours * 60 + start.minutes;
+                        const endMins = end.hours * 60 + end.minutes;
+                        const totalTime = endMins - startMins;
+                        const timeLeft = endMins - currentMinutes;
+                        const percent = totalTime > 0 ? 100 - (timeLeft / totalTime) * 100 : 0;
+                        const minsLeft = Math.floor(timeLeft / 60);
+                        const secsLeft = timeLeft % 60;
+                        progressFill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+                        progressLabel.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')} left`;
+                        progressOverlayText.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')}`;
+                        progressFill.classList.remove('warning', 'critical', 'blink');
+                        if (timeLeft < 5 * 60) {
+                            progressFill.classList.add('warning');
+                        }
+                        if (timeLeft < 2 * 60) {
+                            progressFill.classList.add('critical');
+                        }
+                        if (timeLeft < 30) {
+                            progressFill.classList.add('blink');
+                        }
+                        progressBarContainer.style.display = 'block';
+                        return;
                     }
                 }
             }
-
-            document.getElementById('now-summary-content').innerHTML = summaryText;
-            document.getElementById('now-summary-icon').innerHTML = ICONS[iconType] || ICONS.default;
-
-            const progressBarContainer = document.getElementById('progress-bar-container');
             progressBarContainer.style.display = 'none';
         }
-
         document.getElementById('now-summary-box').addEventListener('click', () => {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2115,7 +2099,6 @@
                 }
             }
         });
-
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2146,12 +2129,10 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
-
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement || 
@@ -2163,7 +2144,6 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2172,7 +2152,6 @@
                 );
             });
         }
-
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2188,7 +2167,6 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
-
         function handleLogin() {
             const password = document.getElementById('password-input').value.trim();
             const errorEl = document.getElementById('login-error');
@@ -2199,6 +2177,7 @@
                 document.getElementById('login-modal').classList.remove('show');
                 generateTimetable();
                 updateTeacherBoxes();
+                // Avvia aggiornamenti precisi ogni secondo
                 setInterval(() => {
                     updateClockPrecise();
                     updateCountdownPrecise();
@@ -2215,7 +2194,6 @@
                 setTimeout(() => errorEl.style.display = 'none', 3000);
             }
         }
-
         function initApp() {
             const currentUser = sessionStorage.getItem('currentUser');
             if (currentUser && credentials[Object.keys(credentials).find(k => credentials[k].name === currentUser)]) {
@@ -2273,7 +2251,6 @@
             });
             updateWeekButtons();
         }
-
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>

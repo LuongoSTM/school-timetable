@@ -79,12 +79,10 @@
             --now-context-lunch: #2d3a4a;
             --now-context-text: #ffffff;
         }
-        /* === Transizione fluida tema === */
         body.theme-transition {
             transition: background-color 0.5s ease, color 0.5s ease !important;
             opacity: 0.9;
         }
-        /* === Sfondo contestuale dinamico === */
         .dynamic-bg {
             position: fixed;
             top: 0;
@@ -97,7 +95,7 @@
         }
         .morning-bg { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
         .afternoon-bg { background: linear-gradient(135deg, #ffe0b2, #ffcc80); }
-        .evening-bg { background: linear-gradient(135deg, #2c3e50, #1a1a2e); }
+        .evening-bg { background: linear-gradient(135deg, #f0f5ff, #e6f0ff); }
         * {
             margin: 0;
             padding: 0;
@@ -114,7 +112,6 @@
             perspective: 1000px;
             overflow: hidden;
         }
-        /* === Luce direzionale migliorata === */
         body::before {
             content: '';
             position: fixed;
@@ -666,7 +663,6 @@
                 0 8px 25px rgba(0, 0, 0, 0.15),
                 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        /* Ombre dinamiche */
         .time-morning .subject-cell { box-shadow: var(--cell-shadow-morning), inset 0 1px 2px rgba(0,0,0,0.05); }
         .time-afternoon .subject-cell { box-shadow: var(--cell-shadow-afternoon), inset 0 1px 2px rgba(0,0,0,0.05); }
         .time-evening .subject-cell { box-shadow: var(--cell-shadow-evening), inset 0 1px 2px rgba(0,0,0,0.05); }
@@ -752,7 +748,7 @@
             border-radius: 15px;
             flex-wrap: wrap;
         }
-        .control-btn, .fullscreen-btn, .export-pdf-btn {
+        .control-btn, .fullscreen-btn {
             background: none;
             border: none;
             color: var(--text-color);
@@ -767,8 +763,7 @@
             gap: 4px;
         }
         .control-btn:hover, .control-btn.active,
-        .fullscreen-btn:hover,
-        .export-pdf-btn:hover {
+        .fullscreen-btn:hover {
             background-color: var(--header-bg);
             color: var(--header-text);
             transform: translateY(-1px);
@@ -862,16 +857,16 @@
             width: 110px;
             min-width: 110px;
         }
-        .teacher-boxes {
+        .right-sidebar {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            min-width: 200px;
+            gap: 15px;
+            min-width: 190px;
         }
         .teacher-box {
             background: var(--secondary-bg);
             border-radius: 10px;
-            padding: 15px;
+            padding: 12px;
             box-shadow: 0 4px 8px var(--card-shadow);
             transform-style: preserve-3d;
             position: relative;
@@ -879,6 +874,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
         }
         [data-theme="dark"] .teacher-box {
             background: rgba(45, 45, 45, 0.9);
@@ -904,24 +900,76 @@
                 0 6px 20px rgba(0, 0, 0, 0.1);
         }
         .teacher-header h3 {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: var(--header-bg);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .lesson-info {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .lesson-label {
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
         }
         .lesson-details {
-            font-size: 12px;
-            padding: 5px;
+            font-size: 11px;
+            padding: 4px;
             background: var(--primary-bg);
             border-radius: 5px;
             border: 1px solid var(--border-color);
+        }
+        .lessons-count-table {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+        }
+        [data-theme="dark"] .lessons-count-table {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .lessons-count-table h3 {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--header-bg);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .lessons-count-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .lessons-count-table th,
+        .lessons-count-table td {
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .lessons-count-table th {
+            background: var(--header-bg);
+            color: var(--header-text);
+            font-size: 12px;
+        }
+        .lessons-count-table td {
+            font-size: 12px;
+        }
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .right-sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .teacher-box, .lessons-count-table {
+                min-width: 48%;
+            }
         }
         .modal {
             display: none;
@@ -1266,7 +1314,6 @@
         <div class="now-context-bar" id="now-context-bar">
             <div id="now-summary-box" class="now-summary-box">
                 <div class="now-summary-icon" id="now-summary-icon">
-                    <!-- Default icon placeholder -->
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
                 <div class="now-summary-content" id="now-summary-content">
@@ -1348,10 +1395,7 @@
                     <span>⛶</span>
                     <span>Full Screen</span>
                 </button>
-                <button id="export-pdf-btn" class="export-pdf-btn">
-                    <span>📄</span>
-                    <span>Export PDF</span>
-                </button>
+                <!-- ✅ Export PDF RIMOSSO -->
                 <div class="dark-mode-control">
                     <span>🌙</span>
                     <div class="toggle-switch" id="dark-mode-toggle">
@@ -1365,7 +1409,7 @@
                 <table id="timetable" class="timetable">
                 </table>
             </div>
-            <div class="teacher-boxes">
+            <div class="right-sidebar">
                 <div class="teacher-box">
                     <div class="teacher-header">
                         <h3>Ms K. Arakelian</h3>
@@ -1392,25 +1436,33 @@
                         <div class="lesson-details" id="next-jenkins">No Lesson Next</div>
                     </div>
                 </div>
+                <!-- ✅ Tabella conteggio -->
+                <div class="lessons-count-table">
+                    <h3>Lessons Until Half Term</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Code</th><th>Count</th></tr>
+                        </thead>
+                        <tbody id="lessons-count-tbody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
     <script>
-        // === SVG ICONS ===
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
-        // === Gestione sfondo e ombre dinamiche ===
+
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
             const bg = document.getElementById('dynamic-bg');
             const body = document.body;
-            // Rimuovi classi precedenti
             body.classList.remove('time-morning', 'time-afternoon', 'time-evening');
             bg.className = 'dynamic-bg';
             if (hour >= 5 && hour < 12) {
@@ -1424,18 +1476,21 @@
                 body.classList.add('time-evening');
             }
         }
+
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
+
         const credentials = {
-            "admin": { name: "Admin User", role: "admin", displayName: "Administrator" },
-            "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian" },
-            "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins" },
-            "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator" }
+            "admin": { name: "Admin User", role: "admin", displayName: "Administrator", key: "admin" },
+            "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian", key: "KAA125" },
+            "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins", key: "NJA225" },
+            "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator", key: "280765" }
         };
+
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1532,6 +1587,7 @@
                 }
             }
         };
+
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
@@ -1547,24 +1603,29 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
+
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
+
         function isWeekA(date) {
             const diffTime = date.getTime() - weekAStartDate.getTime();
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0;
         }
+
         function getCurrentWeek() {
             if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
             return currentWeek;
         }
+
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
             return `subject-${subject.toLowerCase().replace(/\s+/g, '-').replace(/[\/]/g, '-').replace(/[^a-z0-9-]/g, '')}`;
         }
+
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -1575,6 +1636,7 @@
             const year = parts[parts.length - 1];
             return `${weekday} <span class="date-day">${day}</span> ${month} ${year}`;
         }
+
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -1587,6 +1649,7 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
+
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -1604,6 +1667,7 @@
             resultDate.setDate(baseMonday.getDate() + dayIndex);
             return resultDate;
         }
+
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -1612,6 +1676,7 @@
             }
             return null;
         }
+
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -1619,6 +1684,7 @@
             }
             return null;
         }
+
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -1636,6 +1702,7 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
+
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -1692,62 +1759,62 @@
             });
             table.innerHTML = html;
         }
-        async function exportPDF() {
-            if (typeof html2canvas === 'undefined' || typeof jsPDF === 'undefined') {
-                const script1 = document.createElement('script');
-                script1.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-                document.head.appendChild(script1);
-                const script2 = document.createElement('script');
-                script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-                document.head.appendChild(script2);
-                await new Promise(resolve => {
-                    let loaded = 0;
-                    const check = () => {
-                        loaded++;
-                        if (loaded === 2) resolve();
-                    };
-                    script1.onload = check;
-                    script2.onload = check;
-                });
-                window.jsPDF = window.jspdf.jsPDF;
-            }
-            const element = document.getElementById('timetable').cloneNode(true);
-            element.style.width = '100%';
-            element.style.transform = 'scale(1)';
-            element.style.transformOrigin = 'top left';
-            const container = document.createElement('div');
-            container.style.width = '1200px';
-            container.style.padding = '20px';
-            container.appendChild(element);
-            document.body.appendChild(container);
-            try {
-                const canvas = await html2canvas(container, {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor: null
-                });
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('landscape', 'mm', 'a4');
-                const imgWidth = 297;
-                const pageHeight = 210;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
+
+        // ✅ Funzione corretta: conteggio SOLO giorni futuri (escluso oggi)
+        function countLessonsUntilTerm() {
+            const now = new Date();
+            const currentTerm = getNextTerm();
+            if (!currentTerm) return {};
+
+            // Fine del conteggio: il giorno PRIMA dell'inizio del half term
+            const termStart = new Date(currentTerm.startDate);
+            const lastDayToCount = new Date(termStart);
+            lastDayToCount.setDate(lastDayToCount.getDate() - 1); // es. 26 ottobre
+
+            const subjectCount = {};
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1); // inizia da DOMANI
+
+            let currentDate = new Date(tomorrow);
+            while (currentDate <= lastDayToCount) {
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                if (['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
+                    const isA = isWeekA(currentDate);
+                    const weekData = isA ? timetableData.weekA : timetableData.weekB;
+                    const dayData = weekData[dayName];
+                    if (dayData) {
+                        for (const period in dayData) {
+                            const entry = dayData[period];
+                            if (entry && entry.teachers) {
+                                for (const teacher in entry.teachers) {
+                                    const subject = entry.teachers[teacher].subject;
+                                    if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                        subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                pdf.save(`Timetable_Week${getCurrentWeek()}.pdf`);
-            } catch (e) {
-                alert('Error generating PDF: ' + e.message);
-            } finally {
-                document.body.removeChild(container);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            return subjectCount;
+        }
+
+        function renderLessonsCountTable() {
+            const counts = countLessonsUntilTerm();
+            const tbody = document.getElementById('lessons-count-tbody');
+            tbody.innerHTML = '';
+
+            const sorted = Object.entries(counts).sort(([a], [b]) => a.localeCompare(b));
+            for (const [subject, count] of sorted) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${subject}</td><td>${Math.max(0, count)}</td>`;
+                tbody.appendChild(tr);
             }
         }
+
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1803,7 +1870,7 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
-        // === Clock & Countdown sincronizzati ===
+
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -1812,10 +1879,11 @@
             document.getElementById('date-info').innerHTML = formatDate(now);
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
-            const user = sessionStorage.getItem('currentUser');
-            const displayName = credentials[Object.keys(credentials).find(k => credentials[k].name === user)]?.displayName || user || '—';
+            const userKey = sessionStorage.getItem('currentUserKey');
+            const displayName = credentials[userKey]?.displayName || '—';
             document.getElementById('logged-in-user-box').textContent = `Logged in as: ${displayName}`;
         }
+
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -1854,6 +1922,7 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
+
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1899,20 +1968,15 @@
                                     let teacherClass = '';
                                     if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                     else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
-
-                                    // === LOGICA SPECIALE PER LUNCH 10:20–10:40 ===
                                     let badgeText = 'Now';
                                     if (period === '2' && timeRange === '10:20 - 11:30') {
-                                        // Controlla se la classe inizia con 7 o 8
                                         if (/^7|^8/.test(subject) && currentMinutes < (10 * 60 + 40)) {
                                             badgeText = 'Lunch';
                                         }
-                                        // Ma se è "12 / 13 Art", rimane "Now"
                                         if (subject === '12 / 13 Art') {
                                             badgeText = 'Now';
                                         }
                                     }
-
                                     if (subject === 'Lunch' || subject === 'Form Time') {
                                         cells[j].classList.add('now-break');
                                     } else {
@@ -2072,6 +2136,7 @@
             }
             progressBarContainer.style.display = 'none';
         }
+
         document.getElementById('now-summary-box').addEventListener('click', () => {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2099,6 +2164,7 @@
                 }
             }
         });
+
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2129,10 +2195,12 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
+
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement || 
@@ -2144,6 +2212,7 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2152,6 +2221,7 @@
                 );
             });
         }
+
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2167,50 +2237,57 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
+
         function handleLogin() {
             const password = document.getElementById('password-input').value.trim();
             const errorEl = document.getElementById('login-error');
             if (credentials[password]) {
                 const user = credentials[password];
-                sessionStorage.setItem('currentUser', user.name);
+                sessionStorage.setItem('currentUserKey', user.key);
                 document.body.classList.add('authenticated');
                 document.getElementById('login-modal').classList.remove('show');
                 generateTimetable();
                 updateTeacherBoxes();
-                // Avvia aggiornamenti precisi ogni secondo
+                renderLessonsCountTable();
                 setInterval(() => {
                     updateClockPrecise();
                     updateCountdownPrecise();
                     updateTeacherBoxes();
                     updateNowContextBar();
                     updateDynamicBackgroundAndShadows();
+                    renderLessonsCountTable();
                 }, 1000);
                 updateClockPrecise();
                 updateCountdownPrecise();
                 updateNowContextBar();
                 updateDynamicBackgroundAndShadows();
+                renderLessonsCountTable();
             } else {
                 errorEl.style.display = 'block';
                 setTimeout(() => errorEl.style.display = 'none', 3000);
             }
         }
+
         function initApp() {
-            const currentUser = sessionStorage.getItem('currentUser');
-            if (currentUser && credentials[Object.keys(credentials).find(k => credentials[k].name === currentUser)]) {
+            const userKey = sessionStorage.getItem('currentUserKey');
+            if (userKey && credentials[userKey]) {
                 document.body.classList.add('authenticated');
                 generateTimetable();
                 updateTeacherBoxes();
+                renderLessonsCountTable();
                 setInterval(() => {
                     updateClockPrecise();
                     updateCountdownPrecise();
                     updateTeacherBoxes();
                     updateNowContextBar();
                     updateDynamicBackgroundAndShadows();
+                    renderLessonsCountTable();
                 }, 1000);
                 updateClockPrecise();
                 updateCountdownPrecise();
                 updateNowContextBar();
                 updateDynamicBackgroundAndShadows();
+                renderLessonsCountTable();
             } else {
                 document.getElementById('login-modal').classList.add('show');
             }
@@ -2225,12 +2302,12 @@
                 if (e.key === 'Enter') handleLogin();
             });
             document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
-            document.getElementById('export-pdf-btn').addEventListener('click', exportPDF);
             document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
             document.getElementById('day-filter-select').addEventListener('change', (e) => {
                 currentViewDay = e.target.value;
                 if (document.body.classList.contains('authenticated')) {
                     generateTimetable();
+                    renderLessonsCountTable();
                 }
             });
             document.querySelectorAll('.control-btn').forEach(btn => {
@@ -2246,11 +2323,13 @@
                     if (document.body.classList.contains('authenticated')) {
                         generateTimetable();
                         updateTeacherBoxes();
+                        renderLessonsCountTable();
                     }
                 });
             });
             updateWeekButtons();
         }
+
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>

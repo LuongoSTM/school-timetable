@@ -150,7 +150,7 @@
         .clock-section, .countdown-section {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: flex-start;
             flex-shrink: 0;
         }
         .clock-title, .countdown-title-wrapper {
@@ -164,7 +164,7 @@
             display: flex;
             gap: 11px;
         }
-        .clock-box, .countdown-box, .term-info-box {
+        .clock-box, .countdown-box, .term-info-box, .rooms-available-box {
             transform-style: preserve-3d;
             position: relative;
             transition: all 0.3s ease;
@@ -174,10 +174,11 @@
         }
         [data-theme="dark"] .clock-box,
         [data-theme="dark"] .countdown-box,
-        [data-theme="dark"] .term-info-box {
+        [data-theme="dark"] .term-info-box,
+        [data-theme="dark"] .rooms-available-box {
             background: rgba(45, 45, 45, 0.9);
         }
-        .clock-box::before, .countdown-box::before {
+        .clock-box::before, .countdown-box::before, .rooms-available-box::before {
             content: '';
             position: absolute;
             top: 0;
@@ -191,7 +192,7 @@
             border-radius: 8px;
             pointer-events: none;
         }
-        .clock-box:hover, .countdown-box:hover {
+        .clock-box:hover, .countdown-box:hover, .rooms-available-box:hover {
             transform: translateY(-3px) translateZ(5px);
         }
         .clock-box, .countdown-box {
@@ -330,7 +331,7 @@
             font-weight: bold;
             color: var(--text-color);
         }
-        .term-info-box {
+        .term-info-box, .rooms-available-box {
             margin-top: 12px;
             background: var(--countdown-bg);
             border: 1px solid var(--countdown-border);
@@ -346,12 +347,44 @@
             color: var(--countdown-text);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .term-info-box:hover {
+        .term-info-box:hover, .rooms-available-box:hover {
             transform: translateY(-2px);
             box-shadow: 
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
         }
+        /* --- Stile per Rooms Available sulla SINISTRA --- */
+        .rooms-available-box {
+            text-align: left;
+            min-width: 200px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .rooms-available-box h3 {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--header-bg);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .rooms-available-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .rooms-available-box li {
+            margin-bottom: 4px;
+            padding: 2px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .rooms-available-box li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        /* --- Fine stile --- */
+
         .now-context-bar {
             display: flex;
             justify-content: space-between;
@@ -1292,6 +1325,13 @@
                         <div class="clock-label">Seconds</div>
                     </div>
                 </div>
+                
+                <!-- ✅ BOX ROOMS AVAILABLE SPOSTATO SULLA SINISTRA -->
+                <div class="rooms-available-box" id="rooms-available-box">
+                    <h3>Rooms Available</h3>
+                    <ul id="rooms-available-list"></ul>
+                </div>
+                
                 <div class="logged-in-user-box" id="logged-in-user-box">
                     Logged in as: —
                 </div>
@@ -1615,6 +1655,55 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
+
+        function getTodayOrFilteredDay() {
+            if (currentViewDay !== 'all') return currentViewDay;
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            return days.includes(today) ? today : days[0];
+        }
+
+        function getAvailableRoomsForDay(week, day) {
+            const weekData = week === 'A' ? timetableData.weekA : timetableData.weekB;
+            const dayData = weekData[day];
+            if (!dayData) return [];
+
+            const result = [];
+            for (const period of periods) {
+                const periodData = dayData[period];
+                if (!periodData || !periodData.teachers) continue;
+
+                const kSubject = periodData.teachers['Ms K Arakelian']?.subject || '';
+                const jSubject = periodData.teachers['Ms N Jenkins']?.subject || '';
+
+                if (kSubject === '') {
+                    result.push({ period, room: 'A1' });
+                }
+                if (jSubject === '') {
+                    result.push({ period, room: 'A2' });
+                }
+            }
+            return result;
+        }
+
+        function renderRoomsAvailableBox() {
+            const week = getCurrentWeek();
+            const day = getTodayOrFilteredDay();
+            const available = getAvailableRoomsForDay(week, day);
+            const listEl = document.getElementById('rooms-available-list');
+            listEl.innerHTML = '';
+
+            if (available.length === 0) {
+                listEl.innerHTML = '<li>No rooms free today</li>';
+                return;
+            }
+
+            available.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.period} ${item.room}`;
+                listEl.appendChild(li);
+            });
+        }
+
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
@@ -1962,11 +2051,10 @@
                                     let teacherClass = '';
                                     if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                     else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
-                                    // ✅ Non mostrare badge "Now" durante il break 10:20–10:40 per classi 7/8
                                     let showNowBadge = true;
                                     if (period === '2' && timeRange === '10:20 - 11:30') {
                                         if (/^7|^8/.test(subject) && currentMinutes < (10 * 60 + 40)) {
-                                            showNowBadge = false; // break time
+                                            showNowBadge = false;
                                         }
                                     }
                                     if (subject === 'Lunch' || subject === 'Form Time') {
@@ -2234,6 +2322,8 @@
                 generateTimetable();
                 updateTeacherBoxes();
                 renderLessonsCountTable();
+                renderRoomsAvailableBox();
+
                 setInterval(() => {
                     updateClockPrecise();
                     updateCountdownPrecise();
@@ -2241,12 +2331,15 @@
                     updateNowContextBar();
                     updateDynamicBackgroundAndShadows();
                     renderLessonsCountTable();
+                    renderRoomsAvailableBox();
                 }, 1000);
+
                 updateClockPrecise();
                 updateCountdownPrecise();
                 updateNowContextBar();
                 updateDynamicBackgroundAndShadows();
                 renderLessonsCountTable();
+                renderRoomsAvailableBox();
             } else {
                 errorEl.style.display = 'block';
                 setTimeout(() => errorEl.style.display = 'none', 3000);
@@ -2259,6 +2352,8 @@
                 generateTimetable();
                 updateTeacherBoxes();
                 renderLessonsCountTable();
+                renderRoomsAvailableBox();
+
                 setInterval(() => {
                     updateClockPrecise();
                     updateCountdownPrecise();
@@ -2266,12 +2361,15 @@
                     updateNowContextBar();
                     updateDynamicBackgroundAndShadows();
                     renderLessonsCountTable();
+                    renderRoomsAvailableBox();
                 }, 1000);
+
                 updateClockPrecise();
                 updateCountdownPrecise();
                 updateNowContextBar();
                 updateDynamicBackgroundAndShadows();
                 renderLessonsCountTable();
+                renderRoomsAvailableBox();
             } else {
                 document.getElementById('login-modal').classList.add('show');
             }
@@ -2292,6 +2390,7 @@
                 if (document.body.classList.contains('authenticated')) {
                     generateTimetable();
                     renderLessonsCountTable();
+                    renderRoomsAvailableBox();
                 }
             });
             document.querySelectorAll('.control-btn').forEach(btn => {
@@ -2308,6 +2407,7 @@
                         generateTimetable();
                         updateTeacherBoxes();
                         renderLessonsCountTable();
+                        renderRoomsAvailableBox();
                     }
                 });
             });

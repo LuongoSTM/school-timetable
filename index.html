@@ -276,6 +276,11 @@
             color: var(--text-color);
             font-weight: bold;
             display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .date-weekday {
+            display: flex;
             align-items: center;
             gap: 8px;
         }
@@ -287,6 +292,20 @@
             border-radius: 8px;
             display: inline-block;
             background: var(--primary-bg);
+        }
+        .today-badge {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+            animation: pulseToday 2s infinite;
+        }
+        @keyframes pulseToday {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
         .countdown-title-row {
             display: flex;
@@ -1395,7 +1414,6 @@
                     <span>⛶</span>
                     <span>Full Screen</span>
                 </button>
-                <!-- ✅ Export PDF RIMOSSO -->
                 <div class="dark-mode-control">
                     <span>🌙</span>
                     <div class="toggle-switch" id="dark-mode-toggle">
@@ -1436,7 +1454,6 @@
                         <div class="lesson-details" id="next-jenkins">No Lesson Next</div>
                     </div>
                 </div>
-                <!-- ✅ Tabella conteggio -->
                 <div class="lessons-count-table">
                     <h3>Lessons Until Half Term</h3>
                     <table>
@@ -1457,7 +1474,6 @@
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
-
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
@@ -1476,21 +1492,18 @@
                 body.classList.add('time-evening');
             }
         }
-
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
-
         const credentials = {
             "admin": { name: "Admin User", role: "admin", displayName: "Administrator", key: "admin" },
             "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian", key: "KAA125" },
             "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins", key: "NJA225" },
             "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator", key: "280765" }
         };
-
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1587,7 +1600,6 @@
                 }
             }
         };
-
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
@@ -1603,29 +1615,24 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
-
         function isWeekA(date) {
             const diffTime = date.getTime() - weekAStartDate.getTime();
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0;
         }
-
         function getCurrentWeek() {
             if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
             return currentWeek;
         }
-
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
             return `subject-${subject.toLowerCase().replace(/\s+/g, '-').replace(/[\/]/g, '-').replace(/[^a-z0-9-]/g, '')}`;
         }
-
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -1634,9 +1641,14 @@
             const month = parts[1];
             const day = parts[2]?.replace(',', '') || parts[3]?.replace(',', '');
             const year = parts[parts.length - 1];
-            return `${weekday} <span class="date-day">${day}</span> ${month} ${year}`;
+            const today = new Date();
+            const isToday = date.toDateString() === today.toDateString();
+            let todayBadgeHtml = '';
+            if (isToday) {
+                todayBadgeHtml = `<div class="today-badge">Today</div>`;
+            }
+            return `${todayBadgeHtml}<div class="date-weekday">${weekday} <span class="date-day">${day}</span> ${month} ${year}</div>`;
         }
-
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -1649,7 +1661,6 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
-
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -1667,7 +1678,6 @@
             resultDate.setDate(baseMonday.getDate() + dayIndex);
             return resultDate;
         }
-
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -1676,7 +1686,6 @@
             }
             return null;
         }
-
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -1684,7 +1693,6 @@
             }
             return null;
         }
-
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -1702,7 +1710,6 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
-
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -1759,22 +1766,16 @@
             });
             table.innerHTML = html;
         }
-
-        // ✅ Funzione corretta: conteggio SOLO giorni futuri (escluso oggi)
         function countLessonsUntilTerm() {
             const now = new Date();
             const currentTerm = getNextTerm();
             if (!currentTerm) return {};
-
-            // Fine del conteggio: il giorno PRIMA dell'inizio del half term
             const termStart = new Date(currentTerm.startDate);
             const lastDayToCount = new Date(termStart);
-            lastDayToCount.setDate(lastDayToCount.getDate() - 1); // es. 26 ottobre
-
+            lastDayToCount.setDate(lastDayToCount.getDate() - 1);
             const subjectCount = {};
             const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1); // inizia da DOMANI
-
+            tomorrow.setDate(tomorrow.getDate() + 1);
             let currentDate = new Date(tomorrow);
             while (currentDate <= lastDayToCount) {
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1798,15 +1799,12 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-
             return subjectCount;
         }
-
         function renderLessonsCountTable() {
             const counts = countLessonsUntilTerm();
             const tbody = document.getElementById('lessons-count-tbody');
             tbody.innerHTML = '';
-
             const sorted = Object.entries(counts).sort(([a], [b]) => a.localeCompare(b));
             for (const [subject, count] of sorted) {
                 const tr = document.createElement('tr');
@@ -1814,7 +1812,6 @@
                 tbody.appendChild(tr);
             }
         }
-
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1870,7 +1867,6 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
-
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -1883,7 +1879,6 @@
             const displayName = credentials[userKey]?.displayName || '—';
             document.getElementById('logged-in-user-box').textContent = `Logged in as: ${displayName}`;
         }
-
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -1922,7 +1917,6 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
-
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1968,23 +1962,21 @@
                                     let teacherClass = '';
                                     if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                     else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
-                                    let badgeText = 'Now';
+                                    // ✅ Non mostrare badge "Now" durante il break 10:20–10:40 per classi 7/8
+                                    let showNowBadge = true;
                                     if (period === '2' && timeRange === '10:20 - 11:30') {
                                         if (/^7|^8/.test(subject) && currentMinutes < (10 * 60 + 40)) {
-                                            badgeText = 'Lunch';
-                                        }
-                                        if (subject === '12 / 13 Art') {
-                                            badgeText = 'Now';
+                                            showNowBadge = false; // break time
                                         }
                                     }
                                     if (subject === 'Lunch' || subject === 'Form Time') {
                                         cells[j].classList.add('now-break');
                                     } else {
                                         cells[j].classList.add('now-lesson', teacherClass);
-                                        if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                        if (subject && !['Lunch', 'Form Time', ''].includes(subject) && showNowBadge) {
                                             const badge = document.createElement('div');
                                             badge.className = `now-badge ${teacherClass}`;
-                                            badge.textContent = badgeText;
+                                            badge.textContent = 'Now';
                                             cells[j].appendChild(badge);
                                         }
                                     }
@@ -2136,7 +2128,6 @@
             }
             progressBarContainer.style.display = 'none';
         }
-
         document.getElementById('now-summary-box').addEventListener('click', () => {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2164,7 +2155,6 @@
                 }
             }
         });
-
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2195,12 +2185,10 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
-
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement || 
@@ -2212,7 +2200,6 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2221,7 +2208,6 @@
                 );
             });
         }
-
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2237,7 +2223,6 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
-
         function handleLogin() {
             const password = document.getElementById('password-input').value.trim();
             const errorEl = document.getElementById('login-error');
@@ -2267,7 +2252,6 @@
                 setTimeout(() => errorEl.style.display = 'none', 3000);
             }
         }
-
         function initApp() {
             const userKey = sessionStorage.getItem('currentUserKey');
             if (userKey && credentials[userKey]) {
@@ -2329,7 +2313,6 @@
             });
             updateWeekButtons();
         }
-
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>

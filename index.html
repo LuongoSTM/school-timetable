@@ -337,7 +337,6 @@
             color: var(--text-color);
         }
         .term-info-box, .rooms-available-box {
-            margin-top: 12px;
             background: var(--countdown-bg);
             border: 1px solid var(--countdown-border);
             border-radius: 12px;
@@ -363,7 +362,6 @@
             min-width: 200px;
             max-height: 180px;
             overflow-y: auto;
-            margin-top: 0;
         }
         .rooms-available-box h3 {
             font-size: 15px;
@@ -1304,6 +1302,14 @@
             background: var(--header-bg);
             color: var(--header-text);
         }
+
+        /* MODIFICA: Stile per posizionare il term-info-box sotto i countdown allineato a destra */
+        .countdown-lower-row {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -1373,8 +1379,11 @@
                         <div class="countdown-label">Seconds</div>
                     </div>
                 </div>
-                <div class="term-info-box" id="term-info-box">
-                    Loading...
+                <!-- MODIFICA: Aggiunta una nuova riga per il term-info-box posizionato sotto i countdown e allineato a destra -->
+                <div class="countdown-lower-row">
+                    <div class="term-info-box" id="term-info-box">
+                        Loading...
+                    </div>
                 </div>
             </div>
         </div>

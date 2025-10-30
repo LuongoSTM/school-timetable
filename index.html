@@ -160,9 +160,14 @@
             margin-bottom: 8px;
             text-align: center;
         }
-        .clock-container, .countdown-container {
+        .clock-container {
             display: flex;
             gap: 11px;
+        }
+        .countdown-row {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
         }
         .clock-box, .countdown-box, .term-info-box, .rooms-available-box {
             transform-style: preserve-3d;
@@ -353,12 +358,12 @@
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
         }
-        /* --- Stile per Rooms Available sulla SINISTRA --- */
         .rooms-available-box {
             text-align: left;
             min-width: 200px;
             max-height: 180px;
             overflow-y: auto;
+            margin-top: 0;
         }
         .rooms-available-box h3 {
             font-size: 15px;
@@ -383,8 +388,14 @@
             border-bottom: none;
             margin-bottom: 0;
         }
-        /* --- Fine stile --- */
-
+        .period-red {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .room-green {
+            color: #28a745;
+            font-weight: bold;
+        }
         .now-context-bar {
             display: flex;
             justify-content: space-between;
@@ -1325,13 +1336,6 @@
                         <div class="clock-label">Seconds</div>
                     </div>
                 </div>
-                
-                <!-- ✅ BOX ROOMS AVAILABLE SPOSTATO SULLA SINISTRA -->
-                <div class="rooms-available-box" id="rooms-available-box">
-                    <h3>Rooms Available</h3>
-                    <ul id="rooms-available-list"></ul>
-                </div>
-                
                 <div class="logged-in-user-box" id="logged-in-user-box">
                     Logged in as: —
                 </div>
@@ -1347,7 +1351,11 @@
                         <div class="countdown-title" id="countdown-title">October Half Term</div>
                     </div>
                 </div>
-                <div class="countdown-container" id="countdown-container">
+                <div class="countdown-row">
+                    <div class="rooms-available-box" id="rooms-available-box">
+                        <h3>Rooms Available</h3>
+                        <ul id="rooms-available-list"></ul>
+                    </div>
                     <div class="countdown-box">
                         <div class="countdown-value" id="countdown-days">000</div>
                         <div class="countdown-label">Days</div>
@@ -1655,26 +1663,21 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-
         function getTodayOrFilteredDay() {
             if (currentViewDay !== 'all') return currentViewDay;
             const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
             return days.includes(today) ? today : days[0];
         }
-
         function getAvailableRoomsForDay(week, day) {
             const weekData = week === 'A' ? timetableData.weekA : timetableData.weekB;
             const dayData = weekData[day];
             if (!dayData) return [];
-
             const result = [];
             for (const period of periods) {
                 const periodData = dayData[period];
                 if (!periodData || !periodData.teachers) continue;
-
                 const kSubject = periodData.teachers['Ms K Arakelian']?.subject || '';
                 const jSubject = periodData.teachers['Ms N Jenkins']?.subject || '';
-
                 if (kSubject === '') {
                     result.push({ period, room: 'A1' });
                 }
@@ -1684,26 +1687,27 @@
             }
             return result;
         }
-
         function renderRoomsAvailableBox() {
-            const week = getCurrentWeek();
-            const day = getTodayOrFilteredDay();
-            const available = getAvailableRoomsForDay(week, day);
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            const isToday = (currentViewDay === 'all') || (currentViewDay === today);
             const listEl = document.getElementById('rooms-available-list');
+            if (!isToday) {
+                listEl.innerHTML = '<li>Only shown for current day</li>';
+                return;
+            }
+            const week = getCurrentWeek();
+            const available = getAvailableRoomsForDay(week, today);
             listEl.innerHTML = '';
-
             if (available.length === 0) {
                 listEl.innerHTML = '<li>No rooms free today</li>';
                 return;
             }
-
             available.forEach(item => {
                 const li = document.createElement('li');
-                li.textContent = `${item.period} ${item.room}`;
+                li.innerHTML = `<span class="period-red">Period: ${item.period}</span> <span class="room-green">${item.room}</span>`;
                 listEl.appendChild(li);
             });
         }
-
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
@@ -1971,8 +1975,7 @@
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
-            const countdownContainer = document.getElementById('countdown-container');
-            countdownContainer.classList.remove('countdown-warning');
+            // ✅ Removed reference to non-existent #countdown-container
             if (nextTerm) {
                 const diff = nextTerm.startDate.getTime() - now.getTime();
                 if (diff > 0) {
@@ -1985,9 +1988,6 @@
                     document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
                     document.getElementById('countdown-minutes').textContent = mins.toString().padStart(2, '0');
                     document.getElementById('countdown-seconds').textContent = secs.toString().padStart(2, '0');
-                    if (totalDays <= 3) {
-                        countdownContainer.classList.add('countdown-warning');
-                    }
                     document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
                 } else {
                     document.getElementById('countdown-title').textContent = nextTerm.name;
@@ -2323,7 +2323,6 @@
                 updateTeacherBoxes();
                 renderLessonsCountTable();
                 renderRoomsAvailableBox();
-
                 setInterval(() => {
                     updateClockPrecise();
                     updateCountdownPrecise();
@@ -2333,7 +2332,6 @@
                     renderLessonsCountTable();
                     renderRoomsAvailableBox();
                 }, 1000);
-
                 updateClockPrecise();
                 updateCountdownPrecise();
                 updateNowContextBar();
@@ -2353,7 +2351,6 @@
                 updateTeacherBoxes();
                 renderLessonsCountTable();
                 renderRoomsAvailableBox();
-
                 setInterval(() => {
                     updateClockPrecise();
                     updateCountdownPrecise();
@@ -2363,7 +2360,6 @@
                     renderLessonsCountTable();
                     renderRoomsAvailableBox();
                 }, 1000);
-
                 updateClockPrecise();
                 updateCountdownPrecise();
                 updateNowContextBar();

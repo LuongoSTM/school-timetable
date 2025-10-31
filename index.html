@@ -878,13 +878,13 @@
             width: 100%;
         }
         .lessons-sidebar {
-            width: 220px;
+            width: 200px; /* Ridotto a 200px */
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
         .teachers-sidebar {
-            width: 220px;
+            width: 170px; /* Già ridotto a 170px */
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -995,8 +995,9 @@
             -webkit-backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.9);
             font-size: 13px;
-            height: 700px;
+            height: 500px; /* Ridotto a 500px */
             overflow-y: auto;
+            width: 100%; /* Assicura che riempia il container sidebar */
         }
         [data-theme="dark"] .lessons-count-table {
             background: rgba(45, 45, 45, 0.9);
@@ -1536,9 +1537,7 @@
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
     <script>
         // --- Tutte le funzioni JS rimangono identiche ---
-        // (Per brevità non ripeto il JS, ma è esattamente lo stesso del file originale)
-        // Solo la funzione countLessonsUntilTerm è corretta per includere la lezione del giorno se non finita
-
+        // Correzione esplicita per il badge "Now" tramite gestione DOM robusta
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
@@ -2051,6 +2050,7 @@
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             const nowContextBar = document.getElementById('now-context-bar');
             nowContextBar.className = 'now-context-bar';
+            // Rimuovi badge "Now" esistenti
             document.querySelectorAll('.now-badge').forEach(el => el.remove());
             document.querySelectorAll('.subject-cell.now-lesson, .subject-cell.now-break').forEach(el => {
                 el.classList.remove('now-lesson', 'now-break');
@@ -2089,6 +2089,7 @@
                                     if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                     else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
                                     let showNowBadge = true;
+                                    // Regola per il break alle 10:20-10:40 per anni 7-8
                                     if (period === '2' && timeRange === '10:20 - 11:30') {
                                         if (/^7|^8/.test(subject) && currentMinutes < (10 * 60 + 40)) {
                                             showNowBadge = false;

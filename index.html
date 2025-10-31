@@ -127,7 +127,7 @@
             mix-blend-mode: overlay;
         }
         .container {
-            max-width: 1600px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 20px;
             opacity: 0;
@@ -877,6 +877,18 @@
             overflow-y: hidden;
             width: 100%;
         }
+        .lessons-sidebar {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .teachers-sidebar {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
         .timetable {
             width: 100%;
             border-collapse: separate;
@@ -917,12 +929,6 @@
             font-weight: bold;
             width: 110px;
             min-width: 110px;
-        }
-        .right-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            min-width: 190px;
         }
         .teacher-box {
             background: var(--secondary-bg);
@@ -989,6 +995,8 @@
             -webkit-backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.9);
             font-size: 13px;
+            height: 700px;
+            overflow-y: auto;
         }
         [data-theme="dark"] .lessons-count-table {
             background: rgba(45, 45, 45, 0.9);
@@ -1023,13 +1031,16 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            .right-sidebar {
+            .lessons-sidebar,
+            .teachers-sidebar {
+                width: 100%;
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: space-between;
             }
             .teacher-box, .lessons-count-table {
                 min-width: 48%;
+                height: auto;
             }
         }
         .modal {
@@ -1302,8 +1313,6 @@
             background: var(--header-bg);
             color: var(--header-text);
         }
-
-        /* MODIFICA: Stile per posizionare il term-info-box sotto i countdown allineato a destra */
         .countdown-lower-row {
             display: flex;
             justify-content: flex-end;
@@ -1379,7 +1388,6 @@
                         <div class="countdown-label">Seconds</div>
                     </div>
                 </div>
-                <!-- MODIFICA: Aggiunta una nuova riga per il term-info-box posizionato sotto i countdown e allineato a destra -->
                 <div class="countdown-lower-row">
                     <div class="term-info-box" id="term-info-box">
                         Loading...
@@ -1484,7 +1492,18 @@
                 <table id="timetable" class="timetable">
                 </table>
             </div>
-            <div class="right-sidebar">
+            <div class="lessons-sidebar">
+                <div class="lessons-count-table">
+                    <h3>Lessons Until Half Term</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Code</th><th>Count</th></tr>
+                        </thead>
+                        <tbody id="lessons-count-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="teachers-sidebar">
                 <div class="teacher-box">
                     <div class="teacher-header">
                         <h3>Ms K. Arakelian</h3>
@@ -1511,20 +1530,15 @@
                         <div class="lesson-details" id="next-jenkins">No Lesson Next</div>
                     </div>
                 </div>
-                <div class="lessons-count-table">
-                    <h3>Lessons Until Half Term</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Code</th><th>Count</th></tr>
-                        </thead>
-                        <tbody id="lessons-count-tbody"></tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
     <script>
+        // --- Tutte le funzioni JS rimangono identiche ---
+        // (Per brevità non ripeto il JS, ma è esattamente lo stesso del file originale)
+        // Solo la funzione countLessonsUntilTerm è corretta per includere la lezione del giorno se non finita
+
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
@@ -1876,9 +1890,8 @@
             const lastDayToCount = new Date(termStart);
             lastDayToCount.setDate(lastDayToCount.getDate() - 1);
             const subjectCount = {};
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            let currentDate = new Date(tomorrow);
+            const today = new Date(now);
+            let currentDate = new Date(today);
             while (currentDate <= lastDayToCount) {
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
@@ -1892,6 +1905,22 @@
                                 for (const teacher in entry.teachers) {
                                     const subject = entry.teachers[teacher].subject;
                                     if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                        // Include today's lessons only if not yet finished
+                                        if (currentDate.toDateString() === today.toDateString()) {
+                                            const timeRange = entry.time;
+                                            if (timeRange) {
+                                                const [startStr, endStr] = timeRange.split(' - ');
+                                                const end = parseTime(endStr);
+                                                if (end) {
+                                                    const nowMins = now.getHours() * 60 + now.getMinutes();
+                                                    const endMins = end.hours * 60 + end.minutes;
+                                                    if (nowMins >= endMins) {
+                                                        // lesson already finished → skip
+                                                        continue;
+                                                    }
+                                                }
+                                            }
+                                        }
                                         subjectCount[subject] = (subjectCount[subject] || 0) + 1;
                                     }
                                 }
@@ -1984,7 +2013,6 @@
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
-            // ✅ Removed reference to non-existent #countdown-container
             if (nextTerm) {
                 const diff = nextTerm.startDate.getTime() - now.getTime();
                 if (diff > 0) {

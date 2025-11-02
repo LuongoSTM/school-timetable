@@ -130,14 +130,9 @@
             max-width: 1800px;
             margin: 0 auto;
             padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            overflow: hidden;
-        }
-        body.authenticated .container {
             opacity: 1;
             pointer-events: auto;
+            overflow: hidden;
         }
         .header {
             margin-bottom: 20px;
@@ -252,8 +247,7 @@
             margin: 0;
             margin-top: 25px;
             margin-bottom: 10px;
-            opacity: 0;
-            animation: fadeInTitle 1s forwards;
+            opacity: 1;
             text-shadow: 
                 0 1px 0 #ccc, 
                 0 2px 0 #c9c9c9,
@@ -266,16 +260,6 @@
                 0 3px 5px rgba(0,0,0,.2),
                 0 5px 10px rgba(0,0,0,.25);
             transform: translateZ(20px);
-        }
-        @keyframes fadeInTitle {
-            from { 
-                opacity: 0; 
-                transform: translateY(-10px) translateZ(-50px) rotateX(10deg);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) translateZ(0) rotateX(0);
-            }
         }
         .date-info {
             font-size: 25px;
@@ -356,6 +340,11 @@
             box-shadow: 
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        /* Specific override for evening mode term-info-box */
+        html body.authenticated.time-evening div.container div.header div.countdown-section div.countdown-lower-row div#term-info-box.term-info-box,
+        html body.time-evening div.container div.header div.countdown-section div.countdown-lower-row div#term-info-box.term-info-box {
+            padding: 8px 8px;
         }
         .rooms-available-box {
             text-align: left;
@@ -986,7 +975,7 @@
             border-radius: 5px;
             border: 1px solid var(--border-color);
         }
-        .lessons-count-table {
+        .lessons-count-box {
             background: var(--secondary-bg);
             border-radius: 10px;
             padding: 12px;
@@ -995,37 +984,50 @@
             -webkit-backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.9);
             font-size: 13px;
-            height: 700px;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
-        [data-theme="dark"] .lessons-count-table {
+        [data-theme="dark"] .lessons-count-box {
             background: rgba(45, 45, 45, 0.9);
         }
-        .lessons-count-table h3 {
+        .lessons-count-header {
+            text-align: center;
+            margin-bottom: 6px;
             font-size: 15px;
             font-weight: bold;
             color: var(--header-bg);
-            margin-bottom: 10px;
+        }
+        #term-end-date {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: var(--header-bg);
             text-align: center;
         }
-        .lessons-count-table table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-        .lessons-count-table th,
-        .lessons-count-table td {
-            padding: 6px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .lessons-count-table th {
+        .lessons-count-table-header {
             background: var(--header-bg);
             color: var(--header-text);
             font-size: 12px;
         }
-        .lessons-count-table td {
+        .lessons-count-table-header th {
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .lessons-count-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            height: 620px;
+        }
+        .lessons-count-table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 12px;
+        }
+        .lessons-count-table td {
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
         }
         .low-count {
             color: #dc3545;
@@ -1043,185 +1045,11 @@
                 flex-wrap: wrap;
                 justify-content: space-between;
             }
-            .teacher-box, .lessons-count-table {
+            .teacher-box, .lessons-count-box {
                 min-width: 48%;
                 height: auto;
             }
         }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.show {
-            display: flex;
-        }
-        .modal-content {
-            background-color: var(--secondary-bg);
-            padding: 25px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: modalFadeIn 0.3s ease-out;
-            position: relative;
-        }
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
-        }
-        .modal-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--header-bg);
-        }
-        .close {
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--text-color);
-            transition: color 0.3s ease;
-            line-height: 1;
-        }
-        .close:hover {
-            color: var(--button-active);
-        }
-        .modal-info {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .modal-field {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .modal-field:last-child {
-            border-bottom: none;
-        }
-        .field-label {
-            font-weight: bold;
-            color: var(--text-color);
-        }
-        .field-value {
-            color: var(--text-color);
-            text-align: right;
-        }
-        #login-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            align-items: center;
-            justify-content: center;
-        }
-        #login-modal.show {
-            display: flex;
-        }
-        .login-content {
-            background: var(--secondary-bg);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-        .login-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--header-bg);
-        }
-        .login-input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 16px;
-            background: var(--primary-bg);
-            color: var(--text-color);
-        }
-        .login-input:focus {
-            outline: none;
-            border-color: var(--header-bg);
-        }
-        .login-btn {
-            background: var(--header-bg);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-            font-weight: bold;
-        }
-        .login-btn:hover {
-            background: var(--button-hover);
-        }
-        .login-error {
-            color: var(--button-active);
-            margin-top: 10px;
-            font-size: 14px;
-            display: none;
-        }
-        .subject-12-dt-textile { background-color: #ff9500 !important; color: white !important; }
-        .subject-11-art { background-color: #34c759 !important; color: white !important; }
-        .subject-12-13-art { background-color: #34c759 !important; color: white !important; }
-        .subject-9m { background-color: #007aff !important; color: white !important; }
-        .subject-9a { background-color: #007aff !important; color: white !important; }
-        .subject-9s { background-color: #007aff !important; color: white !important; }
-        .subject-9c { background-color: #007aff !important; color: white !important; }
-        .subject-9h { background-color: #007aff !important; color: white !important; }
-        .subject-9s-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-9ac-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-9hm-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-10-art { background-color: #34c759 !important; color: white !important; }
-        .subject-11-photography { background-color: #af52de !important; color: white !important; }
-        .subject-7ac { background-color: #ffcc00 !important; color: black !important; }
-        .subject-7ac-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-7h { background-color: #ffcc00 !important; color: black !important; }
-        .subject-7h-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-7ms { background-color: #ffcc00 !important; color: black !important; }
-        .subject-7ms-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-8ac { background-color: #5ac8fa !important; color: white !important; }
-        .subject-8ac-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-8y { background-color: #5ac8fa !important; color: white !important; }
-        .subject-8y-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-8hm { background-color: #5ac8fa !important; color: white !important; }
-        .subject-8hm-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-8mh { background-color: #5ac8fa !important; color: white !important; }
-        .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
-        .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
-        .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
         .version-badge, .refresh-badge {
             position: fixed;
             bottom: 10px;
@@ -1324,20 +1152,41 @@
             width: 100%;
             margin-top: 8px;
         }
+        /* Ensure subject colors are applied */
+        .subject-12-dt-textile { background-color: #ff9500 !important; color: white !important; }
+        .subject-11-art { background-color: #34c759 !important; color: white !important; }
+        .subject-12-13-art { background-color: #34c759 !important; color: white !important; }
+        .subject-9m { background-color: #007aff !important; color: white !important; }
+        .subject-9a { background-color: #007aff !important; color: white !important; }
+        .subject-9s { background-color: #007aff !important; color: white !important; }
+        .subject-9c { background-color: #007aff !important; color: white !important; }
+        .subject-9h { background-color: #007aff !important; color: white !important; }
+        .subject-9s-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-9ac-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-9hm-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-10-art { background-color: #34c759 !important; color: white !important; }
+        .subject-11-photography { background-color: #af52de !important; color: white !important; }
+        .subject-7ac { background-color: #ffcc00 !important; color: black !important; }
+        .subject-7ac-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-7h { background-color: #ffcc00 !important; color: black !important; }
+        .subject-7h-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-7ms { background-color: #ffcc00 !important; color: black !important; }
+        .subject-7ms-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8ac { background-color: #5ac8fa !important; color: white !important; }
+        .subject-8ac-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8y { background-color: #5ac8fa !important; color: white !important; }
+        .subject-8y-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8hm { background-color: #5ac8fa !important; color: white !important; }
+        .subject-8hm-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8mh { background-color: #5ac8fa !important; color: white !important; }
+        .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
+        .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
+        .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
     </style>
 </head>
-<body>
+<body class="authenticated">
     <div class="dynamic-bg" id="dynamic-bg"></div>
     <div id="offline-banner">⚠️ You are offline. Some features may not work.</div>
-    <div id="login-modal" class="modal">
-        <div class="login-content">
-            <h2 class="login-title">🔒 Teacher Login</h2>
-            <p style="margin-bottom: 15px; color: var(--text-color);">Enter your password to access the timetable.</p>
-            <input type="password" id="password-input" class="login-input" placeholder="Password" autocomplete="off">
-            <button id="login-btn" class="login-btn">Login</button>
-            <div id="login-error" class="login-error">Invalid password. Please try again.</div>
-        </div>
-    </div>
     <div class="container">
         <div class="header">
             <div class="clock-section">
@@ -1356,8 +1205,8 @@
                         <div class="clock-label">Seconds</div>
                     </div>
                 </div>
-                <div class="logged-in-user-box" id="logged-in-user-box">
-                    Logged in as: —
+                <div class="logged-in-user-box">
+                    Logged in as: Administrator
                 </div>
             </div>
             <div class="title-section">
@@ -1490,6 +1339,7 @@
                         <div class="toggle-slider"></div>
                     </div>
                 </div>
+                <a href="login.html" class="nav-item" style="padding:6px 10px; font-size:12px;">Login</a>
             </div>
         </nav>
         <div class="main-content">
@@ -1498,15 +1348,11 @@
                 </table>
             </div>
             <div class="lessons-sidebar">
-                <div class="lessons-count-table">
-                    <h3>Lessons Until Half Term</h3>
-                    <div style="font-size:13px; margin-bottom:6px; text-align:center; color:var(--header-bg);">
-                      Termine: <strong id="term-end-date">—</strong>
-                    </div>
-                    <p style="font-size:12px; margin-bottom:8px; color:#666;">
-                      Lezioni rimanenti da oggi fino al termine del half term (escluse Lunch/Form Time).
-                    </p>
-                    <table>
+                <div class="lessons-count-box">
+                    <div class="lessons-count-header">Lessons Until Half Term</div>
+                    <div id="term-end-date">—</div>
+                    <!-- Intestazione NON scrollabile -->
+                    <table class="lessons-count-table-header">
                         <thead>
                             <tr>
                                 <th>Class</th>
@@ -1515,16 +1361,21 @@
                                 <th>Total</th>
                             </tr>
                         </thead>
-                        <tbody id="lessons-count-tbody"></tbody>
-                        <tfoot>
-                            <tr style="border-top:1px solid var(--border-color); font-weight:bold;">
-                                <td>TOTAL</td>
-                                <td id="arakelian-total">0</td>
-                                <td id="jenkins-total">0</td>
-                                <td id="lessons-total-count">0</td>
-                            </tr>
-                        </tfoot>
                     </table>
+                    <!-- Contenuto scrollabile -->
+                    <div class="lessons-count-scrollable">
+                        <table class="lessons-count-table">
+                            <tbody id="lessons-count-tbody"></tbody>
+                            <tfoot>
+                                <tr style="border-top:1px solid var(--border-color); font-weight:bold;">
+                                    <td>TOTAL</td>
+                                    <td id="arakelian-total">0</td>
+                                    <td id="jenkins-total">0</td>
+                                    <td id="lessons-total-count">0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="teachers-sidebar">
@@ -1559,15 +1410,13 @@
     </div>
     <div class="version-badge" id="version-badge">ver.3.1025.01</div>
     <script>
-        // --- Tutte le funzioni JS rimangono identiche ---
-        // (Per brevità non ripeto il JS, ma è esattamente lo stesso del file originale)
-        // Solo la funzione countLessonsUntilTerm è corretta per includere la lezione del giorno se non finita
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
+
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
@@ -1586,18 +1435,14 @@
                 body.classList.add('time-evening');
             }
         }
+
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
-        const credentials = {
-            "admin": { name: "Admin User", role: "admin", displayName: "Administrator", key: "admin" },
-            "KAA125": { name: "Katie Arakelian", role: "teacher", displayName: "Ms K Arakelian", key: "KAA125" },
-            "NJA225": { name: "Natalie Jenkins", role: "teacher", displayName: "Ms N Jenkins", key: "NJA225" },
-            "280765": { name: "Fiore Luongo Administrator", role: "admin", displayName: "Administrator", key: "280765" }
-        };
+
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1694,6 +1539,7 @@
                 }
             }
         };
+
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
@@ -1709,69 +1555,42 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-        function getTodayOrFilteredDay() {
-            if (currentViewDay !== 'all') return currentViewDay;
-            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-            return days.includes(today) ? today : days[0];
+
+        function extractClassNumber(subject) {
+            const match = subject.match(/^(\d+)/);
+            return match ? parseInt(match[1], 10) : 999;
         }
-        function getAvailableRoomsForDay(week, day) {
-            const weekData = week === 'A' ? timetableData.weekA : timetableData.weekB;
-            const dayData = weekData[day];
-            if (!dayData) return [];
-            const result = [];
-            for (const period of periods) {
-                const periodData = dayData[period];
-                if (!periodData || !periodData.teachers) continue;
-                const kSubject = periodData.teachers['Ms K Arakelian']?.subject || '';
-                const jSubject = periodData.teachers['Ms N Jenkins']?.subject || '';
-                if (kSubject === '') {
-                    result.push({ period, room: 'A1' });
-                }
-                if (jSubject === '') {
-                    result.push({ period, room: 'A2' });
-                }
-            }
-            return result;
-        }
-        function renderRoomsAvailableBox() {
-            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-            const isToday = (currentViewDay === 'all') || (currentViewDay === today);
-            const listEl = document.getElementById('rooms-available-list');
-            if (!isToday) {
-                listEl.innerHTML = '<li>Only shown for current day</li>';
-                return;
-            }
-            const week = getCurrentWeek();
-            const available = getAvailableRoomsForDay(week, today);
-            listEl.innerHTML = '';
-            if (available.length === 0) {
-                listEl.innerHTML = '<li>No rooms free today</li>';
-                return;
-            }
-            available.forEach(item => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span class="period-red">Period: ${item.period}</span> <span class="room-green">${item.room}</span>`;
-                listEl.appendChild(li);
-            });
-        }
+
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
+
         function isWeekA(date) {
             const diffTime = date.getTime() - weekAStartDate.getTime();
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0;
         }
+
         function getCurrentWeek() {
             if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
             return currentWeek;
         }
+
+        // ✅ FIX: genera nomi di classe CSS coerenti con quelle definite
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
-            return `subject-${subject.toLowerCase().replace(/\s+/g, '-').replace(/[\/]/g, '-').replace(/[^a-z0-9-]/g, '')}`;
+            // Rimuovi caratteri speciali ma mantieni solo lettere, numeri, trattini
+            let clean = subject.toLowerCase()
+                .replace(/\s+/g, '-')        // spazi → trattini
+                .replace(/\//g, '-')          // slash → trattino
+                .replace(/[^a-z0-9-]/g, ''); // rimuovi tutto il resto
+            // Sostituisci sequenze multiple di trattini
+            clean = clean.replace(/-+/g, '-').replace(/^-|-$/g, '');
+            return `subject-${clean}`;
         }
+
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -1788,6 +1607,7 @@
             }
             return `${todayBadgeHtml}<div class="date-weekday">${weekday} <span class="date-day">${day}</span> ${month} ${year}</div>`;
         }
+
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -1800,6 +1620,7 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
+
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -1817,6 +1638,7 @@
             resultDate.setDate(baseMonday.getDate() + dayIndex);
             return resultDate;
         }
+
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -1825,6 +1647,7 @@
             }
             return null;
         }
+
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -1832,6 +1655,7 @@
             }
             return null;
         }
+
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -1849,6 +1673,7 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
+
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -1905,6 +1730,7 @@
             });
             table.innerHTML = html;
         }
+
         function countLessonsUntilTerm() {
             const now = new Date();
             const currentTerm = getNextTerm();
@@ -1929,7 +1755,6 @@
                                 for (const teacher in entry.teachers) {
                                     const subject = entry.teachers[teacher].subject;
                                     if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
-                                        // Include today's lessons only if not yet finished
                                         if (currentDate.toDateString() === today.toDateString()) {
                                             const timeRange = entry.time;
                                             if (timeRange) {
@@ -1939,7 +1764,6 @@
                                                     const nowMins = now.getHours() * 60 + now.getMinutes();
                                                     const endMins = end.hours * 60 + end.minutes;
                                                     if (nowMins >= endMins) {
-                                                        // lesson already finished → skip
                                                         continue;
                                                     }
                                                 }
@@ -1957,22 +1781,28 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts };
         }
+
         function renderLessonsCountTable() {
             const { counts, byTeacher } = countLessonsUntilTerm();
+
+            // Ordina per classe numerica
+            const sortedSubjects = Object.keys(counts).sort((a, b) => {
+                const aNum = extractClassNumber(a);
+                const bNum = extractClassNumber(b);
+                if (aNum !== bNum) return aNum - bNum;
+                return a.localeCompare(b);
+            });
+
             const tbody = document.getElementById('lessons-count-tbody');
             tbody.innerHTML = '';
 
             const arakelianTotal = {};
             const jenkinsTotal = {};
 
-            // Initialize totals
-            Object.keys(counts).forEach(subject => {
+            for (const subject of sortedSubjects) {
                 arakelianTotal[subject] = byTeacher['Ms K Arakelian'][subject] || 0;
                 jenkinsTotal[subject] = byTeacher['Ms N Jenkins'][subject] || 0;
-            });
-
-            // Sort subjects alphabetically or by count
-            const sortedSubjects = Object.keys(counts).sort();
+            }
 
             for (const subject of sortedSubjects) {
                 const aCount = arakelianTotal[subject];
@@ -1990,7 +1820,6 @@
                 tbody.appendChild(tr);
             }
 
-            // Totals
             const totalA = Object.values(arakelianTotal).reduce((sum, n) => sum + n, 0);
             const totalJ = Object.values(jenkinsTotal).reduce((sum, n) => sum + n, 0);
             const grandTotal = totalA + totalJ;
@@ -1999,13 +1828,13 @@
             document.getElementById('jenkins-total').textContent = totalJ;
             document.getElementById('lessons-total-count').textContent = grandTotal;
 
-            // Update term end date
             const nextTerm = getNextTerm();
             const termDate = nextTerm?.startDate 
                 ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
+
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2061,6 +1890,7 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
+
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -2069,10 +1899,8 @@
             document.getElementById('date-info').innerHTML = formatDate(now);
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
-            const userKey = sessionStorage.getItem('currentUserKey');
-            const displayName = credentials[userKey]?.displayName || '—';
-            document.getElementById('logged-in-user-box').textContent = `Logged in as: ${displayName}`;
         }
+
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -2106,6 +1934,7 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
+
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2316,33 +2145,7 @@
             }
             progressBarContainer.style.display = 'none';
         }
-        document.getElementById('now-summary-box').addEventListener('click', () => {
-            const now = new Date();
-            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-            const isTodayVisible = (currentViewDay === 'all') || (currentViewDay === today);
-            if (!isTodayVisible) return;
-            const currentDayData = (getCurrentWeek() === 'A' ? timetableData.weekA : timetableData.weekB)[today];
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            if (!currentDayData) return;
-            for (let i = 0; i < periods.length; i++) {
-                const period = periods[i];
-                const timeRange = currentDayData[period]?.time;
-                if (!timeRange) continue;
-                const [startStr, endStr] = timeRange.split(' - ');
-                const start = parseTime(startStr);
-                const end = parseTime(endStr);
-                if (!start || !end) continue;
-                const startMinutes = start.hours * 60 + start.minutes;
-                const endMinutes = end.hours * 60 + end.minutes;
-                if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-                    const row = document.querySelectorAll('#timetable tbody tr')[i];
-                    if (row) {
-                        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                    return;
-                }
-            }
-        });
+
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2373,10 +2176,12 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
+
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement || 
@@ -2388,6 +2193,7 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2396,6 +2202,7 @@
                 );
             });
         }
+
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2411,105 +2218,53 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
-        function handleLogin() {
-            const password = document.getElementById('password-input').value.trim();
-            const errorEl = document.getElementById('login-error');
-            if (credentials[password]) {
-                const user = credentials[password];
-                sessionStorage.setItem('currentUserKey', user.key);
-                document.body.classList.add('authenticated');
-                document.getElementById('login-modal').classList.remove('show');
-                generateTimetable();
-                updateTeacherBoxes();
-                renderLessonsCountTable();
-                renderRoomsAvailableBox();
-                setInterval(() => {
-                    updateClockPrecise();
-                    updateCountdownPrecise();
-                    updateTeacherBoxes();
-                    updateNowContextBar();
-                    updateDynamicBackgroundAndShadows();
-                    renderLessonsCountTable();
-                    renderRoomsAvailableBox();
-                }, 1000);
-                updateClockPrecise();
-                updateCountdownPrecise();
-                updateNowContextBar();
-                updateDynamicBackgroundAndShadows();
-                renderLessonsCountTable();
-                renderRoomsAvailableBox();
-            } else {
-                errorEl.style.display = 'block';
-                setTimeout(() => errorEl.style.display = 'none', 3000);
-            }
+
+        function handleDayFilter() {
+            currentViewDay = document.getElementById('day-filter-select').value;
+            generateTimetable();
+            renderLessonsCountTable();
         }
-        function initApp() {
-            const userKey = sessionStorage.getItem('currentUserKey');
-            if (userKey && credentials[userKey]) {
-                document.body.classList.add('authenticated');
-                generateTimetable();
-                updateTeacherBoxes();
-                renderLessonsCountTable();
-                renderRoomsAvailableBox();
-                setInterval(() => {
-                    updateClockPrecise();
-                    updateCountdownPrecise();
-                    updateTeacherBoxes();
-                    updateNowContextBar();
-                    updateDynamicBackgroundAndShadows();
-                    renderLessonsCountTable();
-                    renderRoomsAvailableBox();
-                }, 1000);
-                updateClockPrecise();
-                updateCountdownPrecise();
-                updateNowContextBar();
-                updateDynamicBackgroundAndShadows();
-                renderLessonsCountTable();
-                renderRoomsAvailableBox();
+
+        function handleWeekControl(e) {
+            const w = e.target.dataset.week;
+            if (w === 'auto') {
+                currentMode = 'auto';
             } else {
-                document.getElementById('login-modal').classList.add('show');
+                currentMode = 'manual';
+                currentWeek = w;
             }
-            const today = new Date().getDate().toString().padStart(2, '0');
-            document.getElementById('version-badge').textContent = `ver.3.1025.${today}`;
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.body.setAttribute('data-theme', 'dark');
-                document.getElementById('dark-mode-toggle').classList.add('active');
-            }
-            document.getElementById('login-btn').addEventListener('click', handleLogin);
-            document.getElementById('password-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') handleLogin();
-            });
-            document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
-            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
-            document.getElementById('day-filter-select').addEventListener('change', (e) => {
-                currentViewDay = e.target.value;
-                if (document.body.classList.contains('authenticated')) {
-                    generateTimetable();
-                    renderLessonsCountTable();
-                    renderRoomsAvailableBox();
-                }
-            });
-            document.querySelectorAll('.control-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const w = btn.dataset.week;
-                    if (w === 'auto') {
-                        currentMode = 'auto';
-                    } else {
-                        currentMode = 'manual';
-                        currentWeek = w;
-                    }
-                    updateWeekButtons();
-                    if (document.body.classList.contains('authenticated')) {
-                        generateTimetable();
-                        updateTeacherBoxes();
-                        renderLessonsCountTable();
-                        renderRoomsAvailableBox();
-                    }
-                });
-            });
             updateWeekButtons();
+            generateTimetable();
+            updateTeacherBoxes();
+            renderLessonsCountTable();
         }
-        document.addEventListener('DOMContentLoaded', initApp);
+
+        document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('click', handleWeekControl);
+        });
+        document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
+        document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
+
+        // INIT
+        generateTimetable();
+        updateTeacherBoxes();
+        renderLessonsCountTable();
+        setInterval(() => {
+            updateClockPrecise();
+            updateCountdownPrecise();
+            updateTeacherBoxes();
+            updateNowContextBar();
+            updateDynamicBackgroundAndShadows();
+            renderLessonsCountTable();
+        }, 1000);
+        updateClockPrecise();
+        updateCountdownPrecise();
+        updateNowContextBar();
+        updateDynamicBackgroundAndShadows();
+        renderLessonsCountTable();
+        const today = new Date().getDate().toString().padStart(2, '0');
+        document.getElementById('version-badge').textContent = `ver.3.1025.${today}`;
     </script>
 </body>
 </html>

@@ -1004,6 +1004,14 @@
             color: var(--header-bg);
             text-align: center;
         }
+
+        /* ✅ Fix per la tabella: intestazione fissa + corpo scrollabile */
+        .lessons-count-table-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 620px;
+            overflow: hidden;
+        }
         .lessons-count-table-header {
             background: var(--header-bg);
             color: var(--header-text);
@@ -1017,14 +1025,22 @@
         .lessons-count-scrollable {
             flex: 1;
             overflow-y: auto;
-            height: 620px;
         }
         .lessons-count-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
+            table-layout: fixed; /* ✅ Allineamento perfetto colonne */
         }
-        .lessons-count-table td {
+        .lessons-count-table thead,
+        .lessons-count-table tbody,
+        .lessons-count-table tfoot {
+            display: table;
+            width: 100%;
+            table-layout: fixed; /* ✅ Match esatto con intestazione */
+        }
+        .lessons-count-table td,
+        .lessons-count-table th {
             padding: 6px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
@@ -1351,30 +1367,32 @@
                 <div class="lessons-count-box">
                     <div class="lessons-count-header">Lessons Until Half Term</div>
                     <div id="term-end-date">—</div>
-                    <!-- Intestazione NON scrollabile -->
-                    <table class="lessons-count-table-header">
-                        <thead>
-                            <tr>
-                                <th>Class</th>
-                                <th>Arakelian</th>
-                                <th>Jenkins</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                    </table>
-                    <!-- Contenuto scrollabile -->
-                    <div class="lessons-count-scrollable">
-                        <table class="lessons-count-table">
-                            <tbody id="lessons-count-tbody"></tbody>
-                            <tfoot>
-                                <tr style="border-top:1px solid var(--border-color); font-weight:bold;">
-                                    <td>TOTAL</td>
-                                    <td id="arakelian-total">0</td>
-                                    <td id="jenkins-total">0</td>
-                                    <td id="lessons-total-count">0</td>
+                    <!-- ✅ Intestazione NON scrollabile -->
+                    <div class="lessons-count-table-wrapper">
+                        <table class="lessons-count-table-header">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>Arakelian</th>
+                                    <th>Jenkins</th>
+                                    <th>Total</th>
                                 </tr>
-                            </tfoot>
+                            </thead>
                         </table>
+                        <!-- ✅ Contenuto scrollabile con allineamento corretto -->
+                        <div class="lessons-count-scrollable">
+                            <table class="lessons-count-table">
+                                <tbody id="lessons-count-tbody"></tbody>
+                                <tfoot>
+                                    <tr style="border-top:1px solid var(--border-color); font-weight:bold;">
+                                        <td>TOTAL</td>
+                                        <td id="arakelian-total">0</td>
+                                        <td id="jenkins-total">0</td>
+                                        <td id="lessons-total-count">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1416,7 +1434,6 @@
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
-
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
@@ -1435,14 +1452,12 @@
                 body.classList.add('time-evening');
             }
         }
-
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
-
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1539,7 +1554,6 @@
                 }
             }
         };
-
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
@@ -1555,29 +1569,24 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-
         function extractClassNumber(subject) {
             const match = subject.match(/^(\d+)/);
             return match ? parseInt(match[1], 10) : 999;
         }
-
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
-
         function isWeekA(date) {
             const diffTime = date.getTime() - weekAStartDate.getTime();
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0;
         }
-
         function getCurrentWeek() {
             if (currentMode === 'auto') return isWeekA(new Date()) ? 'A' : 'B';
             return currentWeek;
         }
-
         // ✅ FIX: genera nomi di classe CSS coerenti con quelle definite
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
@@ -1590,7 +1599,6 @@
             clean = clean.replace(/-+/g, '-').replace(/^-|-$/g, '');
             return `subject-${clean}`;
         }
-
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -1607,7 +1615,6 @@
             }
             return `${todayBadgeHtml}<div class="date-weekday">${weekday} <span class="date-day">${day}</span> ${month} ${year}</div>`;
         }
-
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -1620,7 +1627,6 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
-
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -1638,7 +1644,6 @@
             resultDate.setDate(baseMonday.getDate() + dayIndex);
             return resultDate;
         }
-
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -1647,7 +1652,6 @@
             }
             return null;
         }
-
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -1655,7 +1659,6 @@
             }
             return null;
         }
-
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -1673,7 +1676,6 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
-
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -1730,7 +1732,6 @@
             });
             table.innerHTML = html;
         }
-
         function countLessonsUntilTerm() {
             const now = new Date();
             const currentTerm = getNextTerm();
@@ -1781,10 +1782,8 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts };
         }
-
         function renderLessonsCountTable() {
             const { counts, byTeacher } = countLessonsUntilTerm();
-
             // Ordina per classe numerica
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
                 const aNum = extractClassNumber(a);
@@ -1792,24 +1791,19 @@
                 if (aNum !== bNum) return aNum - bNum;
                 return a.localeCompare(b);
             });
-
             const tbody = document.getElementById('lessons-count-tbody');
             tbody.innerHTML = '';
-
             const arakelianTotal = {};
             const jenkinsTotal = {};
-
             for (const subject of sortedSubjects) {
                 arakelianTotal[subject] = byTeacher['Ms K Arakelian'][subject] || 0;
                 jenkinsTotal[subject] = byTeacher['Ms N Jenkins'][subject] || 0;
             }
-
             for (const subject of sortedSubjects) {
                 const aCount = arakelianTotal[subject];
                 const jCount = jenkinsTotal[subject];
                 const total = aCount + jCount;
                 const className = total <= 2 ? 'low-count' : '';
-
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="${className}">${subject}</td>
@@ -1819,22 +1813,18 @@
                 `;
                 tbody.appendChild(tr);
             }
-
             const totalA = Object.values(arakelianTotal).reduce((sum, n) => sum + n, 0);
             const totalJ = Object.values(jenkinsTotal).reduce((sum, n) => sum + n, 0);
             const grandTotal = totalA + totalJ;
-
             document.getElementById('arakelian-total').textContent = totalA;
             document.getElementById('jenkins-total').textContent = totalJ;
             document.getElementById('lessons-total-count').textContent = grandTotal;
-
             const nextTerm = getNextTerm();
             const termDate = nextTerm?.startDate 
                 ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
-
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1890,7 +1880,6 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
-
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -1900,7 +1889,6 @@
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
         }
-
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -1934,7 +1922,6 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
-
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2145,7 +2132,6 @@
             }
             progressBarContainer.style.display = 'none';
         }
-
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2176,12 +2162,10 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
-
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement || 
@@ -2193,7 +2177,6 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2202,7 +2185,6 @@
                 );
             });
         }
-
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2218,13 +2200,11 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
-
         function handleDayFilter() {
             currentViewDay = document.getElementById('day-filter-select').value;
             generateTimetable();
             renderLessonsCountTable();
         }
-
         function handleWeekControl(e) {
             const w = e.target.dataset.week;
             if (w === 'auto') {
@@ -2238,14 +2218,12 @@
             updateTeacherBoxes();
             renderLessonsCountTable();
         }
-
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.querySelectorAll('.control-btn').forEach(btn => {
             btn.addEventListener('click', handleWeekControl);
         });
         document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
-
         // INIT
         generateTimetable();
         updateTeacherBoxes();

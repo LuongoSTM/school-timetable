@@ -878,7 +878,7 @@
             width: 100%;
         }
         .lessons-sidebar {
-            width: 220px;
+            width: 280px;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -1011,6 +1011,7 @@
         .lessons-count-table table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 12px;
         }
         .lessons-count-table th,
         .lessons-count-table td {
@@ -1507,13 +1508,20 @@
                     </p>
                     <table>
                         <thead>
-                            <tr><th>Code</th><th>Count</th></tr>
+                            <tr>
+                                <th>Class</th>
+                                <th>Arakelian</th>
+                                <th>Jenkins</th>
+                                <th>Total</th>
+                            </tr>
                         </thead>
                         <tbody id="lessons-count-tbody"></tbody>
                         <tfoot>
                             <tr style="border-top:1px solid var(--border-color); font-weight:bold;">
-                              <td>TOTAL</td>
-                              <td id="lessons-total-count">0</td>
+                                <td>TOTAL</td>
+                                <td id="arakelian-total">0</td>
+                                <td id="jenkins-total">0</td>
+                                <td id="lessons-total-count">0</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -1897,7 +1905,6 @@
             });
             table.innerHTML = html;
         }
-
         function countLessonsUntilTerm() {
             const now = new Date();
             const currentTerm = getNextTerm();
@@ -1950,37 +1957,55 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts };
         }
-
         function renderLessonsCountTable() {
             const { counts, byTeacher } = countLessonsUntilTerm();
             const tbody = document.getElementById('lessons-count-tbody');
             tbody.innerHTML = '';
 
-            // Ordina per conteggio decrescente
-            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            const arakelianTotal = {};
+            const jenkinsTotal = {};
 
-            for (const [subject, count] of sorted) {
-                const kCount = byTeacher['Ms K Arakelian'][subject] || 0;
-                const jCount = byTeacher['Ms N Jenkins'][subject] || 0;
-                const detail = `(K:${kCount}, N:${jCount})`;
-                const className = count <= 2 ? 'low-count' : '';
+            // Initialize totals
+            Object.keys(counts).forEach(subject => {
+                arakelianTotal[subject] = byTeacher['Ms K Arakelian'][subject] || 0;
+                jenkinsTotal[subject] = byTeacher['Ms N Jenkins'][subject] || 0;
+            });
+
+            // Sort subjects alphabetically or by count
+            const sortedSubjects = Object.keys(counts).sort();
+
+            for (const subject of sortedSubjects) {
+                const aCount = arakelianTotal[subject];
+                const jCount = jenkinsTotal[subject];
+                const total = aCount + jCount;
+                const className = total <= 2 ? 'low-count' : '';
+
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="${className}">${subject} <small>${detail}</small></td><td>${count}</td>`;
+                tr.innerHTML = `
+                    <td class="${className}">${subject}</td>
+                    <td class="${aCount <= 2 ? 'low-count' : ''}">${aCount}</td>
+                    <td class="${jCount <= 2 ? 'low-count' : ''}">${jCount}</td>
+                    <td class="${total <= 2 ? 'low-count' : ''}">${total}</td>
+                `;
                 tbody.appendChild(tr);
             }
 
-            // Aggiorna totale
-            const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
-            document.getElementById('lessons-total-count').textContent = total;
+            // Totals
+            const totalA = Object.values(arakelianTotal).reduce((sum, n) => sum + n, 0);
+            const totalJ = Object.values(jenkinsTotal).reduce((sum, n) => sum + n, 0);
+            const grandTotal = totalA + totalJ;
 
-            // Aggiorna data termine
+            document.getElementById('arakelian-total').textContent = totalA;
+            document.getElementById('jenkins-total').textContent = totalJ;
+            document.getElementById('lessons-total-count').textContent = grandTotal;
+
+            // Update term end date
             const nextTerm = getNextTerm();
             const termDate = nextTerm?.startDate 
                 ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
-
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();

@@ -1003,6 +1003,31 @@
             color: var(--header-bg);
             text-align: center;
         }
+
+        /* --- FILTRO PER ALL/WEEK/DAY --- */
+        .lessons-filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .filter-btn {
+            font-size: 11px;
+            padding: 3px 6px;
+            border: 1px solid var(--border-color);
+            background: var(--primary-bg);
+            color: var(--text-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .filter-btn.active {
+            background: var(--header-bg);
+            color: white;
+            border-color: var(--header-bg);
+        }
+        /* -------------------------------- */
+
         .lessons-count-table-wrapper {
             display: flex;
             flex-direction: column;
@@ -1047,7 +1072,7 @@
             font-weight: bold;
         }
 
-        /* --- NUOVE CLASSI PER LEZIONI DI OGGI --- */
+        /* --- EVIDENZIAZIONE LEZIONI DI OGGI --- */
         .today-arakelian {
             background-color: rgba(52, 199, 89, 0.08) !important;
             border-left: 3px solid var(--teacher-arakelian-color);
@@ -1056,7 +1081,7 @@
             background-color: rgba(175, 82, 222, 0.08) !important;
             border-left: 3px solid var(--teacher-jenkins-color);
         }
-        /* ---------------------------------------- */
+        /* ------------------------------------- */
 
         @media (max-width: 1200px) {
             .main-content {
@@ -1375,6 +1400,12 @@
                 <div class="lessons-count-box">
                     <div class="lessons-count-header">Lessons Until Half Term</div>
                     <div id="term-end-date">—</div>
+                    <!-- FILTRO AGGIUNTO -->
+                    <div class="lessons-filter-controls">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="week">This Week</button>
+                        <button class="filter-btn" data-filter="day">Today</button>
+                    </div>
                     <div class="lessons-count-table-wrapper">
                         <table class="lessons-count-table-header">
                             <thead>
@@ -1434,6 +1465,7 @@
     </div>
     <div class="version-badge" id="version-badge">ver.3.1103.01</div>
     <script>
+        // === SCRIPT IDENTICO AL FILE ORIGINALE, MA CON FUNZIONE countLessonsUntilTerm AGGIORNATA E GESTIONE FILTRO ===
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
@@ -1563,6 +1595,7 @@
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
+        let lessonsFilterMode = 'all'; // <-- nuovo stato per il filtro
         const weekAStartDate = new Date(2025, 8, 1);
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
@@ -1715,19 +1748,36 @@
             fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
             return fridayBefore;
         }
-        function countLessonsUntilTerm() {
+        function countLessonsUntilTerm(filterMode = 'all') {
             const now = new Date();
             const currentTerm = getNextTerm();
             if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
             const cutOffDate = getCutOffDate(currentTerm.startDate);
-            const today = new Date(now);
-            const todayTruncated = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const thisWeekStart = new Date(today);
+            const dayOfWeek = thisWeekStart.getDay();
+            thisWeekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // Monday
+            const thisWeekEnd = new Date(thisWeekStart);
+            thisWeekEnd.setDate(thisWeekStart.getDate() + 4); // Friday
+
             const subjectCount = {};
             const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
             const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
 
-            let currentDate = new Date(todayTruncated);
-            while (currentDate <= cutOffDate) {
+            let currentDate = new Date(today);
+            if (filterMode === 'all') {
+                currentDate = new Date(today);
+            } else if (filterMode === 'week') {
+                currentDate = new Date(thisWeekStart);
+            } else if (filterMode === 'day') {
+                currentDate = new Date(today);
+            }
+
+            const endDate = filterMode === 'all' ? cutOffDate :
+                           filterMode === 'week' ? thisWeekEnd :
+                           filterMode === 'day' ? today : cutOffDate;
+
+            while (currentDate <= endDate) {
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
                     const weekRef = new Date(2025, 9, 31);
@@ -1758,8 +1808,13 @@
                                                 }
                                             }
                                         }
-                                        subjectCount[subject] = (subjectCount[subject] || 0) + 1;
-                                        teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
+                                        // Aggiungi solo se rientra nel filtro
+                                        if (filterMode === 'all' ||
+                                            (filterMode === 'week' && currentDate >= thisWeekStart && currentDate <= thisWeekEnd) ||
+                                            (filterMode === 'day' && isToday)) {
+                                            subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+                                            teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
+                                        }
                                     }
                                 }
                             }
@@ -1827,7 +1882,7 @@
             table.innerHTML = html;
         }
         function renderLessonsCountTable() {
-            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm();
+            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode);
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
                 const aNum = extractClassNumber(a);
                 const bNum = extractClassNumber(b);
@@ -1848,7 +1903,6 @@
                 const total = aCount + jCount;
                 const className = total <= 2 ? 'low-count' : '';
                 const tr = document.createElement('tr');
-                // Determina se il subject è lezione di oggi per ogni docente
                 const isArakelianToday = todayLessons['Ms K Arakelian'].has(subject);
                 const isJenkinsToday = todayLessons['Ms N Jenkins'].has(subject);
                 tr.innerHTML = `
@@ -2306,9 +2360,23 @@
             updateTeacherBoxes();
             renderLessonsCountTable();
         }
+        // === NUOVA FUNZIONE FILTRO ===
+        function handleLessonsFilter(e) {
+            const filter = e.target.dataset.filter;
+            if (!filter) return;
+            lessonsFilterMode = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+            renderLessonsCountTable();
+        }
+        // === INIT HANDLERS ===
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.querySelectorAll('.control-btn').forEach(btn => {
             btn.addEventListener('click', handleWeekControl);
+        });
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', handleLessonsFilter);
         });
         document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
@@ -2316,7 +2384,7 @@
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();
-        updateRoomsAvailable(); // ✅
+        updateRoomsAvailable();
         setInterval(() => {
             updateClockPrecise();
             updateCountdownPrecise();
@@ -2324,7 +2392,7 @@
             updateNowContextBar();
             updateDynamicBackgroundAndShadows();
             renderLessonsCountTable();
-            updateRoomsAvailable(); // ✅
+            updateRoomsAvailable();
         }, 1000);
         updateClockPrecise();
         updateCountdownPrecise();

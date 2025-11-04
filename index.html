@@ -1046,6 +1046,18 @@
             color: #dc3545;
             font-weight: bold;
         }
+
+        /* --- NUOVE CLASSI PER LEZIONI DI OGGI --- */
+        .today-arakelian {
+            background-color: rgba(52, 199, 89, 0.08) !important;
+            border-left: 3px solid var(--teacher-arakelian-color);
+        }
+        .today-jenkins {
+            background-color: rgba(175, 82, 222, 0.08) !important;
+            border-left: 3px solid var(--teacher-jenkins-color);
+        }
+        /* ---------------------------------------- */
+
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -1706,12 +1718,14 @@
         function countLessonsUntilTerm() {
             const now = new Date();
             const currentTerm = getNextTerm();
-            if (!currentTerm) return { counts: {}, byTeacher: {} };
+            if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
             const cutOffDate = getCutOffDate(currentTerm.startDate);
             const today = new Date(now);
             const todayTruncated = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             const subjectCount = {};
             const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
+            const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
+
             let currentDate = new Date(todayTruncated);
             while (currentDate <= cutOffDate) {
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1729,7 +1743,8 @@
                                 for (const teacher in entry.teachers) {
                                     const subject = entry.teachers[teacher].subject;
                                     if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
-                                        if (currentDate.toDateString() === today.toDateString()) {
+                                        const isToday = currentDate.toDateString() === today.toDateString();
+                                        if (isToday) {
                                             const timeRange = entry.time;
                                             if (timeRange) {
                                                 const [startStr, endStr] = timeRange.split(' - ');
@@ -1737,8 +1752,8 @@
                                                 if (end) {
                                                     const nowMins = now.getHours() * 60 + now.getMinutes();
                                                     const endMins = end.hours * 60 + end.minutes;
-                                                    if (nowMins >= endMins) {
-                                                        continue;
+                                                    if (nowMins < endMins) {
+                                                        todayLessons[teacher].add(subject);
                                                     }
                                                 }
                                             }
@@ -1753,7 +1768,7 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-            return { counts: subjectCount, byTeacher: teacherCounts };
+            return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
         function generateTimetable() {
             const week = getCurrentWeek();
@@ -1812,7 +1827,7 @@
             table.innerHTML = html;
         }
         function renderLessonsCountTable() {
-            const { counts, byTeacher } = countLessonsUntilTerm();
+            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm();
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
                 const aNum = extractClassNumber(a);
                 const bNum = extractClassNumber(b);
@@ -1833,10 +1848,13 @@
                 const total = aCount + jCount;
                 const className = total <= 2 ? 'low-count' : '';
                 const tr = document.createElement('tr');
+                // Determina se il subject è lezione di oggi per ogni docente
+                const isArakelianToday = todayLessons['Ms K Arakelian'].has(subject);
+                const isJenkinsToday = todayLessons['Ms N Jenkins'].has(subject);
                 tr.innerHTML = `
                     <td class="${className}">${subject}</td>
-                    <td class="${aCount <= 2 ? 'low-count' : ''}">${aCount}</td>
-                    <td class="${jCount <= 2 ? 'low-count' : ''}">${jCount}</td>
+                    <td class="${aCount <= 2 ? 'low-count' : ''} ${isArakelianToday ? 'today-arakelian' : ''}">${aCount}</td>
+                    <td class="${jCount <= 2 ? 'low-count' : ''} ${isJenkinsToday ? 'today-jenkins' : ''}">${jCount}</td>
                     <td class="${total <= 2 ? 'low-count' : ''}">${total}</td>
                 `;
                 tbody.appendChild(tr);
@@ -1853,7 +1871,6 @@
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
-
         // ✅ NUOVA FUNZIONE: Rooms Available
         function updateRoomsAvailable() {
             const now = new Date();
@@ -1870,7 +1887,6 @@
             }
             const rooms = ['A1', 'A2'];
             const result = [];
-
             for (const period of periods) {
                 const periodData = dayData[period];
                 if (!periodData || !periodData.time) continue;
@@ -1878,12 +1894,10 @@
                 const room1 = periodData.teachers?.['Ms K Arakelian']?.room || '';
                 const subject2 = periodData.teachers?.['Ms N Jenkins']?.subject || '';
                 const room2 = periodData.teachers?.['Ms N Jenkins']?.room || '';
-
                 // Escludi Form Time, Lunch e lezioni vuote
                 if (['Form Time', 'Lunch', ''].includes(subject1) && ['Form Time', 'Lunch', ''].includes(subject2)) {
                     continue;
                 }
-
                 // Verifica se A1 è libera
                 if (!(['Form Time', 'Lunch'].includes(subject1)) && subject1.trim() === '' && room1.trim() === '') {
                     result.push(`${period} – A1 free`);
@@ -1893,14 +1907,12 @@
                     result.push(`${period} – A2 free`);
                 }
             }
-
             if (result.length === 0) {
                 document.getElementById('rooms-available-list').innerHTML = '<li>No free rooms</li>';
             } else {
                 document.getElementById('rooms-available-list').innerHTML = result.map(r => `<li>${r}</li>`).join('');
             }
         }
-
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();

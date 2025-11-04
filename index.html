@@ -1459,15 +1459,15 @@
             </div>
         </div>
     </div>
-    <div class="version-badge" id="version-badge">ver.3.1103.01</div>
+    <div class="version-badge" id="version-badge">ver.3.1103.02</div>
     <script>
-        // === SCRIPT CON FUNZIONE AGGIORNATA countLessonsUntilTerm ===
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
+
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
@@ -1486,12 +1486,14 @@
                 body.classList.add('time-evening');
             }
         }
+
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
+
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -1588,11 +1590,13 @@
                 }
             }
         };
+
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
         let lessonsFilterMode = 'all';
-        const weekAStartDate = new Date(2025, 8, 1);
+
+        const weekAStartDate = new Date(2025, 8, 1); // 1 Sep 2025
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
             { name: "Christmas Term", startDate: new Date(2025, 11, 22), endDate: new Date(2026, 0, 2) },
@@ -1601,42 +1605,73 @@
             { name: "May Half Term", startDate: new Date(2026, 4, 25), endDate: new Date(2026, 4, 29) },
             { name: "Summer Term", startDate: new Date(2026, 6, 20), endDate: new Date(2026, 7, 31) }
         ];
+
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
+
+        // ✅ RIPRISTINATA LA LOGICA ORIGINALE per determinare la settimana corrente
+        function getCurrentWeekCorrect() {
+            const now = new Date();
+            const refDate = new Date(2025, 8, 1); // Monday, 1 Sep 2025
+            // Conta solo le settimane che non sono half term
+            const diffTime = now.getTime() - refDate.getTime();
+            const totalWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+            // Sottrai le settimane di half term passate
+            let halfTermWeeks = 0;
+            for (let term of schoolTerms) {
+                if (term.endDate < now) {
+                    // Se il term è interamente nel passato, è una settimana da escludere
+                    halfTermWeeks++;
+                }
+            }
+            const adjustedWeeks = totalWeeks - halfTermWeeks;
+            return adjustedWeeks % 2 === 0 ? 'A' : 'B';
+        }
+
+        // ✅ NUOVA FUNZIONE: determina correttamente Week A/B per qualsiasi data, escludendo half term
+        function getWeekForDate(targetDate) {
+            const refDate = new Date(2025, 8, 1); // Monday, 1 Sep 2025
+            const diffTime = targetDate.getTime() - refDate.getTime();
+            const totalWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+            let halfTermWeeks = 0;
+            for (let term of schoolTerms) {
+                const termStart = new Date(term.startDate);
+                const termEnd = new Date(term.endDate);
+                // Se il term include interamente la settimana di targetDate, non conta
+                const termMonday = new Date(termStart);
+                termMonday.setDate(termStart.getDate() - (termStart.getDay() === 0 ? 6 : termStart.getDay() - 1));
+                const termFriday = new Date(termMonday);
+                termFriday.setDate(termMonday.getDate() + 4);
+                // Controlla se targetDate cade nella settimana del term
+                if (targetDate >= termMonday && targetDate <= termFriday) {
+                    return null; // data in half term → non conta
+                }
+                // Conta quanti half term sono *completamente* prima di targetDate
+                if (termEnd < targetDate) {
+                    halfTermWeeks++;
+                }
+            }
+            const adjustedWeeks = totalWeeks - halfTermWeeks;
+            return adjustedWeeks % 2 === 0 ? 'A' : 'B';
+        }
+
         function extractClassNumber(subject) {
             const match = subject.match(/^(\d+)/);
             return match ? parseInt(match[1], 10) : 999;
         }
+
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
-        function getCurrentWeekCorrect() {
-            const now = new Date();
-            let lastTermEnd = new Date(2025, 8, 1);
-            for (let term of schoolTerms) {
-                if (term.endDate < now) {
-                    lastTermEnd = new Date(term.endDate);
-                } else {
-                    break;
-                }
-            }
-            const nextMonday = new Date(lastTermEnd);
-            nextMonday.setDate(lastTermEnd.getDate() + 3);
-            const dayOfWeek = nextMonday.getDay();
-            if (dayOfWeek !== 1) {
-                nextMonday.setDate(nextMonday.getDate() + (1 - dayOfWeek + 7) % 7);
-            }
-            const diffTime = now.getTime() - nextMonday.getTime();
-            const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
-            return diffWeeks % 2 === 0 ? 'A' : 'B';
-        }
+
         function getCurrentWeek() {
             if (currentMode === 'auto') return getCurrentWeekCorrect();
             return currentWeek;
         }
+
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
             let clean = subject.toLowerCase()
@@ -1646,6 +1681,7 @@
             clean = clean.replace(/-+/g, '-').replace(/^-|-$/g, '');
             return `subject-${clean}`;
         }
+
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -1662,6 +1698,7 @@
             }
             return `${todayBadgeHtml}<div class="date-weekday">${weekday} <span class="date-day">${day}</span> ${month} ${year}</div>`;
         }
+
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -1674,6 +1711,7 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
+
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -1703,6 +1741,7 @@
             resultDate.setDate(baseMonday.getDate() + dayIndex);
             return resultDate;
         }
+
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -1711,6 +1750,7 @@
             }
             return null;
         }
+
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -1718,6 +1758,7 @@
             }
             return null;
         }
+
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -1735,6 +1776,7 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
+
         function getCutOffDate(termStartDate) {
             const termMonday = new Date(termStartDate);
             const day = termMonday.getDay();
@@ -1745,7 +1787,7 @@
             return fridayBefore;
         }
 
-        // ✅ FUNZIONE AGGIORNATA: Ora esclude le lezioni di oggi non appena finite
+        // ✅ FUNZIONE CORRETTA: usa getWeekForDate per determinare la settimana di ogni data
         function countLessonsUntilTerm(filterMode = 'all') {
             const now = new Date();
             const currentTerm = getNextTerm();
@@ -1755,35 +1797,38 @@
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const thisWeekStart = new Date(today);
             const dayOfWeek = thisWeekStart.getDay();
-            thisWeekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // Monday
+            thisWeekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
             const thisWeekEnd = new Date(thisWeekStart);
-            thisWeekEnd.setDate(thisWeekStart.getDate() + 4); // Friday
+            thisWeekEnd.setDate(thisWeekStart.getDate() + 4);
 
             const subjectCount = {};
             const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
             const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
 
-            let currentDate = new Date(today);
+            let currentDate = new Date();
+            let endDate = new Date();
+
             if (filterMode === 'all') {
                 currentDate = new Date(today);
+                endDate = new Date(cutOffDate);
             } else if (filterMode === 'week') {
                 currentDate = new Date(thisWeekStart);
+                endDate = new Date(thisWeekEnd);
             } else if (filterMode === 'day') {
                 currentDate = new Date(today);
+                endDate = new Date(today);
             }
-
-            const endDate = filterMode === 'all' ? cutOffDate :
-                           filterMode === 'week' ? thisWeekEnd :
-                           filterMode === 'day' ? today : cutOffDate;
 
             while (currentDate <= endDate) {
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
-                    const weekRef = new Date(2025, 9, 31);
-                    const diffDays = currentDate.getTime() - weekRef.getTime();
-                    const diffWeeks = Math.floor(diffDays / (1000 * 60 * 60 * 24 * 7));
-                    const isWeekAForDate = diffWeeks >= 0 ? (diffWeeks % 2 === 0) : false;
-                    const weekData = isWeekAForDate ? timetableData.weekA : timetableData.weekB;
+                    const weekTag = getWeekForDate(currentDate);
+                    if (weekTag === null) {
+                        // Data in half term → salta
+                        currentDate.setDate(currentDate.getDate() + 1);
+                        continue;
+                    }
+                    const weekData = weekTag === 'A' ? timetableData.weekA : timetableData.weekB;
                     const dayData = weekData[dayName];
 
                     if (dayData) {
@@ -1794,8 +1839,8 @@
                                     const subject = entry.teachers[teacher].subject;
                                     if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
                                         let includeLesson = false;
-
                                         const isToday = currentDate.toDateString() === today.toDateString();
+
                                         if (isToday) {
                                             const timeRange = entry.time;
                                             if (timeRange) {
@@ -1804,7 +1849,6 @@
                                                 if (endTime) {
                                                     const nowMins = now.getHours() * 60 + now.getMinutes();
                                                     const endMins = endTime.hours * 60 + endTime.minutes;
-                                                    // Includi solo se la lezione NON è ancora finita
                                                     if (nowMins < endMins) {
                                                         includeLesson = true;
                                                         todayLessons[teacher].add(subject);
@@ -1815,13 +1859,7 @@
                                             includeLesson = true;
                                         }
 
-                                        // Applica il filtro (all / week / day)
-                                        const inFilterRange = 
-                                            (filterMode === 'all') ||
-                                            (filterMode === 'week' && currentDate >= thisWeekStart && currentDate <= thisWeekEnd) ||
-                                            (filterMode === 'day' && isToday);
-
-                                        if (includeLesson && inFilterRange) {
+                                        if (includeLesson) {
                                             subjectCount[subject] = (subjectCount[subject] || 0) + 1;
                                             teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
                                         }
@@ -1893,6 +1931,7 @@
             });
             table.innerHTML = html;
         }
+
         function renderLessonsCountTable() {
             const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode);
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
@@ -1901,22 +1940,28 @@
                 if (aNum !== bNum) return aNum - bNum;
                 return a.localeCompare(b);
             });
+
             const tbody = document.getElementById('lessons-count-tbody');
             tbody.innerHTML = '';
+
             const arakelianTotal = {};
             const jenkinsTotal = {};
+
             for (const subject of sortedSubjects) {
                 arakelianTotal[subject] = byTeacher['Ms K Arakelian'][subject] || 0;
                 jenkinsTotal[subject] = byTeacher['Ms N Jenkins'][subject] || 0;
             }
+
             for (const subject of sortedSubjects) {
                 const aCount = arakelianTotal[subject];
                 const jCount = jenkinsTotal[subject];
                 const total = aCount + jCount;
                 const className = total <= 2 ? 'low-count' : '';
-                const tr = document.createElement('tr');
+
                 const isArakelianToday = todayLessons['Ms K Arakelian'].has(subject);
                 const isJenkinsToday = todayLessons['Ms N Jenkins'].has(subject);
+
+                const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="${className}">${subject}</td>
                     <td class="${aCount <= 2 ? 'low-count' : ''} ${isArakelianToday ? 'today-arakelian' : ''}">${aCount}</td>
@@ -1925,19 +1970,22 @@
                 `;
                 tbody.appendChild(tr);
             }
+
             const totalA = Object.values(arakelianTotal).reduce((sum, n) => sum + n, 0);
             const totalJ = Object.values(jenkinsTotal).reduce((sum, n) => sum + n, 0);
             const grandTotal = totalA + totalJ;
+
             document.getElementById('arakelian-total').textContent = totalA;
             document.getElementById('jenkins-total').textContent = totalJ;
             document.getElementById('lessons-total-count').textContent = grandTotal;
+
             const nextTerm = getNextTerm();
             const termDate = nextTerm?.startDate 
                 ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
-        // ✅ NUOVA FUNZIONE: Rooms Available
+
         function updateRoomsAvailable() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -1960,15 +2008,12 @@
                 const room1 = periodData.teachers?.['Ms K Arakelian']?.room || '';
                 const subject2 = periodData.teachers?.['Ms N Jenkins']?.subject || '';
                 const room2 = periodData.teachers?.['Ms N Jenkins']?.room || '';
-                // Escludi Form Time, Lunch e lezioni vuote
                 if (['Form Time', 'Lunch', ''].includes(subject1) && ['Form Time', 'Lunch', ''].includes(subject2)) {
                     continue;
                 }
-                // Verifica se A1 è libera
                 if (!(['Form Time', 'Lunch'].includes(subject1)) && subject1.trim() === '' && room1.trim() === '') {
                     result.push(`${period} – A1 free`);
                 }
-                // Verifica se A2 è libera
                 if (!(['Form Time', 'Lunch'].includes(subject2)) && subject2.trim() === '' && room2.trim() === '') {
                     result.push(`${period} – A2 free`);
                 }
@@ -1979,17 +2024,20 @@
                 document.getElementById('rooms-available-list').innerHTML = result.map(r => `<li>${r}</li>`).join('');
             }
         }
+
         function updateTeacherBoxes() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
             const todayData = wd[today];
+
             teachers.forEach(teacher => {
                 const key = teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins';
                 let current = 'No Lesson Now';
                 let next = 'No Lesson Next';
                 let currentIdx = -1;
+
                 periods.forEach((p, i) => {
                     if (todayData?.[p] && isCurrentTime(todayData[p].time)) {
                         currentIdx = i;
@@ -2001,6 +2049,7 @@
                         }
                     }
                 });
+
                 if (currentIdx >= 0) {
                     const nextInfo = getNextPeriod(currentIdx, today, week);
                     if (nextInfo) {
@@ -2030,10 +2079,12 @@
                         }
                     });
                 }
+
                 document.getElementById(`current-${key}`).textContent = current;
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
+
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -2043,6 +2094,7 @@
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
         }
+
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -2076,39 +2128,49 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
+
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
             const isTodayVisible = (currentViewDay === 'all') || (currentViewDay === today);
             const currentDayData = (getCurrentWeek() === 'A' ? timetableData.weekA : timetableData.weekB)[today];
+
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             const nowContextBar = document.getElementById('now-context-bar');
+
             nowContextBar.className = 'now-context-bar';
             document.querySelectorAll('.now-badge').forEach(el => el.remove());
             document.querySelectorAll('.subject-cell.now-lesson, .subject-cell.now-break').forEach(el => {
                 el.classList.remove('now-lesson', 'now-break');
             });
+
             let summaryText = "No scheduled activity";
             let iconType = 'default';
             let inPeriod = false;
             let isBreakOrLunch = false;
             let nextLessonTime = null;
             let nextLessonStartTime = null;
+
             if (isTodayVisible && currentDayData) {
                 const visibleDays = currentViewDay === 'all' ? days : [currentViewDay];
                 const todayIndexInVisible = visibleDays.indexOf(today);
                 if (todayIndexInVisible === -1) return;
+
                 const todayColumnOffset = 2 + (todayIndexInVisible * 2);
+
                 for (let i = 0; i < periods.length; i++) {
                     const period = periods[i];
                     const timeRange = currentDayData[period]?.time;
                     if (!timeRange) continue;
+
                     const [startStr, endStr] = timeRange.split(' - ');
                     const start = parseTime(startStr);
                     const end = parseTime(endStr);
                     if (!start || !end) continue;
+
                     const startMinutes = start.hours * 60 + start.minutes;
                     const endMinutes = end.hours * 60 + end.minutes;
+
                     if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
                         const row = document.querySelectorAll('#timetable tbody tr')[i];
                         if (row) {
@@ -2121,12 +2183,14 @@
                                     let teacherClass = '';
                                     if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                     else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
+
                                     let showNowBadge = true;
                                     if (period === '2' && timeRange === '10:20 - 11:30') {
                                         if (/^7|^8/.test(subject) && currentMinutes < (10 * 60 + 40)) {
                                             showNowBadge = false;
                                         }
                                     }
+
                                     if (subject === 'Lunch' || subject === 'Form Time') {
                                         cells[j].classList.add('now-break');
                                     } else {
@@ -2141,6 +2205,7 @@
                                 }
                             }
                         }
+
                         const periodLabel = period === 'Form Time' ? 'Form Time' : `Period ${period}`;
                         let teacherDetails = [];
                         const currentPeriodData = currentDayData[period];
@@ -2155,20 +2220,24 @@
                                 }
                             }
                         }
+
                         let liveIndicator = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div>`;
                         if (teacherDetails.length > 0) {
                             summaryText = `${liveIndicator} • <span class="now-summary-highlight">${periodLabel}</span> • ${timeRange} • ${teacherDetails.join(' | ')}`;
                         } else {
                             summaryText = `${liveIndicator} • <span class="now-summary-highlight">${periodLabel}</span> • ${timeRange}`;
                         }
+
                         iconType = 'lesson';
                         nowContextBar.classList.add('lesson');
                         if (teacherDetails.some(t => t.includes('Arakelian'))) nowContextBar.classList.add('arakelian');
                         if (teacherDetails.some(t => t.includes('Jenkins'))) nowContextBar.classList.add('jenkins');
+
                         inPeriod = true;
                         break;
                     }
                 }
+
                 if (!inPeriod) {
                     for (let i = 0; i < periods.length; i++) {
                         const period = periods[i];
@@ -2187,6 +2256,7 @@
                             }
                         }
                     }
+
                     const break1Start = 10 * 60 + 20;
                     const break1End = 10 * 60 + 40;
                     const break2Start = 11 * 60 + 10;
@@ -2195,6 +2265,7 @@
                     const lunch1End = 13 * 60 + 30;
                     const lunch2Start = 13 * 60 + 30;
                     const lunch2End = 14 * 60 + 30;
+
                     if (currentMinutes >= break1Start && currentMinutes < break1End) {
                         summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 7–8`;
                         iconType = 'break';
@@ -2222,6 +2293,7 @@
                             summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • No more lessons today`;
                         }
                     }
+
                     if (isBreakOrLunch) {
                         const todayColumnOffset = 2 + (todayIndexInVisible * 2);
                         document.querySelectorAll('#timetable tbody tr').forEach(row => {
@@ -2237,12 +2309,15 @@
             } else {
                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Today not visible`;
             }
+
             document.getElementById('now-summary-content').innerHTML = summaryText;
             document.getElementById('now-summary-icon').innerHTML = ICONS[iconType] || ICONS.default;
+
             const progressBarContainer = document.getElementById('progress-bar-container');
             const progressFill = document.getElementById('progress-fill');
             const progressLabel = document.getElementById('progress-label');
             const progressOverlayText = document.getElementById('progress-overlay-text');
+
             if (isTodayVisible && inPeriod && currentDayData) {
                 const currentPeriod = periods.find(p => {
                     const tr = currentDayData[p]?.time;
@@ -2253,6 +2328,7 @@
                     if (!st || !en) return false;
                     return currentMinutes >= st.hours * 60 + st.minutes && currentMinutes < en.hours * 60 + en.minutes;
                 });
+
                 if (currentPeriod) {
                     const timeRange = currentDayData[currentPeriod].time;
                     const [startStr, endStr] = timeRange.split(' - ');
@@ -2266,9 +2342,11 @@
                         const percent = totalTime > 0 ? 100 - (timeLeft / totalTime) * 100 : 0;
                         const minsLeft = Math.floor(timeLeft / 60);
                         const secsLeft = timeLeft % 60;
+
                         progressFill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
                         progressLabel.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')} left`;
                         progressOverlayText.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')}`;
+
                         progressFill.classList.remove('warning', 'critical', 'blink');
                         if (timeLeft < 5 * 60) {
                             progressFill.classList.add('warning');
@@ -2279,13 +2357,16 @@
                         if (timeLeft < 30) {
                             progressFill.classList.add('blink');
                         }
+
                         progressBarContainer.style.display = 'block';
                         return;
                     }
                 }
             }
+
             progressBarContainer.style.display = 'none';
         }
+
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2316,10 +2397,12 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
+
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement || 
@@ -2331,6 +2414,7 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2339,6 +2423,7 @@
                 );
             });
         }
+
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2354,11 +2439,13 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
+
         function handleDayFilter() {
             currentViewDay = document.getElementById('day-filter-select').value;
             generateTimetable();
             renderLessonsCountTable();
         }
+
         function handleWeekControl(e) {
             const w = e.target.dataset.week;
             if (w === 'auto') {
@@ -2372,7 +2459,7 @@
             updateTeacherBoxes();
             renderLessonsCountTable();
         }
-        // === NUOVA FUNZIONE FILTRO ===
+
         function handleLessonsFilter(e) {
             const filter = e.target.dataset.filter;
             if (!filter) return;
@@ -2382,7 +2469,7 @@
             });
             renderLessonsCountTable();
         }
-        // === INIT HANDLERS ===
+
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.querySelectorAll('.control-btn').forEach(btn => {
             btn.addEventListener('click', handleWeekControl);
@@ -2392,11 +2479,12 @@
         });
         document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
-        // INIT
+
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();
         updateRoomsAvailable();
+
         setInterval(() => {
             updateClockPrecise();
             updateCountdownPrecise();
@@ -2406,13 +2494,15 @@
             renderLessonsCountTable();
             updateRoomsAvailable();
         }, 1000);
+
         updateClockPrecise();
         updateCountdownPrecise();
         updateNowContextBar();
         updateDynamicBackgroundAndShadows();
         renderLessonsCountTable();
+
         const today = new Date().getDate().toString().padStart(2, '0');
-        document.getElementById('version-badge').textContent = `ver.3.1103.${today}`;
+        document.getElementById('version-badge').textContent = `ver.3.1103.02`;
     </script>
 </body>
 </html>

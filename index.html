@@ -1572,12 +1572,9 @@
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
-
-        // ✅ NUOVA LOGICA: determina la settimana corretta dopo ogni half term
         function getCurrentWeekCorrect() {
             const now = new Date();
-            // Trova l'ultimo half term terminato prima di oggi
-            let lastTermEnd = new Date(2025, 8, 1); // inizio anno scolastico
+            let lastTermEnd = new Date(2025, 8, 1);
             for (let term of schoolTerms) {
                 if (term.endDate < now) {
                     lastTermEnd = new Date(term.endDate);
@@ -1585,25 +1582,20 @@
                     break;
                 }
             }
-            // Aggiungi un giorno per partire da lunedì successivo
             const nextMonday = new Date(lastTermEnd);
-            nextMonday.setDate(lastTermEnd.getDate() + 3); // venerdì + 3 = lunedì
-            // Normalizza al lunedì
+            nextMonday.setDate(lastTermEnd.getDate() + 3);
             const dayOfWeek = nextMonday.getDay();
             if (dayOfWeek !== 1) {
                 nextMonday.setDate(nextMonday.getDate() + (1 - dayOfWeek + 7) % 7);
             }
-            // Calcola giorni trascorsi da quel lunedì
             const diffTime = now.getTime() - nextMonday.getTime();
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0 ? 'A' : 'B';
         }
-
         function getCurrentWeek() {
             if (currentMode === 'auto') return getCurrentWeekCorrect();
             return currentWeek;
         }
-
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
             let clean = subject.toLowerCase()
@@ -1644,7 +1636,6 @@
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
-            // Usa la nuova logica per trovare il lunedì di riferimento
             let lastTermEnd = new Date(2025, 8, 1);
             for (let term of schoolTerms) {
                 if (term.endDate < now) {
@@ -1659,7 +1650,6 @@
             if (dayOfWeek !== 1) {
                 nextMonday.setDate(nextMonday.getDate() + (1 - dayOfWeek + 7) % 7);
             }
-            // Ora aggiungi settimane in base a A/B
             const diffWeeks = targetWeekIsA ? 0 : 1;
             const baseMonday = new Date(nextMonday);
             baseMonday.setDate(nextMonday.getDate() + diffWeeks * 7);
@@ -1704,8 +1694,6 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
-
-        // ✅ LOGICA ORIGINALE PER IL CONTEGGIO: escludi settimana half term
         function getCutOffDate(termStartDate) {
             const termMonday = new Date(termStartDate);
             const day = termMonday.getDay();
@@ -1715,7 +1703,6 @@
             fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
             return fridayBefore;
         }
-
         function countLessonsUntilTerm() {
             const now = new Date();
             const currentTerm = getNextTerm();
@@ -1729,10 +1716,7 @@
             while (currentDate <= cutOffDate) {
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
-                    const isA = getCurrentWeekCorrect() === 'A' ? 
-                        (Math.floor((currentDate - new Date(2025, 9, 31)) / (1000 * 60 * 60 * 24 * 7)) % 2 === 0) : false;
-                    // ✅ Usa il nuovo determinatore per ogni data
-                    const weekRef = new Date(2025, 9, 31); // fine October half term
+                    const weekRef = new Date(2025, 9, 31);
                     const diffDays = currentDate.getTime() - weekRef.getTime();
                     const diffWeeks = Math.floor(diffDays / (1000 * 60 * 60 * 24 * 7));
                     const isWeekAForDate = diffWeeks >= 0 ? (diffWeeks % 2 === 0) : false;
@@ -1771,7 +1755,6 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts };
         }
-
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -1828,7 +1811,6 @@
             });
             table.innerHTML = html;
         }
-
         function renderLessonsCountTable() {
             const { counts, byTeacher } = countLessonsUntilTerm();
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
@@ -1870,6 +1852,53 @@
                 ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
+        }
+
+        // ✅ NUOVA FUNZIONE: Rooms Available
+        function updateRoomsAvailable() {
+            const now = new Date();
+            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            if (!days.includes(today)) {
+                document.getElementById('rooms-available-list').innerHTML = '<li>No school today</li>';
+                return;
+            }
+            const week = getCurrentWeek();
+            const dayData = (week === 'A' ? timetableData.weekA : timetableData.weekB)[today];
+            if (!dayData) {
+                document.getElementById('rooms-available-list').innerHTML = '<li>No data</li>';
+                return;
+            }
+            const rooms = ['A1', 'A2'];
+            const result = [];
+
+            for (const period of periods) {
+                const periodData = dayData[period];
+                if (!periodData || !periodData.time) continue;
+                const subject1 = periodData.teachers?.['Ms K Arakelian']?.subject || '';
+                const room1 = periodData.teachers?.['Ms K Arakelian']?.room || '';
+                const subject2 = periodData.teachers?.['Ms N Jenkins']?.subject || '';
+                const room2 = periodData.teachers?.['Ms N Jenkins']?.room || '';
+
+                // Escludi Form Time, Lunch e lezioni vuote
+                if (['Form Time', 'Lunch', ''].includes(subject1) && ['Form Time', 'Lunch', ''].includes(subject2)) {
+                    continue;
+                }
+
+                // Verifica se A1 è libera
+                if (!(['Form Time', 'Lunch'].includes(subject1)) && subject1.trim() === '' && room1.trim() === '') {
+                    result.push(`${period} – A1 free`);
+                }
+                // Verifica se A2 è libera
+                if (!(['Form Time', 'Lunch'].includes(subject2)) && subject2.trim() === '' && room2.trim() === '') {
+                    result.push(`${period} – A2 free`);
+                }
+            }
+
+            if (result.length === 0) {
+                document.getElementById('rooms-available-list').innerHTML = '<li>No free rooms</li>';
+            } else {
+                document.getElementById('rooms-available-list').innerHTML = result.map(r => `<li>${r}</li>`).join('');
+            }
         }
 
         function updateTeacherBoxes() {
@@ -1927,7 +1956,6 @@
                 document.getElementById(`next-${key}`).textContent = next;
             });
         }
-
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -1937,7 +1965,6 @@
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
         }
-
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -1971,7 +1998,6 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
-
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2182,7 +2208,6 @@
             }
             progressBarContainer.style.display = 'none';
         }
-
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 
@@ -2213,7 +2238,6 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
@@ -2229,7 +2253,6 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         function updateWeekButtons() {
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.classList.toggle('active', 
@@ -2238,7 +2261,6 @@
                 );
             });
         }
-
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -2254,13 +2276,11 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
-
         function handleDayFilter() {
             currentViewDay = document.getElementById('day-filter-select').value;
             generateTimetable();
             renderLessonsCountTable();
         }
-
         function handleWeekControl(e) {
             const w = e.target.dataset.week;
             if (w === 'auto') {
@@ -2274,18 +2294,17 @@
             updateTeacherBoxes();
             renderLessonsCountTable();
         }
-
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.querySelectorAll('.control-btn').forEach(btn => {
             btn.addEventListener('click', handleWeekControl);
         });
         document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
-
         // INIT
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();
+        updateRoomsAvailable(); // ✅
         setInterval(() => {
             updateClockPrecise();
             updateCountdownPrecise();
@@ -2293,6 +2312,7 @@
             updateNowContextBar();
             updateDynamicBackgroundAndShadows();
             renderLessonsCountTable();
+            updateRoomsAvailable(); // ✅
         }, 1000);
         updateClockPrecise();
         updateCountdownPrecise();

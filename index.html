@@ -164,7 +164,7 @@
             gap: 11px;
             align-items: flex-start;
         }
-        .clock-box, .countdown-box, .term-info-box, .rooms-available-box {
+        .clock-box, .countdown-box, .term-info-box {
             transform-style: preserve-3d;
             position: relative;
             transition: all 0.3s ease;
@@ -174,11 +174,10 @@
         }
         [data-theme="dark"] .clock-box,
         [data-theme="dark"] .countdown-box,
-        [data-theme="dark"] .term-info-box,
-        [data-theme="dark"] .rooms-available-box {
+        [data-theme="dark"] .term-info-box {
             background: rgba(45, 45, 45, 0.9);
         }
-        .clock-box::before, .countdown-box::before, .rooms-available-box::before {
+        .clock-box::before, .countdown-box::before {
             content: '';
             position: absolute;
             top: 0;
@@ -192,7 +191,7 @@
             border-radius: 8px;
             pointer-events: none;
         }
-        .clock-box:hover, .countdown-box:hover, .rooms-available-box:hover {
+        .clock-box:hover, .countdown-box:hover {
             transform: translateY(-3px) translateZ(5px);
         }
         .clock-box, .countdown-box {
@@ -299,10 +298,28 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
+
+        /* 🔹 Nuovo badge "Room Free" - solo per oggi, verde scuro */
+        .room-free-badge {
+            display: inline-block;
+            background: #218838; /* verde scuro */
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 1px 5px;
+            border-radius: 8px;
+            animation: pulseToday 2s infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+
         .countdown-title-row {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: flex-end; /* 🔹 Allineato a destra */
             gap: 12px;
             width: 100%;
         }
@@ -322,7 +339,7 @@
             font-weight: bold;
             color: var(--text-color);
         }
-        .term-info-box, .rooms-available-box {
+        .term-info-box {
             background: var(--countdown-bg);
             border: 1px solid var(--countdown-border);
             border-radius: 12px;
@@ -337,7 +354,7 @@
             color: var(--countdown-text);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .term-info-box:hover, .rooms-available-box:hover {
+        .term-info-box:hover {
             transform: translateY(-2px);
             box-shadow: 
                 0 6px 12px rgba(0, 0, 0, 0.15),
@@ -346,35 +363,6 @@
         html body.authenticated.time-evening div.container div.header div.countdown-section div.countdown-lower-row div#term-info-box.term-info-box,
         html body.time-evening div.container div.header div.countdown-section div.countdown-lower-row div#term-info-box.term-info-box {
             padding: 8px 8px;
-        }
-        .rooms-available-box {
-            text-align: left;
-            min-width: 200px;
-            max-height: 180px;
-            overflow-y: auto;
-        }
-        .rooms-available-box h3 {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--header-bg);
-            margin-bottom: 8px;
-            text-align: center;
-        }
-        .rooms-available-box ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-        .rooms-available-box li {
-            margin-bottom: 4px;
-            padding: 2px 0;
-            border-bottom: 1px dashed var(--border-color);
-        }
-        .rooms-available-box li:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
         }
         .period-red {
             color: #dc3545;
@@ -976,6 +964,8 @@
             border-radius: 5px;
             border: 1px solid var(--border-color);
         }
+
+        /* 🔹 Altezza box Lessons Until Half Term = 500px */
         .lessons-count-box {
             background: var(--secondary-bg);
             border-radius: 10px;
@@ -987,6 +977,7 @@
             font-size: 13px;
             display: flex;
             flex-direction: column;
+            height: 500px; /* 🔹 Altezza fissa */
         }
         [data-theme="dark"] .lessons-count-box {
             background: rgba(45, 45, 45, 0.9);
@@ -1029,7 +1020,7 @@
         .lessons-count-table-wrapper {
             display: flex;
             flex-direction: column;
-            height: 500px;
+            flex: 1; /* occupa spazio rimanente */
             overflow: hidden;
         }
         .lessons-count-table-header {
@@ -1259,15 +1250,12 @@
             <div class="countdown-section">
                 <div class="countdown-title-wrapper">
                     <div class="countdown-title-row">
-                        <div id="week-info">Current Week: A</div>
                         <div class="countdown-title" id="countdown-title">October Half Term</div>
+                        <div id="week-info">Current Week: A</div>
                     </div>
                 </div>
                 <div class="countdown-row">
-                    <div class="rooms-available-box" id="rooms-available-box">
-                        <h3>Rooms Available</h3>
-                        <ul id="rooms-available-list"></ul>
-                    </div>
+                    <!-- 🔸 Rooms Available RIMOSSO -->
                     <div class="countdown-box">
                         <div class="countdown-value" id="countdown-days">000</div>
                         <div class="countdown-label">Days</div>
@@ -1736,10 +1724,9 @@
             fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
             return fridayBefore;
         }
-        // 🔧 CORREZIONE QUI: conteggio accurato
         function countLessonsUntilTerm(filterMode = 'all') {
             const now = new Date();
-            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 00:00 di oggi
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const currentTerm = getNextTerm();
             if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
             const cutOffDate = getCutOffDate(currentTerm.startDate);
@@ -1748,47 +1735,37 @@
             thisWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
             const thisWeekEnd = new Date(thisWeekStart);
             thisWeekEnd.setDate(thisWeekStart.getDate() + 4);
-
             const subjectCount = {};
             const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
             const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
-
             let currentDate = new Date(todayStart);
             if (filterMode === 'all') {
-                // inizia da oggi, non da giorni passati
             } else if (filterMode === 'week') {
                 currentDate = new Date(thisWeekStart);
             } else if (filterMode === 'day') {
                 currentDate = new Date(todayStart);
             }
-
             const endDate = filterMode === 'all' ? cutOffDate :
                            filterMode === 'week' ? thisWeekEnd :
                            filterMode === 'day' ? todayStart : cutOffDate;
-
             while (currentDate <= endDate) {
                 const currentDateStr = currentDate.toDateString();
                 const isToday = currentDateStr === todayStart.toDateString();
-
-                // ✅ Salta i giorni passati (non oggi) completamente
                 if (!isToday && currentDate < todayStart) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
-
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (!['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
-
                 const weekRef = new Date(2025, 9, 31);
                 const diffDays = currentDate.getTime() - weekRef.getTime();
                 const diffWeeks = Math.floor(diffDays / (1000 * 60 * 60 * 24 * 7));
                 const isWeekAForDate = diffWeeks >= 0 ? (diffWeeks % 2 === 0) : false;
                 const weekData = isWeekAForDate ? timetableData.weekA : timetableData.weekB;
                 const dayData = weekData[dayName];
-
                 if (dayData) {
                     for (const period in dayData) {
                         const entry = dayData[period];
@@ -1796,7 +1773,6 @@
                         for (const teacher of teachers) {
                             const subject = entry.teachers[teacher]?.subject;
                             if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
-
                             let includeLesson = false;
                             if (isToday) {
                                 const timeRange = entry.time;
@@ -1813,17 +1789,14 @@
                                     }
                                 }
                             } else {
-                                // Oggi no → incluso solo se è un giorno futuro
                                 if (currentDate > todayStart) {
                                     includeLesson = true;
                                 }
                             }
-
                             const inFilterRange = 
                                 (filterMode === 'all') ||
                                 (filterMode === 'week' && currentDate >= thisWeekStart && currentDate <= thisWeekEnd) ||
                                 (filterMode === 'day' && isToday);
-
                             if (includeLesson && inFilterRange) {
                                 subjectCount[subject] = (subjectCount[subject] || 0) + 1;
                                 teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
@@ -1833,7 +1806,6 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-
             return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
         function generateTimetable() {
@@ -1844,11 +1816,11 @@
             if (currentViewDay !== 'all') {
                 visibleDays = [currentViewDay];
             }
+            const today = new Date().toDateString();
             let html = '<thead><tr><th class="period-cell">Period</th><th class="time-cell">Time</th>';
             visibleDays.forEach(day => {
                 const d = getDayDate(day, week);
                 const formattedDate = `${d.getDate()} ${d.toLocaleDateString('en-US', { month: 'long' })} ${d.getFullYear()}`;
-                const today = new Date().toDateString();
                 const dayDate = new Date(d).toDateString();
                 const dayName = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
                 let dayHeader = dayName;
@@ -1867,6 +1839,8 @@
                 html += `<tr><td class="period-cell">${period}</td>`;
                 html += `<td class="time-cell">${time}</td>`;
                 visibleDays.forEach(day => {
+                    const dayDate = getDayDate(day, week).toDateString();
+                    const isToday = (dayDate === today);
                     teachers.forEach(teacher => {
                         const data = wd[day]?.[period]?.teachers?.[teacher];
                         let cls = 'subject-cell';
@@ -1881,6 +1855,11 @@
                             } else {
                                 cls += ` ${getSubjectClass(data.subject)}`;
                                 content = `<div class="subject-name">${data.subject}</div>${data.room ? `<div class="room-name">${data.room}</div>` : ''}`;
+                            }
+                        } else {
+                            // 🔹 Room Free solo per oggi
+                            if (isToday && time && period !== 'Form Time' && period !== 'Lunch') {
+                                content = `<div class="room-free-badge">Room Free</div>`;
                             }
                         }
                         const cellData = JSON.stringify({
@@ -1942,44 +1921,6 @@
                 ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
-        }
-        function updateRoomsAvailable() {
-            const now = new Date();
-            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-            if (!days.includes(today)) {
-                document.getElementById('rooms-available-list').innerHTML = '<li>No school today</li>';
-                return;
-            }
-            const week = getCurrentWeek();
-            const dayData = (week === 'A' ? timetableData.weekA : timetableData.weekB)[today];
-            if (!dayData) {
-                document.getElementById('rooms-available-list').innerHTML = '<li>No data</li>';
-                return;
-            }
-            const rooms = ['A1', 'A2'];
-            const result = [];
-            for (const period of periods) {
-                const periodData = dayData[period];
-                if (!periodData || !periodData.time) continue;
-                const subject1 = periodData.teachers?.['Ms K Arakelian']?.subject || '';
-                const room1 = periodData.teachers?.['Ms K Arakelian']?.room || '';
-                const subject2 = periodData.teachers?.['Ms N Jenkins']?.subject || '';
-                const room2 = periodData.teachers?.['Ms N Jenkins']?.room || '';
-                if (['Form Time', 'Lunch', ''].includes(subject1) && ['Form Time', 'Lunch', ''].includes(subject2)) {
-                    continue;
-                }
-                if (!(['Form Time', 'Lunch'].includes(subject1)) && subject1.trim() === '' && room1.trim() === '') {
-                    result.push(`${period} – A1 free`);
-                }
-                if (!(['Form Time', 'Lunch'].includes(subject2)) && subject2.trim() === '' && room2.trim() === '') {
-                    result.push(`${period} – A2 free`);
-                }
-            }
-            if (result.length === 0) {
-                document.getElementById('rooms-available-list').innerHTML = '<li>No free rooms</li>';
-            } else {
-                document.getElementById('rooms-available-list').innerHTML = result.map(r => `<li>${r}</li>`).join('');
-            }
         }
         function updateTeacherBoxes() {
             const now = new Date();
@@ -2395,7 +2336,6 @@
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();
-        updateRoomsAvailable();
         setInterval(() => {
             updateClockPrecise();
             updateCountdownPrecise();
@@ -2403,7 +2343,6 @@
             updateNowContextBar();
             updateDynamicBackgroundAndShadows();
             renderLessonsCountTable();
-            updateRoomsAvailable();
         }, 1000);
         updateClockPrecise();
         updateCountdownPrecise();

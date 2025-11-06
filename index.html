@@ -672,6 +672,25 @@
             0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.95); }
             50% { box-shadow: 0 4px 15px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.95); }
         }
+        .free-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.95);
+            animation: pulse 2s infinite, bounce 1s ease-in-out infinite alternate;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
         .subject-cell {
             padding: 5px 5px 5px 5px;
             background: var(--primary-bg);
@@ -2084,7 +2103,20 @@
                             }
                         } else {
                             if (isToday && time && period !== 'Form Time' && period !== 'Lunch') {
-                                content = `<div class="room-free-badge">Room Free</div>`;
+                                // Calcola se la lezione è in corso o non è ancora iniziata
+                                const [startStr, endStr] = time.split(' - ');
+                                const start = parseTime(startStr);
+                                const end = parseTime(endStr);
+                                if (start && end) {
+                                    const now = new Date();
+                                    const nowMins = now.getHours() * 60 + now.getMinutes();
+                                    const startMins = start.hours * 60 + start.minutes;
+                                    const endMins = end.hours * 60 + end.minutes;
+                                    // Se l'ora attuale è < endMins, mostra il badge
+                                    if (nowMins < endMins) {
+                                        content = `<div class="room-free-badge">Room Free</div><div class="free-badge">Free</div>`;
+                                    }
+                                }
                             }
                         }
                         const cellData = JSON.stringify({

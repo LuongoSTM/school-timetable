@@ -672,25 +672,6 @@
             0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.95); }
             50% { box-shadow: 0 4px 15px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.95); }
         }
-        .free-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            color: white;
-            font-size: 10px;
-            font-weight: 800;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.95);
-            animation: pulse 2s infinite, bounce 1s ease-in-out infinite alternate;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-            background: linear-gradient(135deg, #dc3545, #c82333);
-        }
         .subject-cell {
             padding: 5px 5px 5px 5px;
             background: var(--primary-bg);
@@ -1164,6 +1145,25 @@
             background: var(--header-bg);
             transition: width 0.5s ease;
         }
+        .teacher-stats-toggle {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--header-bg);
+        }
+        .teacher-stats-toggle select {
+            padding: 3px 6px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background: var(--primary-bg);
+            color: var(--text-color);
+            font-size: 12px;
+        }
+        .teacher-stat-row {
+            display: none;
+        }
+        .teacher-stat-row.active {
+            display: flex;
+        }
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -1550,6 +1550,9 @@
                         This Week:
                     </span>
                     <span class="stat-value" id="stat-week">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-week" style="width: 0%;"></div>
+                    </div>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">
@@ -1557,6 +1560,9 @@
                         This Month:
                     </span>
                     <span class="stat-value" id="stat-month">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-month" style="width: 0%;"></div>
+                    </div>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">
@@ -1564,6 +1570,9 @@
                         Until Half Term:
                     </span>
                     <span class="stat-value" id="stat-half-term">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-half-term" style="width: 0%;"></div>
+                    </div>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">
@@ -1571,6 +1580,57 @@
                         Until Year End:
                     </span>
                     <span class="stat-value" id="stat-year-end">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-year-end" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="teacher-stats-toggle">
+                    <label for="teacher-stats-select">Show by Teacher:</label>
+                    <select id="teacher-stats-select">
+                        <option value="">All Teachers</option>
+                        <option value="Ms K Arakelian">Ms K. Arakelian</option>
+                        <option value="Ms N Jenkins">Ms N. Jenkins</option>
+                    </select>
+                </div>
+                <div class="stat-row teacher-stat-row" id="stat-week-teacher">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        This Week:
+                    </span>
+                    <span class="stat-value" id="stat-week-teacher-value">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-week-teacher" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-row teacher-stat-row" id="stat-month-teacher">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 2v4M16 2v4M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>
+                        This Month:
+                    </span>
+                    <span class="stat-value" id="stat-month-teacher-value">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-month-teacher" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-row teacher-stat-row" id="stat-half-term-teacher">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        Until Half Term:
+                    </span>
+                    <span class="stat-value" id="stat-half-term-teacher-value">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-half-term-teacher" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-row teacher-stat-row" id="stat-year-end-teacher">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Until Year End:
+                    </span>
+                    <span class="stat-value" id="stat-year-end-teacher-value">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-year-end-teacher" style="width: 0%;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1708,6 +1768,7 @@
         let currentViewDay = 'all';
         let lessonsFilterMode = 'all';
         let statisticsVisible = false;
+        let currentTeacherFilter = '';
         const weekAStartDate = new Date(2025, 8, 1);
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
@@ -1968,7 +2029,7 @@
             }
             return count;
         }
-        function countLessonsUntilTerm(filterMode = 'all') {
+        function countLessonsUntilTerm(filterMode = 'all', teacherFilter = '') {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const currentTerm = getNextTerm();
@@ -2016,6 +2077,7 @@
                         for (const teacher of teachers) {
                             const subject = entry.teachers[teacher]?.subject;
                             if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
+                            if (teacherFilter && teacherFilter !== teacher) continue;
                             let includeLesson = false;
                             if (isToday) {
                                 const timeRange = entry.time;
@@ -2614,8 +2676,53 @@
             document.getElementById('stat-month').textContent = monthCount;
             document.getElementById('stat-half-term').textContent = halfTermTotal;
             document.getElementById('stat-year-end').textContent = yearEndTotal;
+            // Update progress bars
+            // Assuming max possible lessons per week is 14 (7 periods * 2 teachers)
+            const maxWeek = 14;
+            const progressWeek = (weekCount / maxWeek) * 100;
+            document.getElementById('progress-week').style.width = `${Math.min(100, progressWeek)}%`;
+            // Assuming max possible lessons per month is 300
+            const maxMonth = 300;
+            const progressMonth = (monthCount / maxMonth) * 100;
+            document.getElementById('progress-month').style.width = `${Math.min(100, progressMonth)}%`;
+            // Assuming max possible lessons until half term is 1000
+            const maxHalfTerm = 1000;
+            const progressHalfTerm = (halfTermTotal / maxHalfTerm) * 100;
+            document.getElementById('progress-half-term').style.width = `${Math.min(100, progressHalfTerm)}%`;
+            // Assuming max possible lessons until year end is 2000
+            const maxYearEnd = 2000;
+            const progressYearEnd = (yearEndTotal / maxYearEnd) * 100;
+            document.getElementById('progress-year-end').style.width = `${Math.min(100, progressYearEnd)}%`;
+            // Update teacher-specific stats if selected
+            if (currentTeacherFilter) {
+                const { counts: tCounts, byTeacher: tByTeacher, todayLessons: tTodayLessons } = countLessonsUntilTerm('all', currentTeacherFilter);
+                const tWeekCount = countLessonsInWeek(weekType, currentTeacherFilter);
+                const tMonthCount = countLessonsInMonth(now.getMonth(), now.getFullYear(), currentTeacherFilter);
+                const tHalfTermTotal = Object.values(tCounts).reduce((a, b) => a + b, 0);
+                const tYearEndTotal = countLessonsUntilYearEnd(currentTeacherFilter);
+                document.getElementById('stat-week-teacher-value').textContent = tWeekCount;
+                document.getElementById('stat-month-teacher-value').textContent = tMonthCount;
+                document.getElementById('stat-half-term-teacher-value').textContent = tHalfTermTotal;
+                document.getElementById('stat-year-end-teacher-value').textContent = tYearEndTotal;
+                document.getElementById('progress-week-teacher').style.width = `${Math.min(100, (tWeekCount / (maxWeek/2)) * 100)}%`;
+                document.getElementById('progress-month-teacher').style.width = `${Math.min(100, (tMonthCount / (maxMonth/2)) * 100)}%`;
+                document.getElementById('progress-half-term-teacher').style.width = `${Math.min(100, (tHalfTermTotal / (maxHalfTerm/2)) * 100)}%`;
+                document.getElementById('progress-year-end-teacher').style.width = `${Math.min(100, (tYearEndTotal / (maxYearEnd/2)) * 100)}%`;
+            }
+            // Toggle teacher stats visibility
+            const teacherRows = document.querySelectorAll('.teacher-stat-row');
+            if (currentTeacherFilter) {
+                teacherRows.forEach(row => row.classList.add('active'));
+            } else {
+                teacherRows.forEach(row => row.classList.remove('active'));
+            }
         }
         function handleRefreshStats() {
+            updateStatisticsValues();
+        }
+        function handleTeacherFilterChange() {
+            const select = document.getElementById('teacher-stats-select');
+            currentTeacherFilter = select.value;
             updateStatisticsValues();
         }
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
@@ -2632,6 +2739,7 @@
             toggleStatistics();
         });
         document.getElementById('refresh-stats-btn').addEventListener('click', handleRefreshStats);
+        document.getElementById('teacher-stats-select').addEventListener('change', handleTeacherFilterChange);
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();

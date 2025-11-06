@@ -775,6 +775,11 @@
             color: var(--nav-active-text);
             transform: translateY(-2px) translateZ(8px);
         }
+        /* NEW: Style for active Statistics nav item */
+        .nav-item.stats-active {
+            background-color: var(--fullscreen-active-bg) !important;
+            color: white !important;
+        }
         .nav-controls {
             display: flex;
             align-items: center;
@@ -1145,10 +1150,20 @@
             background: var(--header-bg);
             transition: width 0.5s ease;
         }
+        /* NEW: Teacher stats toggle styling */
         .teacher-stats-toggle {
-            margin-top: 10px;
+            margin-top: 8px; /* Spazio ridotto sopra */
+            padding: 8px 0; /* Spazio intorno */
+            border-top: 1px solid var(--border-color); /* Separatore */
             font-size: 12px;
             color: var(--header-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .teacher-stats-toggle label {
+            font-weight: bold;
+            margin-bottom: 2px;
         }
         .teacher-stats-toggle select {
             padding: 3px 6px;
@@ -1157,6 +1172,7 @@
             background: var(--primary-bg);
             color: var(--text-color);
             font-size: 12px;
+            width: 100%; /* Prende tutta la larghezza */
         }
         .teacher-stat-row {
             display: none;
@@ -1273,6 +1289,20 @@
             cursor: pointer;
         }
         #day-filter-select:hover {
+            background: var(--header-bg);
+            color: var(--header-text);
+        }
+        #week-selector {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--nav-controls-bg);
+            color: var(--text-color);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #week-selector:hover {
             background: var(--header-bg);
             color: var(--header-text);
         }
@@ -1428,7 +1458,8 @@
                     </div>
                     <span>Exam Clock</span>
                 </a>
-                <a href="data.html" class="nav-item">
+                <!-- NEW: Statistics Nav Item with Icon -->
+                <a href="#" class="nav-item" id="stats-nav">
                     <div class="icon-wrapper">
                         <svg class="nav-icon data-icon" viewBox="0 0 100 100">
                             <rect class="bar bar-1" x="25" y="70" width="6" height="0" rx="2"/>
@@ -1439,10 +1470,8 @@
                             <path d="M20,80 L20,30" stroke-width="4" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <span>Data</span>
+                    <span>Statistics</span>
                 </a>
-                <!-- NEW: Statistics Nav Item -->
-                <a href="#" class="nav-item" id="stats-nav">Statistics</a>
             </div>
             <div class="nav-controls">
                 <select id="day-filter-select">
@@ -1453,9 +1482,12 @@
                     <option value="THURSDAY">Thursday</option>
                     <option value="FRIDAY">Friday</option>
                 </select>
-                <button class="control-btn" data-week="A">Week A</button>
-                <button class="control-btn" data-week="B">Week B</button>
-                <button class="control-btn active" data-week="auto">Automatic</button>
+                <!-- NEW: Week Selector Dropdown -->
+                <select id="week-selector">
+                    <option value="auto">Automatic</option>
+                    <option value="A">Week A</option>
+                    <option value="B">Week B</option>
+                </select>
                 <button id="fullscreen-btn" class="fullscreen-btn">
                     <span>⛶</span>
                     <span>Full Screen</span>
@@ -1544,6 +1576,15 @@
                     Lesson Statistics
                     <button id="refresh-stats-btn" class="refresh-stats-btn" title="Refresh Stats">🔄</button>
                 </div>
+                <!-- NEW: Teacher filter moved here -->
+                <div class="teacher-stats-toggle">
+                    <label for="teacher-stats-select">Show by Teacher:</label>
+                    <select id="teacher-stats-select">
+                        <option value="">All Teachers</option>
+                        <option value="Ms K Arakelian">Ms K. Arakelian</option>
+                        <option value="Ms N Jenkins">Ms N. Jenkins</option>
+                    </select>
+                </div>
                 <div class="stat-row">
                     <span class="stat-label">
                         <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -1583,14 +1624,6 @@
                     <div class="mini-progress-bar">
                         <div class="mini-progress-fill" id="progress-year-end" style="width: 0%;"></div>
                     </div>
-                </div>
-                <div class="teacher-stats-toggle">
-                    <label for="teacher-stats-select">Show by Teacher:</label>
-                    <select id="teacher-stats-select">
-                        <option value="">All Teachers</option>
-                        <option value="Ms K Arakelian">Ms K. Arakelian</option>
-                        <option value="Ms N Jenkins">Ms N. Jenkins</option>
-                    </select>
                 </div>
                 <div class="stat-row teacher-stat-row" id="stat-week-teacher">
                     <span class="stat-label">
@@ -1635,7 +1668,7 @@
             </div>
         </div>
     </div>
-    <div class="version-badge" id="version-badge">ver.3.1105.01</div>
+    <div class="version-badge" id="version-badge">ver.3.1107.01</div>
     <script>
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
@@ -1926,9 +1959,9 @@
             for (const term of schoolTerms) {
                 const termStart = new Date(term.startDate);
                 const termEnd = new Date(term.endDate);
-                const termMonday = new Date(termStart);
-                termMonday.setDate(termStart.getDate() - (termStart.getDay() === 0 ? 6 : termStart.getDay() - 1));
-                if (monday >= termMonday && monday <= termEnd) {
+                const termMon = new Date(termStart);
+                termMon.setDate(termStart.getDate() - (termStart.getDay() === 0 ? 6 : termStart.getDay() - 1));
+                if (monday >= termMon && monday <= termEnd) {
                     return null;
                 }
             }
@@ -2201,7 +2234,7 @@
             table.innerHTML = html;
         }
         function renderLessonsCountTable() {
-            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode);
+            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode, currentTeacherFilter); // Passa il filtro insegnante
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
                 const aNum = extractClassNumber(a);
                 const bNum = extractClassNumber(b);
@@ -2210,15 +2243,9 @@
             });
             const tbody = document.getElementById('lessons-count-tbody');
             tbody.innerHTML = '';
-            const arakelianTotal = {};
-            const jenkinsTotal = {};
             for (const subject of sortedSubjects) {
-                arakelianTotal[subject] = byTeacher['Ms K Arakelian'][subject] || 0;
-                jenkinsTotal[subject] = byTeacher['Ms N Jenkins'][subject] || 0;
-            }
-            for (const subject of sortedSubjects) {
-                const aCount = arakelianTotal[subject];
-                const jCount = jenkinsTotal[subject];
+                const aCount = byTeacher['Ms K Arakelian'][subject] || 0;
+                const jCount = byTeacher['Ms N Jenkins'][subject] || 0;
                 const total = aCount + jCount;
                 const className = total <= 2 ? 'low-count' : '';
                 const tr = document.createElement('tr');
@@ -2232,9 +2259,23 @@
                 `;
                 tbody.appendChild(tr);
             }
-            const totalA = Object.values(arakelianTotal).reduce((sum, n) => sum + n, 0);
-            const totalJ = Object.values(jenkinsTotal).reduce((sum, n) => sum + n, 0);
-            const grandTotal = totalA + totalJ;
+            // Calcola totali solo se non si sta filtrando per insegnante
+            let totalA = 0, totalJ = 0, grandTotal = 0;
+            if (!currentTeacherFilter) {
+                totalA = Object.values(byTeacher['Ms K Arakelian']).reduce((sum, n) => sum + n, 0);
+                totalJ = Object.values(byTeacher['Ms N Jenkins']).reduce((sum, n) => sum + n, 0);
+                grandTotal = totalA + totalJ;
+            } else {
+                // Se si filtra per insegnante, mostra 0 per l'altro e il totale filtrato
+                if (currentTeacherFilter === 'Ms K Arakelian') {
+                    totalA = Object.values(byTeacher['Ms K Arakelian']).reduce((sum, n) => sum + n, 0);
+                    totalJ = 0;
+                } else if (currentTeacherFilter === 'Ms N Jenkins') {
+                    totalA = 0;
+                    totalJ = Object.values(byTeacher['Ms N Jenkins']).reduce((sum, n) => sum + n, 0);
+                }
+                grandTotal = totalA + totalJ;
+            }
             document.getElementById('arakelian-total').textContent = totalA;
             document.getElementById('jenkins-total').textContent = totalJ;
             document.getElementById('lessons-total-count').textContent = grandTotal;
@@ -2599,13 +2640,8 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-        function updateWeekButtons() {
-            document.querySelectorAll('.control-btn').forEach(btn => {
-                btn.classList.toggle('active', 
-                    (currentMode === 'auto' && btn.dataset.week === 'auto') ||
-                    (currentMode === 'manual' && btn.dataset.week === currentWeek)
-                );
-            });
+        function updateWeekSelector() {
+            document.getElementById('week-selector').value = currentMode === 'auto' ? 'auto' : currentWeek;
         }
         function toggleDarkMode() {
             const body = document.body;
@@ -2629,17 +2665,17 @@
             generateTimetable();
             renderLessonsCountTable();
         }
-        function handleWeekControl(e) {
-            const w = e.target.dataset.week;
-            if (w === 'auto') {
+        function handleWeekSelector(e) {
+            const val = e.target.value;
+            if (val === 'auto') {
                 currentMode = 'auto';
             } else {
                 currentMode = 'manual';
-                currentWeek = w;
+                currentWeek = val;
             }
             statisticsVisible = false;
             document.getElementById('statistics-box').style.display = 'none';
-            updateWeekButtons();
+            updateWeekSelector();
             generateTimetable();
             updateTeacherBoxes();
             renderLessonsCountTable();
@@ -2660,8 +2696,12 @@
                 currentViewDay = 'all';
                 document.getElementById('day-filter-select').value = 'all';
                 document.getElementById('statistics-box').style.display = 'block';
+                // NEW: Update nav item state
+                document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
             } else {
                 document.getElementById('statistics-box').style.display = 'none';
+                // NEW: Update nav item state
+                document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
             }
             generateTimetable();
             updateStatisticsValues();
@@ -2713,12 +2753,11 @@
         }
         function handleTeacherFilterChange() {
             currentTeacherFilter = document.getElementById('teacher-stats-select').value;
+            renderLessonsCountTable(); // Aggiorna anche la tabella quando cambia il filtro insegnante
             updateStatisticsValues();
         }
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
-        document.querySelectorAll('.control-btn').forEach(btn => {
-            btn.addEventListener('click', handleWeekControl);
-        });
+        document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', handleLessonsFilter);
         });
@@ -2733,6 +2772,10 @@
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();
+        // NEW: Update interval logic
+        let lastLessonsUpdate = Date.now();
+        const lessonsUpdateInterval = 30 * 60 * 1000; // 30 minuti in millisecondi
+
         setInterval(() => {
             updateClockPrecise();
             updateCountdownPrecise();
@@ -2741,13 +2784,27 @@
             updateDynamicBackgroundAndShadows();
             if (statisticsVisible) updateStatisticsValues();
         }, 1000);
+
+        setInterval(() => {
+            if (statisticsVisible) {
+                const now = Date.now();
+                if (now - lastLessonsUpdate >= lessonsUpdateInterval) {
+                    renderLessonsCountTable();
+                    lastLessonsUpdate = now;
+                }
+            } else {
+                // Se non è attiva la vista statistiche, aggiorna ogni secondo come prima
+                renderLessonsCountTable();
+            }
+        }, 1000); // Controlla ogni secondo se aggiornare la tabella
+
         updateClockPrecise();
         updateCountdownPrecise();
         updateNowContextBar();
         updateDynamicBackgroundAndShadows();
         renderLessonsCountTable();
         const today = new Date().getDate().toString().padStart(2, '0');
-        document.getElementById('version-badge').textContent = `ver.3.1105.01`;
+        document.getElementById('version-badge').textContent = `ver.3.1107.01`;
     </script>
 </body>
 </html>

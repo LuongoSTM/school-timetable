@@ -298,7 +298,6 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
-
         /* 🔹 Nuovo badge "Room Free" - solo per oggi, verde scuro */
         .room-free-badge {
             display: inline-block;
@@ -315,7 +314,6 @@
             transform: translate(-50%, -50%);
             z-index: 5;
         }
-
         .countdown-title-row {
             display: flex;
             align-items: center;
@@ -964,7 +962,6 @@
             border-radius: 5px;
             border: 1px solid var(--border-color);
         }
-
         /* 🔹 Altezza box Lessons Until Half Term = 500px */
         .lessons-count-box {
             background: var(--secondary-bg);
@@ -1258,19 +1255,19 @@
                     <!-- 🔸 Rooms Available RIMOSSO -->
                     <div class="countdown-box">
                         <div class="countdown-value" id="countdown-days">000</div>
-                        <div class="countdown-label">Days</div>
+                        <div class="clock-label">Days</div>
                     </div>
                     <div class="countdown-box">
                         <div class="countdown-value" id="countdown-hours">00</div>
-                        <div class="countdown-label">Hours</div>
+                        <div class="clock-label">Hours</div>
                     </div>
                     <div class="countdown-box">
                         <div class="countdown-value" id="countdown-minutes">00</div>
-                        <div class="countdown-label">Minutes</div>
+                        <div class="clock-label">Minutes</div>
                     </div>
                     <div class="countdown-box">
                         <div class="countdown-value" id="countdown-seconds">00</div>
-                        <div class="countdown-label">Seconds</div>
+                        <div class="clock-label">Seconds</div>
                     </div>
                 </div>
                 <div class="countdown-lower-row">
@@ -1724,47 +1721,102 @@
             fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
             return fridayBefore;
         }
+
+        // NEW: getWeekTypeForDate
+        function getWeekTypeForDate(date) {
+            const searchDate = new Date(date);
+            // Adjust to Monday of the week
+            const day = searchDate.getDay();
+            const monday = new Date(searchDate);
+            monday.setDate(searchDate.getDate() - (day === 0 ? 6 : day - 1));
+
+            // Check if this week is a half-term week
+            for (const term of schoolTerms) {
+                const termStart = new Date(term.startDate);
+                const termEnd = new Date(term.endDate);
+                const termMonday = new Date(termStart);
+                termMonday.setDate(termStart.getDate() - (termStart.getDay() === 0 ? 6 : termStart.getDay() - 1));
+                if (monday >= termMonday && monday <= termEnd) {
+                    return null; // This is a half-term week → skip
+                }
+            }
+
+            // Find reference point
+            let refMonday = new Date(2025, 8, 1); // 1 Sep 2025 = Monday
+            let weekCount = 0;
+
+            while (refMonday <= monday) {
+                // Skip half-term weeks
+                let skip = false;
+                for (const term of schoolTerms) {
+                    const termStart = new Date(term.startDate);
+                    const termEnd = new Date(term.endDate);
+                    const termMon = new Date(termStart);
+                    termMon.setDate(termStart.getDate() - (termStart.getDay() === 0 ? 6 : termStart.getDay() - 1));
+                    if (refMonday >= termMon && refMonday <= termEnd) {
+                        skip = true;
+                        break;
+                    }
+                }
+                if (!skip) {
+                    if (refMonday < monday) weekCount++;
+                }
+                const next = new Date(refMonday);
+                next.setDate(refMonday.getDate() + 7);
+                refMonday = next;
+            }
+
+            return weekCount % 2 === 0 ? 'A' : 'B';
+        }
+
         function countLessonsUntilTerm(filterMode = 'all') {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const currentTerm = getNextTerm();
             if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
+
             const cutOffDate = getCutOffDate(currentTerm.startDate);
             const thisWeekStart = new Date(todayStart);
             const dayOfWeek = thisWeekStart.getDay();
             thisWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
             const thisWeekEnd = new Date(thisWeekStart);
             thisWeekEnd.setDate(thisWeekStart.getDate() + 4);
+
             const subjectCount = {};
             const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
             const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
+
             let currentDate = new Date(todayStart);
-            if (filterMode === 'all') {
-            } else if (filterMode === 'week') {
+            if (filterMode === 'week') {
                 currentDate = new Date(thisWeekStart);
             } else if (filterMode === 'day') {
                 currentDate = new Date(todayStart);
             }
+
             const endDate = filterMode === 'all' ? cutOffDate :
                            filterMode === 'week' ? thisWeekEnd :
                            filterMode === 'day' ? todayStart : cutOffDate;
+
             while (currentDate <= endDate) {
-                const currentDateStr = currentDate.toDateString();
-                const isToday = currentDateStr === todayStart.toDateString();
-                if (!isToday && currentDate < todayStart) {
+                const isToday = currentDate.toDateString() === todayStart.toDateString();
+                if (currentDate < todayStart) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
+
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (!['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
-                const weekRef = new Date(2025, 9, 31);
-                const diffDays = currentDate.getTime() - weekRef.getTime();
-                const diffWeeks = Math.floor(diffDays / (1000 * 60 * 60 * 24 * 7));
-                const isWeekAForDate = diffWeeks >= 0 ? (diffWeeks % 2 === 0) : false;
-                const weekData = isWeekAForDate ? timetableData.weekA : timetableData.weekB;
+
+                const weekType = getWeekTypeForDate(currentDate);
+                if (!weekType) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    continue; // skip half-term week
+                }
+
+                const weekData = weekType === 'A' ? timetableData.weekA : timetableData.weekB;
                 const dayData = weekData[dayName];
                 if (dayData) {
                     for (const period in dayData) {
@@ -1773,6 +1825,7 @@
                         for (const teacher of teachers) {
                             const subject = entry.teachers[teacher]?.subject;
                             if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
+
                             let includeLesson = false;
                             if (isToday) {
                                 const timeRange = entry.time;
@@ -1789,14 +1842,14 @@
                                     }
                                 }
                             } else {
-                                if (currentDate > todayStart) {
-                                    includeLesson = true;
-                                }
+                                includeLesson = true;
                             }
+
                             const inFilterRange = 
                                 (filterMode === 'all') ||
                                 (filterMode === 'week' && currentDate >= thisWeekStart && currentDate <= thisWeekEnd) ||
                                 (filterMode === 'day' && isToday);
+
                             if (includeLesson && inFilterRange) {
                                 subjectCount[subject] = (subjectCount[subject] || 0) + 1;
                                 teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
@@ -1806,8 +1859,10 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
+
             return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
+
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;

@@ -171,13 +171,21 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.9);
+            /* NEW: Apply blue border style */
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
         }
         [data-theme="dark"] .clock-box,
         [data-theme="dark"] .countdown-box,
         [data-theme="dark"] .term-info-box {
             background: rgba(45, 45, 45, 0.9);
         }
-        .clock-box::before, .countdown-box::before {
+        .clock-box::before, .countdown-box::before, .term-info-box::before {
             content: '';
             position: absolute;
             top: 0;
@@ -188,7 +196,7 @@
                 rgba(255,255,255,0.1) 0%, 
                 transparent 50%,
                 rgba(0,0,0,0.05) 100%);
-            border-radius: 8px;
+            border-radius: 8px; /* NEW: Match border-radius */
             pointer-events: none;
         }
         .clock-box:hover, .countdown-box:hover {
@@ -196,12 +204,14 @@
         }
         .clock-box, .countdown-box {
             background: var(--countdown-bg);
-            border: 1px solid var(--countdown-border);
+            /* REMOVED: original border */
+            border: none; /* NEW: Remove original border */
             border-radius: 8px;
             padding: 12px 10px;
             text-align: center;
             min-width: 70px;
-            box-shadow: 0 2px 4px var(--card-shadow);
+            /* REMOVED: original box-shadow */
+            box-shadow: none; /* NEW: Remove original shadow */
         }
         .clock-value, .countdown-value {
             font-size: 32px;
@@ -338,14 +348,14 @@
         }
         .term-info-box {
             background: var(--countdown-bg);
-            border: 1px solid var(--countdown-border);
+            /* REMOVED: original border */
+            border: none; /* NEW: Remove original border */
             border-radius: 12px;
             padding: 12px 16px;
             text-align: center;
             min-width: 200px;
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.1),
-                inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            /* REMOVED: original box-shadow */
+            box-shadow: none; /* NEW: Remove original shadow */
             font-size: 16px;
             font-weight: bold;
             color: var(--countdown-text);
@@ -922,8 +932,14 @@
             -webkit-backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.9);
             font-size: 13px;
-            display: flex; /* NEW: Use flex for internal layout */
-            flex-direction: column; /* NEW: Stack items vertically */
+            /* NEW: Apply blue border style */
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
         }
         [data-theme="dark"] .teacher-box {
             background: rgba(45, 45, 45, 0.9);
@@ -948,39 +964,18 @@
                 0 10px 30px rgba(0, 0, 0, 0.15),
                 0 6px 20px rgba(0, 0, 0, 0.1);
         }
-        .teacher-header {
-            display: flex; /* NEW: Flex for icon and title */
-            align-items: center;
-            gap: 8px; /* NEW: Space between icon and title */
-            margin-bottom: 8px;
-        }
         .teacher-header h3 {
             font-size: 15px;
             font-weight: bold;
             color: var(--header-bg);
-            margin: 0; /* NEW: Remove default margin */
-        }
-        .teacher-icon {
-            width: 20px; /* NEW: Set icon size */
-            height: 20px;
-            vertical-align: middle;
+            margin-bottom: 8px;
         }
         .lesson-info {
             margin-bottom: 6px;
-            display: flex; /* NEW: Flex for label and details */
-            justify-content: space-between; /* NEW: Space label and details apart */
-            align-items: center; /* NEW: Align vertically */
         }
         .lesson-label {
             font-weight: bold;
             font-size: 11px;
-            display: flex; /* NEW: Flex for label icon */
-            align-items: center; /* NEW: Align icon with text */
-            gap: 4px; /* NEW: Space between icon and text */
-        }
-        .lesson-label svg {
-            width: 12px; /* NEW: Set icon size */
-            height: 12px;
         }
         .lesson-details {
             font-size: 11px;
@@ -988,22 +983,6 @@
             background: var(--primary-bg);
             border-radius: 5px;
             border: 1px solid var(--border-color);
-            flex-grow: 1; /* NEW: Allow details to grow */
-            text-align: right; /* NEW: Align text to right */
-            margin-left: 8px; /* NEW: Space from label */
-        }
-        .teacher-live-indicator {
-            position: absolute; /* NEW: Position badge absolutely */
-            top: 8px;
-            right: 8px;
-            background-color: #dc3545; /* NEW: Red background */
-            color: white; /* NEW: White text */
-            font-size: 10px; /* NEW: Small font */
-            font-weight: bold; /* NEW: Bold text */
-            padding: 2px 5px; /* NEW: Small padding */
-            border-radius: 10px; /* NEW: Pill shape */
-            display: none; /* NEW: Hidden by default */
-            z-index: 10; /* NEW: Ensure it's on top */
         }
         .lessons-count-box {
             background: var(--secondary-bg);
@@ -1017,22 +996,44 @@
             display: flex;
             flex-direction: column;
             height: 500px; /* Altezza fissa */
+            /* NEW: Apply red border style */
+            border: 1px solid #dc3545;
+            border-left: 4px solid #dc3545;
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
         }
         [data-theme="dark"] .lessons-count-box {
             background: rgba(45, 45, 45, 0.9);
+        }
+        .lessons-count-box::before { /* NEW: Add ::before for red box */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 10px;
+            pointer-events: none;
         }
         .lessons-count-header {
             text-align: center;
             margin-bottom: 6px;
             font-size: 15px;
             font-weight: bold;
-            color: var(--header-bg);
+            color: #dc3545; /* NEW: Red header text */
         }
         #term-end-date {
             display: block;
             font-size: 13px;
             margin-bottom: 8px;
-            color: var(--header-bg);
+            color: #dc3545; /* NEW: Red text */
             text-align: center;
         }
         .lessons-filter-controls {
@@ -1052,9 +1053,9 @@
             transition: all 0.2s ease;
         }
         .filter-btn.active {
-            background: var(--header-bg);
+            background: #dc3545; /* NEW: Red active button */
             color: white;
-            border-color: var(--header-bg);
+            border-color: #dc3545; /* NEW: Red active border */
         }
         .lessons-count-table-wrapper {
             display: flex;
@@ -1063,8 +1064,8 @@
             overflow: hidden;
         }
         .lessons-count-table-header {
-            background: var(--header-bg);
-            color: var(--header-text);
+            background: #dc3545; /* NEW: Red header */
+            color: white; /* NEW: White text for red header */
             font-size: 12px;
         }
         .lessons-count-table-header th {
@@ -1584,59 +1585,29 @@
             <div class="teachers-sidebar">
                 <div class="teacher-box">
                     <div class="teacher-header">
-                        <svg class="teacher-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
                         <h3>Ms K. Arakelian</h3>
                     </div>
                     <div class="lesson-info">
-                        <div class="lesson-label">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                            Current:
-                        </div>
+                        <div class="lesson-label">Current:</div>
                         <div class="lesson-details" id="current-arakelian">No Lesson Now</div>
                     </div>
                     <div class="lesson-info">
-                        <div class="lesson-label">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M23 4a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 4z"/>
-                            </svg>
-                            Next:
-                        </div>
+                        <div class="lesson-label">Next:</div>
                         <div class="lesson-details" id="next-arakelian">No Lesson Next</div>
                     </div>
-                    <div class="teacher-live-indicator" id="live-arakelian">LIVE</div>
                 </div>
                 <div class="teacher-box">
                     <div class="teacher-header">
-                        <svg class="teacher-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
                         <h3>Ms N. Jenkins</h3>
                     </div>
                     <div class="lesson-info">
-                        <div class="lesson-label">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                            Current:
-                        </div>
+                        <div class="lesson-label">Current:</div>
                         <div class="lesson-details" id="current-jenkins">No Lesson Now</div>
                     </div>
                     <div class="lesson-info">
-                        <div class="lesson-label">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M23 4a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 4z"/>
-                            </svg>
-                            Next:
-                        </div>
+                        <div class="lesson-label">Next:</div>
                         <div class="lesson-details" id="next-jenkins">No Lesson Next</div>
                     </div>
-                    <div class="teacher-live-indicator" id="live-jenkins">LIVE</div>
                 </div>
             </div>
             <!-- NEW: Statistics Box -->
@@ -2342,34 +2313,8 @@
                         }
                     });
                 }
-
-                // NEW: Update current lesson color based on status
-                const currentElement = document.getElementById(`current-${key}`);
-                const nextElement = document.getElementById(`next-${key}`);
-                const liveIndicatorElement = document.getElementById(`live-${key}`);
-
-                // Reset color
-                currentElement.style.color = '';
-
-                if (current.includes('No Lesson Now')) {
-                    currentElement.style.color = '#6c757d'; // Grey
-                } else if (current.includes('Lunch')) {
-                    currentElement.style.color = '#28a745'; // Green
-                } else if (current.includes('Break') || current.includes('Form Time')) {
-                    currentElement.style.color = '#ffc107'; // Yellow/Orange
-                } else {
-                    currentElement.style.color = '#dc3545'; // Red for active lesson
-                }
-
-                currentElement.textContent = current;
-                nextElement.textContent = next;
-
-                // NEW: Show/hide LIVE indicator based on current lesson
-                if (currentIdx >= 0) {
-                    liveIndicatorElement.style.display = 'block';
-                } else {
-                    liveIndicatorElement.style.display = 'none';
-                }
+                document.getElementById(`current-${key}`).textContent = current;
+                document.getElementById(`next-${key}`).textContent = next;
             });
         }
         function updateClockPrecise() {

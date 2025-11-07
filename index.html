@@ -1150,11 +1150,11 @@
             background: var(--header-bg);
             transition: width 0.5s ease;
         }
-        /* NEW: Teacher stats toggle styling */
-        .teacher-stats-toggle {
-            margin-top: 8px; /* Spazio ridotto sopra */
-            padding: 8px 0; /* Spazio intorno */
-            border-top: 1px solid var(--border-color); /* Separatore */
+        /* NEW: Teacher stats toggle styling - REMOVED */
+        /* .teacher-stats-toggle {
+            margin-top: 8px; 
+            padding: 8px 0; 
+            border-top: 1px solid var(--border-color); 
             font-size: 12px;
             color: var(--header-bg);
             display: flex;
@@ -1172,14 +1172,14 @@
             background: var(--primary-bg);
             color: var(--text-color);
             font-size: 12px;
-            width: 100%; /* Prende tutta la larghezza */
+            width: 100%; 
         }
         .teacher-stat-row {
             display: none;
         }
         .teacher-stat-row.active {
             display: flex;
-        }
+        } */
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -1576,15 +1576,7 @@
                     Lesson Statistics
                     <button id="refresh-stats-btn" class="refresh-stats-btn" title="Refresh Stats">🔄</button>
                 </div>
-                <!-- NEW: Teacher filter moved here -->
-                <div class="teacher-stats-toggle">
-                    <label for="teacher-stats-select">Show by Teacher:</label>
-                    <select id="teacher-stats-select">
-                        <option value="">All Teachers</option>
-                        <option value="Ms K Arakelian">Ms K. Arakelian</option>
-                        <option value="Ms N Jenkins">Ms N. Jenkins</option>
-                    </select>
-                </div>
+                <!-- NEW: Teacher filter removed -->
                 <div class="stat-row">
                     <span class="stat-label">
                         <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -1625,46 +1617,7 @@
                         <div class="mini-progress-fill" id="progress-year-end" style="width: 0%;"></div>
                     </div>
                 </div>
-                <div class="stat-row teacher-stat-row" id="stat-week-teacher">
-                    <span class="stat-label">
-                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        This Week (Teacher):
-                    </span>
-                    <span class="stat-value" id="stat-week-teacher-value">0</span>
-                    <div class="mini-progress-bar">
-                        <div class="mini-progress-fill" id="progress-week-teacher" style="width: 0%;"></div>
-                    </div>
-                </div>
-                <div class="stat-row teacher-stat-row" id="stat-month-teacher">
-                    <span class="stat-label">
-                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 2v4M16 2v4M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>
-                        This Month (Teacher):
-                    </span>
-                    <span class="stat-value" id="stat-month-teacher-value">0</span>
-                    <div class="mini-progress-bar">
-                        <div class="mini-progress-fill" id="progress-month-teacher" style="width: 0%;"></div>
-                    </div>
-                </div>
-                <div class="stat-row teacher-stat-row" id="stat-half-term-teacher">
-                    <span class="stat-label">
-                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        Until Half Term (Teacher):
-                    </span>
-                    <span class="stat-value" id="stat-half-term-teacher-value">0</span>
-                    <div class="mini-progress-bar">
-                        <div class="mini-progress-fill" id="progress-half-term-teacher" style="width: 0%;"></div>
-                    </div>
-                </div>
-                <div class="stat-row teacher-stat-row" id="stat-year-end-teacher">
-                    <span class="stat-label">
-                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        Until Year End (Teacher):
-                    </span>
-                    <span class="stat-value" id="stat-year-end-teacher-value">0</span>
-                    <div class="mini-progress-bar">
-                        <div class="mini-progress-fill" id="progress-year-end-teacher" style="width: 0%;"></div>
-                    </div>
-                </div>
+                <!-- NEW: Teacher-specific rows removed -->
             </div>
         </div>
     </div>
@@ -1801,7 +1754,7 @@
         let currentViewDay = 'all';
         let lessonsFilterMode = 'all';
         let statisticsVisible = false;
-        let currentTeacherFilter = '';
+        // currentTeacherFilter removed
         const weekAStartDate = new Date(2025, 8, 1);
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
@@ -1988,7 +1941,7 @@
             }
             return weekCount % 2 === 0 ? 'A' : 'B';
         }
-        function countLessonsInWeek(weekType, teacherFilter = '') {
+        function countLessonsInWeek(weekType) { // Removed teacherFilter parameter
             const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
             let count = 0;
             for (const day of days) {
@@ -1997,7 +1950,6 @@
                     const entry = dayData[period];
                     if (!entry || !entry.teachers) continue;
                     for (const teacher of teachers) {
-                        if (teacherFilter && teacherFilter !== teacher) continue;
                         const subject = entry.teachers[teacher]?.subject;
                         if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
                             count++;
@@ -2007,7 +1959,7 @@
             }
             return count;
         }
-        function countLessonsInMonth(month, year, teacherFilter = '') {
+        function countLessonsInMonth(month, year) { // Removed teacherFilter parameter
             const now = new Date();
             let count = 0;
             let currentDate = new Date(year, month, 1);
@@ -2023,7 +1975,6 @@
                             const entry = dayData[period];
                             if (!entry || !entry.teachers) continue;
                             for (const teacher of teachers) {
-                                if (teacherFilter && teacherFilter !== teacher) continue;
                                 const subject = entry.teachers[teacher]?.subject;
                                 if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
                                     count++;
@@ -2036,7 +1987,7 @@
             }
             return count;
         }
-        function countLessonsUntilYearEnd(teacherFilter = '') {
+        function countLessonsUntilYearEnd() { // Removed teacherFilter parameter
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             let count = 0;
@@ -2052,7 +2003,6 @@
                             const entry = dayData[period];
                             if (!entry || !entry.teachers) continue;
                             for (const teacher of teachers) {
-                                if (teacherFilter && teacherFilter !== teacher) continue;
                                 const subject = entry.teachers[teacher]?.subject;
                                 if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
                                     count++;
@@ -2065,7 +2015,7 @@
             }
             return count;
         }
-        function countLessonsUntilTerm(filterMode = 'all', teacherFilter = '') {
+        function countLessonsUntilTerm(filterMode = 'all') { // Removed teacherFilter parameter
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const currentTerm = getNextTerm();
@@ -2111,7 +2061,6 @@
                         const entry = dayData[period];
                         if (!entry || !entry.teachers) continue;
                         for (const teacher of teachers) {
-                            if (teacherFilter && teacherFilter !== teacher) continue;
                             const subject = entry.teachers[teacher]?.subject;
                             if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
                             let includeLesson = false;
@@ -2234,7 +2183,7 @@
             table.innerHTML = html;
         }
         function renderLessonsCountTable() {
-            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode, currentTeacherFilter); // Passa il filtro insegnante
+            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode); // Removed currentTeacherFilter
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
                 const aNum = extractClassNumber(a);
                 const bNum = extractClassNumber(b);
@@ -2259,23 +2208,11 @@
                 `;
                 tbody.appendChild(tr);
             }
-            // Calcola totali solo se non si sta filtrando per insegnante
+            // Calcola totali per il box Lessons Until Half Term
             let totalA = 0, totalJ = 0, grandTotal = 0;
-            if (!currentTeacherFilter) {
-                totalA = Object.values(byTeacher['Ms K Arakelian']).reduce((sum, n) => sum + n, 0);
-                totalJ = Object.values(byTeacher['Ms N Jenkins']).reduce((sum, n) => sum + n, 0);
-                grandTotal = totalA + totalJ;
-            } else {
-                // Se si filtra per insegnante, mostra 0 per l'altro e il totale filtrato
-                if (currentTeacherFilter === 'Ms K Arakelian') {
-                    totalA = Object.values(byTeacher['Ms K Arakelian']).reduce((sum, n) => sum + n, 0);
-                    totalJ = 0;
-                } else if (currentTeacherFilter === 'Ms N Jenkins') {
-                    totalA = 0;
-                    totalJ = Object.values(byTeacher['Ms N Jenkins']).reduce((sum, n) => sum + n, 0);
-                }
-                grandTotal = totalA + totalJ;
-            }
+            totalA = Object.values(byTeacher['Ms K Arakelian']).reduce((sum, n) => sum + n, 0);
+            totalJ = Object.values(byTeacher['Ms N Jenkins']).reduce((sum, n) => sum + n, 0);
+            grandTotal = totalA + totalJ;
             document.getElementById('arakelian-total').textContent = totalA;
             document.getElementById('jenkins-total').textContent = totalJ;
             document.getElementById('lessons-total-count').textContent = grandTotal;
@@ -2709,12 +2646,12 @@
         function updateStatisticsValues() {
             if (!statisticsVisible) return;
             const weekType = getCurrentWeek();
-            const weekCount = countLessonsInWeek(weekType, currentTeacherFilter);
+            const weekCount = countLessonsInWeek(weekType); // Removed currentTeacherFilter
             const now = new Date();
-            const monthCount = countLessonsInMonth(now.getMonth(), now.getFullYear(), currentTeacherFilter);
-            const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all', currentTeacherFilter);
+            const monthCount = countLessonsInMonth(now.getMonth(), now.getFullYear()); // Removed currentTeacherFilter
+            const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all'); // Removed currentTeacherFilter
             const halfTermTotal = Object.values(_).reduce((a, b) => a + b, 0);
-            const yearEndTotal = countLessonsUntilYearEnd(currentTeacherFilter);
+            const yearEndTotal = countLessonsUntilYearEnd(); // Removed currentTeacherFilter
             document.getElementById('stat-week').textContent = weekCount;
             document.getElementById('stat-month').textContent = monthCount;
             document.getElementById('stat-half-term').textContent = halfTermTotal;
@@ -2728,34 +2665,12 @@
             document.getElementById('progress-month').style.width = `${Math.min(100, (monthCount / maxMonth) * 100)}%`;
             document.getElementById('progress-half-term').style.width = `${Math.min(100, (halfTermTotal / maxHalfTerm) * 100)}%`;
             document.getElementById('progress-year-end').style.width = `${Math.min(100, (yearEndTotal / maxYearEnd) * 100)}%`;
-            // Update teacher-specific stats if selected
-            if (currentTeacherFilter) {
-                document.querySelectorAll('.teacher-stat-row').forEach(row => row.classList.add('active'));
-                const tWeekCount = countLessonsInWeek(weekType, currentTeacherFilter);
-                const tMonthCount = countLessonsInMonth(now.getMonth(), now.getFullYear(), currentTeacherFilter);
-                const { counts: tCounts, byTeacher: tByTeacher, todayLessons: tTodayLessons } = countLessonsUntilTerm('all', currentTeacherFilter);
-                const tHalfTermTotal = Object.values(tCounts).reduce((a, b) => a + b, 0);
-                const tYearEndTotal = countLessonsUntilYearEnd(currentTeacherFilter);
-                document.getElementById('stat-week-teacher-value').textContent = tWeekCount;
-                document.getElementById('stat-month-teacher-value').textContent = tMonthCount;
-                document.getElementById('stat-half-term-teacher-value').textContent = tHalfTermTotal;
-                document.getElementById('stat-year-end-teacher-value').textContent = tYearEndTotal;
-                document.getElementById('progress-week-teacher').style.width = `${Math.min(100, (tWeekCount / (maxWeek/2)) * 100)}%`;
-                document.getElementById('progress-month-teacher').style.width = `${Math.min(100, (tMonthCount / (maxMonth/2)) * 100)}%`;
-                document.getElementById('progress-half-term-teacher').style.width = `${Math.min(100, (tHalfTermTotal / (maxHalfTerm/2)) * 100)}%`;
-                document.getElementById('progress-year-end-teacher').style.width = `${Math.min(100, (tYearEndTotal / (maxYearEnd/2)) * 100)}%`;
-            } else {
-                document.querySelectorAll('.teacher-stat-row').forEach(row => row.classList.remove('active'));
-            }
+            // Teacher-specific rows removed, no need to update them
         }
         function handleRefreshStats() {
             updateStatisticsValues();
         }
-        function handleTeacherFilterChange() {
-            currentTeacherFilter = document.getElementById('teacher-stats-select').value;
-            renderLessonsCountTable(); // Aggiorna anche la tabella quando cambia il filtro insegnante
-            updateStatisticsValues();
-        }
+        // handleTeacherFilterChange function removed
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -2768,14 +2683,13 @@
             toggleStatistics();
         });
         document.getElementById('refresh-stats-btn').addEventListener('click', handleRefreshStats);
-        document.getElementById('teacher-stats-select').addEventListener('change', handleTeacherFilterChange);
+        // Removed event listener for teacher-stats-select
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();
         // NEW: Update interval logic
         let lastLessonsUpdate = Date.now();
         const lessonsUpdateInterval = 30 * 60 * 1000; // 30 minuti in millisecondi
-
         setInterval(() => {
             updateClockPrecise();
             updateCountdownPrecise();
@@ -2784,7 +2698,6 @@
             updateDynamicBackgroundAndShadows();
             if (statisticsVisible) updateStatisticsValues();
         }, 1000);
-
         setInterval(() => {
             if (statisticsVisible) {
                 const now = Date.now();
@@ -2797,7 +2710,6 @@
                 renderLessonsCountTable();
             }
         }, 1000); // Controlla ogni secondo se aggiornare la tabella
-
         updateClockPrecise();
         updateCountdownPrecise();
         updateNowContextBar();

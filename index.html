@@ -1835,6 +1835,7 @@
             }
             const diffTime = now.getTime() - nextMonday.getTime();
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+            // CORREZIONE: Utilizzo di 'diffWeeks' invece di 'diffWks'
             return diffWeeks % 2 === 0 ? 'A' : 'B';
         }
         function getCurrentWeek() {

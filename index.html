@@ -1190,36 +1190,48 @@
             background: var(--header-bg);
             transition: width 0.5s ease;
         }
-        /* NEW: Teacher stats toggle styling - REMOVED */
-        /* .teacher-stats-toggle {
-            margin-top: 8px; 
-            padding: 8px 0; 
-            border-top: 1px solid var(--border-color); 
-            font-size: 12px;
-            color: var(--header-bg);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        /* NEW: Non Inclusive Dates Box */
+        .non-inclusive-dates-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            width: 280px;
+            border: 1px solid #6c757d;
+            border-left: 4px solid #6c757d;
+            display: none; /* Inizialmente nascosto */
+            /* NEW: Compact and centered style */
+            margin: 10px auto; /* Centrato e con margine */
+            width: calc(100% - 20px); /* Leggermente piu piccolo per il padding */
+            max-width: 250px; /* Larghezza massima */
+            box-sizing: border-box; /* Include padding e border nella larghezza */
         }
-        .teacher-stats-toggle label {
+        [data-theme="dark"] .non-inclusive-dates-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .non-inclusive-dates-header {
+            font-size: 15px;
             font-weight: bold;
-            margin-bottom: 2px;
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 12px;
         }
-        .teacher-stats-toggle select {
-            padding: 3px 6px;
-            border-radius: 5px;
-            border: 1px solid var(--border-color);
-            background: var(--primary-bg);
-            color: var(--text-color);
-            font-size: 12px;
-            width: 100%; 
+        .non-inclusive-dates-list {
+            max-height: 150px; /* Altezza fissa per lo scroll */
+            overflow-y: auto;
+            padding: 5px;
         }
-        .teacher-stat-row {
-            display: none;
+        .non-inclusive-dates-list li {
+            padding: 3px 0;
+            border-bottom: 1px solid var(--border-color);
         }
-        .teacher-stat-row.active {
-            display: flex;
-        } */
+        .non-inclusive-dates-list li:last-child {
+            border-bottom: none;
+        }
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -1227,11 +1239,12 @@
             }
             .lessons-sidebar,
             .teachers-sidebar,
-            .statistics-box {
+            .statistics-box,
+            .non-inclusive-dates-box {
                 width: 100%;
                 min-width: auto;
             }
-            .teacher-box, .lessons-count-box, .statistics-box {
+            .teacher-box, .lessons-count-box, .statistics-box, .non-inclusive-dates-box {
                 min-width: 48%;
                 height: auto;
             }
@@ -1363,8 +1376,6 @@
         .subject-9s-dt { background-color: #ff3b30 !important; color: white !important; }
         .subject-9ac-dt { background-color: #ff3b30 !important; color: white !important; }
         .subject-9hm-dt { background-color: #ff3b30 !important; color: white !important; }
-        .subject-10-art { background-color: #34c759 !important; color: white !important; }
-        .subject-11-photography { background-color: #af52de !important; color: white !important; }
         .subject-7ac { background-color: #ffcc00 !important; color: black !important; }
         .subject-7ac-dt { background-color: #ff3b30 !important; color: white !important; }
         .subject-7h { background-color: #ffcc00 !important; color: black !important; }
@@ -1581,6 +1592,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- OLD: Non Inclusive Dates Box removed from here -->
             </div>
             <div class="teachers-sidebar">
                 <div class="teacher-box">
@@ -1610,7 +1622,7 @@
                     </div>
                 </div>
             </div>
-            <!-- NEW: Statistics Box -->
+            <!-- NEW: Statistics Box (posizionato accanto a teachers-sidebar) -->
             <div class="statistics-box" id="statistics-box">
                 <div class="statistics-header">
                     Lesson Statistics
@@ -1657,7 +1669,13 @@
                         <div class="mini-progress-fill" id="progress-year-end" style="width: 0%;"></div>
                     </div>
                 </div>
-                <!-- NEW: Teacher-specific rows removed -->
+                <!-- NEW: Non Inclusive Dates Box moved here inside statistics box -->
+                <div class="non-inclusive-dates-box" id="non-inclusive-dates-box">
+                    <div class="non-inclusive-dates-header">Non Inclusive Dates</div>
+                    <ul id="non-inclusive-dates-list" class="non-inclusive-dates-list">
+                        <!-- Popolato via JavaScript -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -1804,6 +1822,19 @@
             { name: "May Half Term", startDate: new Date(2026, 4, 25), endDate: new Date(2026, 4, 29) },
             { name: "Summer Term", startDate: new Date(2026, 6, 20), endDate: new Date(2026, 7, 31) }
         ];
+        // *** AGGIUNGI NUOVE DATE NON INCLUSIVE QUI ***
+        // Le date qui definite saranno escluse dal conteggio delle lezioni.
+        // Segui il formato: new Date(anno, mese - 1, giorno)
+        // Esempio: 21 Novembre 2025 -> new Date(2025, 10, 21)
+        // Esempio: 19 Dicembre 2025 -> new Date(2025, 11, 19)
+        const nonInclusiveDates = [
+            new Date(2025, 10, 21), // 21 Nov 2025
+            new Date(2025, 11, 19)  // 19 Dec 2025
+            // Aggiungi altre date qui, ad esempio:
+            // new Date(2026, 0, 1),  // 1 Jan 2026
+            // new Date(2026, 4, 3),  // 3 May 2026
+        ];
+        const nonInclusiveWeeks = []; // Array per settimane intere, se necessario in futuro
         const schoolYearEnd = new Date(2026, 7, 31); // 31 Aug 2026
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
@@ -1945,11 +1976,26 @@
             fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
             return fridayBefore;
         }
+        // NEW: Check if a date is non-inclusive
+        function isNonInclusiveDate(date) {
+            const dateStr = date.toDateString();
+            return nonInclusiveDates.some(d => d.toDateString() === dateStr);
+        }
         function getWeekTypeForDate(date) {
             const searchDate = new Date(date);
+            // NEW: Check for non-inclusive dates first
+            if (isNonInclusiveDate(searchDate)) {
+                return null;
+            }
             const day = searchDate.getDay();
             const monday = new Date(searchDate);
             monday.setDate(searchDate.getDate() - (day === 0 ? 6 : day - 1));
+            // NEW: Check for non-inclusive weeks
+            for (const week of nonInclusiveWeeks) {
+                if (monday >= week.start && monday <= week.end) {
+                    return null;
+                }
+            }
             for (const term of schoolTerms) {
                 const termStart = new Date(term.startDate);
                 const termEnd = new Date(term.endDate);
@@ -2000,6 +2046,7 @@
             }
             return count;
         }
+        // NEW: Updated countLessonsInMonth to exclude non-inclusive dates
         function countLessonsInMonth(month, year) { // Removed teacherFilter parameter
             const now = new Date();
             let count = 0;
@@ -2028,6 +2075,7 @@
             }
             return count;
         }
+        // NEW: Updated countLessonsUntilYearEnd to exclude non-inclusive dates
         function countLessonsUntilYearEnd() { // Removed teacherFilter parameter
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -2056,6 +2104,7 @@
             }
             return count;
         }
+        // NEW: Updated countLessonsUntilTerm to exclude non-inclusive dates
         function countLessonsUntilTerm(filterMode = 'all') { // Removed teacherFilter parameter
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -2081,6 +2130,11 @@
                            filterMode === 'day' ? todayStart : cutOffDate;
             while (currentDate <= endDate) {
                 const isToday = currentDate.toDateString() === todayStart.toDateString();
+                // NEW: Check if the current date is non-inclusive
+                if (isNonInclusiveDate(currentDate)) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    continue;
+                }
                 if (currentDate < todayStart) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
@@ -2174,6 +2228,8 @@
                 visibleDays.forEach(day => {
                     const dayDate = getDayDate(day, week).toDateString();
                     const isToday = (dayDate === today);
+                    // NEW: Check if the day date is non-inclusive
+                    const isNonIncl = isNonInclusiveDate(getDayDate(day, week));
                     teachers.forEach(teacher => {
                         const data = wd[day]?.[period]?.teachers?.[teacher];
                         let cls = 'subject-cell';
@@ -2190,8 +2246,8 @@
                                 content = `<div class="subject-name">${data.subject}</div>${data.room ? `<div class="room-name">${data.room}</div>` : ''}`;
                             }
                         } else {
-                            if (isToday && time && period !== 'Form Time' && period !== 'Lunch') {
-                                // Calcola se la lezione è in corso o non è ancora iniziata
+                            // NEW: Show Room Free only if the date is not non-inclusive
+                            if (isToday && time && period !== 'Form Time' && period !== 'Lunch' && !isNonIncl) {
                                 const [startStr, endStr] = time.split(' - ');
                                 const start = parseTime(startStr);
                                 const end = parseTime(endStr);
@@ -2200,7 +2256,6 @@
                                     const nowMins = now.getHours() * 60 + now.getMinutes();
                                     const startMins = start.hours * 60 + start.minutes;
                                     const endMins = end.hours * 60 + end.minutes;
-                                    // Se l'ora attuale è < endMins, mostra il badge
                                     if (nowMins < endMins) {
                                         content = `<div class="room-free-badge">Room Free</div>`;
                                     }
@@ -2382,6 +2437,13 @@
                 const visibleDays = currentViewDay === 'all' ? days : [currentViewDay];
                 const todayIndexInVisible = visibleDays.indexOf(today);
                 if (todayIndexInVisible === -1 && !statisticsVisible) return;
+                // NEW: Check if today is non-inclusive
+                if (isNonInclusiveDate(now)) {
+                    summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date`;
+                    document.getElementById('now-summary-content').innerHTML = summaryText;
+                    document.getElementById('now-summary-icon').innerHTML = ICONS['default'] || ICONS.default;
+                    return;
+                }
                 let todayColumnOffset = 2;
                 if (!statisticsVisible && todayIndexInVisible !== -1) {
                     todayColumnOffset = 2 + (todayIndexInVisible * 2);
@@ -2676,10 +2738,14 @@
                 document.getElementById('statistics-box').style.display = 'block';
                 // NEW: Update nav item state
                 document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
+                // NEW: Show non-inclusive dates box (now inside statistics box)
+                document.getElementById('non-inclusive-dates-box').style.display = 'block';
             } else {
                 document.getElementById('statistics-box').style.display = 'none';
                 // NEW: Update nav item state
                 document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
+                // NEW: Hide non-inclusive dates box (now inside statistics box)
+                document.getElementById('non-inclusive-dates-box').style.display = 'none';
             }
             generateTimetable();
             updateStatisticsValues();
@@ -2689,9 +2755,11 @@
             const weekType = getCurrentWeek();
             const weekCount = countLessonsInWeek(weekType); // Removed currentTeacherFilter
             const now = new Date();
+            // NEW: Use updated countLessonsInMonth
             const monthCount = countLessonsInMonth(now.getMonth(), now.getFullYear()); // Removed currentTeacherFilter
             const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all'); // Removed currentTeacherFilter
             const halfTermTotal = Object.values(_).reduce((a, b) => a + b, 0);
+            // NEW: Use updated countLessonsUntilYearEnd
             const yearEndTotal = countLessonsUntilYearEnd(); // Removed currentTeacherFilter
             document.getElementById('stat-week').textContent = weekCount;
             document.getElementById('stat-month').textContent = monthCount;
@@ -2712,6 +2780,16 @@
             updateStatisticsValues();
         }
         // handleTeacherFilterChange function removed
+        // NEW: Function to populate non-inclusive dates list
+        function populateNonInclusiveDatesList() {
+            const list = document.getElementById('non-inclusive-dates-list');
+            list.innerHTML = '';
+            nonInclusiveDates.forEach(date => {
+                const li = document.createElement('li');
+                li.textContent = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+                list.appendChild(li);
+            });
+        }
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -2725,6 +2803,8 @@
         });
         document.getElementById('refresh-stats-btn').addEventListener('click', handleRefreshStats);
         // Removed event listener for teacher-stats-select
+        // NEW: Call the function to populate the list on initial load
+        populateNonInclusiveDatesList();
         generateTimetable();
         updateTeacherBoxes();
         renderLessonsCountTable();

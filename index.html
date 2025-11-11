@@ -2151,38 +2151,56 @@
             }
             return count;
         }
-        // NEW: Updated countLessonsUntilTerm to exclude non-inclusive dates
+        // NEW: Updated countLessonsUntilTerm to exclude non-inclusive dates and handle 'month' filter correctly
         function countLessonsUntilTerm(filterMode = 'all') { // Removed teacherFilter parameter
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const currentTerm = getNextTerm();
             if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
-            const cutOffDate = getCutOffDate(currentTerm.startDate);
-            const thisWeekStart = new Date(todayStart);
-            const dayOfWeek = thisWeekStart.getDay();
-            thisWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-            const thisWeekEnd = new Date(thisWeekStart);
-            thisWeekEnd.setDate(thisWeekStart.getDate() + 4);
+
+            let startDate = new Date(todayStart);
+            let endDate = new Date(todayStart);
+
+            if (filterMode === 'month') {
+                // Calcola per l'intero mese corrente
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            } else {
+                // Logica originale per 'all', 'week', 'day'
+                if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
+                const cutOffDate = getCutOffDate(currentTerm.startDate);
+                const thisWeekStart = new Date(todayStart);
+                const dayOfWeek = thisWeekStart.getDay();
+                thisWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+                const thisWeekEnd = new Date(thisWeekStart);
+                thisWeekEnd.setDate(thisWeekStart.getDate() + 4);
+
+                if (filterMode === 'week') {
+                    startDate = new Date(thisWeekStart);
+                    endDate = thisWeekEnd;
+                } else if (filterMode === 'day') {
+                    startDate = new Date(todayStart);
+                    endDate = new Date(todayStart);
+                } else { // filterMode === 'all'
+                    endDate = cutOffDate;
+                }
+            }
+
             const subjectCount = {};
             const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
             const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
-            let currentDate = new Date(todayStart);
-            if (filterMode === 'week') {
-                currentDate = new Date(thisWeekStart);
-            } else if (filterMode === 'day') {
-                currentDate = new Date(todayStart);
-            }
-            const endDate = filterMode === 'all' ? cutOffDate :
-                           filterMode === 'week' ? thisWeekEnd :
-                           filterMode === 'day' ? todayStart : cutOffDate;
-            while (currentDate <= endDate) {
+
+            let currentDate = new Date(startDate);
+            const endDateTime = endDate.getTime(); // Ottimizzazione: memorizza il timestamp finale
+
+            while (currentDate.getTime() <= endDateTime) {
                 const isToday = currentDate.toDateString() === todayStart.toDateString();
                 // NEW: Check if the current date is non-inclusive
                 if (isNonInclusiveDate(currentDate)) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
-                if (currentDate < todayStart) {
+                if (currentDate < startDate) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
@@ -2228,10 +2246,8 @@
                             } else {
                                 includeLesson = true;
                             }
-                            const inFilterRange = 
-                                (filterMode === 'all') ||
-                                (filterMode === 'week' && currentDate >= thisWeekStart && currentDate <= thisWeekEnd) ||
-                                (filterMode === 'day' && isToday);
+                            // Per il filtro 'month', includi tutte le lezioni del mese
+                            const inFilterRange = filterMode === 'month' ? true : (filterMode === 'all' || (filterMode === 'week' && currentDate >= new Date(startDate) && currentDate <= new Date(endDate)) || (filterMode === 'day' && isToday));
                             if (includeLesson && inFilterRange) {
                                 subjectCount[subject] = (subjectCount[subject] || 0) + 1;
                                 teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
@@ -2243,6 +2259,7 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
+
         // NEW: Function to count non-inclusive lessons for a specific filter mode
         function countNonInclusiveLessons(filterMode = 'all') {
             const now = new Date();
@@ -3058,7 +3075,7 @@
             updateClockPrecise();
             updateCountdownPrecise();
             updateTeacherBoxes();
-            updateNowContextBar();
+            updateNowContextBar(); // CORREZIONE: Aggiunto questo aggiornamento
             updateDynamicBackgroundAndShadows();
             if (statisticsVisible) updateStatisticsValues();
         }, 1000);

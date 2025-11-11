@@ -1199,7 +1199,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
+            font-size: 11px; /* Ridotto il font */
             width: 280px;
             border: 1px solid #6c757d;
             border-left: 4px solid #6c757d;
@@ -1214,7 +1214,7 @@
             background: rgba(45, 45, 45, 0.9);
         }
         .non-inclusive-dates-header {
-            font-size: 15px;
+            font-size: 13px; /* Ridotto il font */
             font-weight: bold;
             color: #6c757d;
             text-align: center;
@@ -1228,9 +1228,23 @@
         .non-inclusive-dates-list li {
             padding: 3px 0;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        .non-inclusive-dates-list li.past {
+            text-decoration: line-through;
+            opacity: 0.7;
         }
         .non-inclusive-dates-list li:last-child {
             border-bottom: none;
+        }
+        .non-inclusive-dates-list .date-label {
+            font-weight: bold;
+        }
+        .non-inclusive-dates-list .desc-label {
+            flex-grow: 1;
+            margin-left: 5px;
+            text-align: right;
         }
         @media (max-width: 1200px) {
             .main-content {
@@ -1679,7 +1693,7 @@
             </div>
         </div>
     </div>
-    <div class="version-badge" id="version-badge">ver.3.1107.01</div>
+    <div class="version-badge" id="version-badge">ver.3.1111.01</div>
     <script>
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
@@ -1828,13 +1842,30 @@
         // Esempio: 21 Novembre 2025 -> new Date(2025, 10, 21)
         // Esempio: 19 Dicembre 2025 -> new Date(2025, 11, 19)
         const nonInclusiveDates = [
-            new Date(2025, 10, 21), // 21 Nov 2025
-            new Date(2025, 11, 19)  // 19 Dec 2025
+            new Date(2025, 8, 1),   // 01/09/2025
+            new Date(2025, 8, 2),   // 02/09/2025
+            new Date(2025, 8, 25),  // 25/09/2025
+            new Date(2025, 9, 9),   // 09/10/2025
+            new Date(2025, 10, 21), // 21/11/2025
+            new Date(2025, 11, 19), // 19/12/2025
+            new Date(2026, 0, 5),   // 05/01/2026
+            new Date(2026, 2, 19),  // 19/03/2026
+            new Date(2026, 4, 4),   // 04/05/2026 (Bank Holiday)
+            new Date(2026, 5, 26),  // 26/06/2026 (STM Day)
+            new Date(2026, 6, 3),   // 03/07/2026 (Sport Day)
+            new Date(2026, 6, 16),  // 16/07/2026 (Culture Day)
+            new Date(2026, 6, 17),  // 17/07/2026 (End Year Celebration)
             // Aggiungi altre date qui, ad esempio:
             // new Date(2026, 0, 1),  // 1 Jan 2026
             // new Date(2026, 4, 3),  // 3 May 2026
         ];
         const nonInclusiveWeeks = []; // Array per settimane intere, se necessario in futuro
+        // NEW: Specifica periodi per alcune date
+        const nonInclusivePeriods = {
+            "2025-09-25": ["4b", "5"], // Open Evening Y6
+            "2025-10-09": ["4b", "5"], // Open Evening 6 Form
+            "2026-03-19": ["4b", "5"]  // Option Evening
+        };
         const schoolYearEnd = new Date(2026, 7, 31); // 31 Aug 2026
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
@@ -2039,6 +2070,11 @@
                     for (const teacher of teachers) {
                         const subject = entry.teachers[teacher]?.subject;
                         if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                            // NEW: Check for period-specific exclusions
+                            const dateStr = getDayDate(day, weekType).toISOString().split('T')[0];
+                            if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                continue;
+                            }
                             count++;
                         }
                     }
@@ -2065,6 +2101,11 @@
                             for (const teacher of teachers) {
                                 const subject = entry.teachers[teacher]?.subject;
                                 if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                    // NEW: Check for period-specific exclusions
+                                    const dateStr = currentDate.toISOString().split('T')[0];
+                                    if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                        continue;
+                                    }
                                     count++;
                                 }
                             }
@@ -2094,6 +2135,11 @@
                             for (const teacher of teachers) {
                                 const subject = entry.teachers[teacher]?.subject;
                                 if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                    // NEW: Check for period-specific exclusions
+                                    const dateStr = currentDate.toISOString().split('T')[0];
+                                    if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                        continue;
+                                    }
                                     count++;
                                 }
                             }
@@ -2158,6 +2204,11 @@
                         for (const teacher of teachers) {
                             const subject = entry.teachers[teacher]?.subject;
                             if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
+                            // NEW: Check for period-specific exclusions
+                            const dateStr = currentDate.toISOString().split('T')[0];
+                            if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                continue;
+                            }
                             let includeLesson = false;
                             if (isToday) {
                                 const timeRange = entry.time;
@@ -2230,11 +2281,14 @@
                     const isToday = (dayDate === today);
                     // NEW: Check if the day date is non-inclusive
                     const isNonIncl = isNonInclusiveDate(getDayDate(day, week));
+                    // NEW: Check for period-specific exclusions for this specific date
+                    const dateStr = getDayDate(day, week).toISOString().split('T')[0];
+                    const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
                     teachers.forEach(teacher => {
                         const data = wd[day]?.[period]?.teachers?.[teacher];
                         let cls = 'subject-cell';
                         let content = '';
-                        if (data?.subject) {
+                        if (data?.subject && !isPeriodExcluded) {
                             if (data.subject === 'Form Time') {
                                 cls += ' form-time';
                                 content = 'Form Time';
@@ -2246,8 +2300,8 @@
                                 content = `<div class="subject-name">${data.subject}</div>${data.room ? `<div class="room-name">${data.room}</div>` : ''}`;
                             }
                         } else {
-                            // NEW: Show Room Free only if the date is not non-inclusive
-                            if (isToday && time && period !== 'Form Time' && period !== 'Lunch' && !isNonIncl) {
+                            // NEW: Show Room Free only if the date is not non-inclusive and period is not excluded
+                            if (isToday && time && period !== 'Form Time' && period !== 'Lunch' && !isNonIncl && !isPeriodExcluded) {
                                 const [startStr, endStr] = time.split(' - ');
                                 const start = parseTime(startStr);
                                 const end = parseTime(endStr);
@@ -2467,6 +2521,16 @@
                                     const cellData = JSON.parse(cells[j].dataset.cell || '{}');
                                     const subject = cellData.subject || '';
                                     const teacher = cellData.teacher || '';
+                                    // NEW: Check for period-specific exclusions for this specific date
+                                    const dateStr = now.toISOString().split('T')[0];
+                                    const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
+                                    if (isPeriodExcluded) {
+                                        // Clear any existing classes and badges for excluded periods
+                                        cells[j].classList.remove('now-lesson', 'arakelian', 'jenkins', 'now-break');
+                                        const existingBadge = cells[j].querySelector('.now-badge');
+                                        if (existingBadge) existingBadge.remove();
+                                        continue;
+                                    }
                                     let teacherClass = '';
                                     if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                     else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
@@ -2490,6 +2554,13 @@
                                 }
                             }
                         }
+                        // NEW: Check for period-specific exclusions for this specific date
+                        const dateStr = now.toISOString().split('T')[0];
+                        const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
+                        if (isPeriodExcluded) {
+                            // If the current period is excluded, skip showing it as active
+                            continue;
+                        }
                         const periodLabel = period === 'Form Time' ? 'Form Time' : `Period ${period}`;
                         let teacherDetails = [];
                         const currentPeriodData = currentDayData[period];
@@ -2498,7 +2569,7 @@
                                 const lesson = currentPeriodData.teachers[teacher];
                                 if (lesson && lesson.subject && !['Lunch', ''].includes(lesson.subject)) {
                                     const displaySubject = lesson.subject === 'Form Time' ? 'Form Time' : lesson.subject;
-                                    const room = lesson.room ? `(${lesson.room})` : '';
+                                    const room = lesson.room ? `(${room})` : '';
                                     const teacherColor = teacher === 'Ms K Arakelian' ? 'var(--teacher-arakelian-color)' : 'var(--teacher-jenkins-color)';
                                     teacherDetails.push(`<span style="color:${teacherColor};font-weight:bold;">${teacher}</span>: ${displaySubject} ${room}`);
                                 }
@@ -2544,26 +2615,56 @@
                     const lunch1End = 13 * 60 + 30;
                     const lunch2Start = 13 * 60 + 30;
                     const lunch2End = 14 * 60 + 30;
+                    // NEW: Check for period-specific exclusions for break/lunch times as well
+                    const dateStr = now.toISOString().split('T')[0];
                     if (currentMinutes >= break1Start && currentMinutes < break1End) {
-                        summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 7–8`;
-                        iconType = 'break';
-                        nowContextBar.classList.add('break');
-                        isBreakOrLunch = true;
+                        const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('2'); // Break time is part of period 2
+                        if (isPeriodExcluded) {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                            iconType = 'default';
+                            nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                        } else {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 7–8`;
+                            iconType = 'break';
+                            nowContextBar.classList.add('break');
+                            isBreakOrLunch = true;
+                        }
                     } else if (currentMinutes >= break2Start && currentMinutes < break2End) {
-                        summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 9–13`;
-                        iconType = 'break';
-                        nowContextBar.classList.add('break');
-                        isBreakOrLunch = true;
+                        const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('3'); // Break time is part of period 3
+                        if (isPeriodExcluded) {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                            iconType = 'default';
+                            nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                        } else {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 9–13`;
+                            iconType = 'break';
+                            nowContextBar.classList.add('break');
+                            isBreakOrLunch = true;
+                        }
                     } else if (currentMinutes >= lunch1Start && currentMinutes < lunch1End) {
-                        summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 7–8`;
-                        iconType = 'lunch';
-                        nowContextBar.classList.add('lunch');
-                        isBreakOrLunch = true;
+                        const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('4a'); // Lunch starts in 4a
+                        if (isPeriodExcluded) {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                            iconType = 'default';
+                            nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                        } else {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 7–8`;
+                            iconType = 'lunch';
+                            nowContextBar.classList.add('lunch');
+                            isBreakOrLunch = true;
+                        }
                     } else if (currentMinutes >= lunch2Start && currentMinutes < lunch2End) {
-                        summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 9–13`;
-                        iconType = 'lunch';
-                        nowContextBar.classList.add('lunch');
-                        isBreakOrLunch = true;
+                        const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('4b'); // Lunch includes 4b
+                        if (isPeriodExcluded) {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                            iconType = 'default';
+                            nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                        } else {
+                            summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 9–13`;
+                            iconType = 'lunch';
+                            nowContextBar.classList.add('lunch');
+                            isBreakOrLunch = true;
+                        }
                     } else {
                         if (nextLessonTime && nextLessonStartTime) {
                             summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Next lesson in <span class="now-summary-highlight">${nextLessonTime}</span> at ${nextLessonStartTime}`;
@@ -2572,8 +2673,13 @@
                         }
                     }
                     if (isBreakOrLunch) {
+                        // NEW: Apply break styling only if the period is not excluded
                         const todayColumnOffset = 2 + (visibleDays.indexOf(today) * 2);
-                        document.querySelectorAll('#timetable tbody tr').forEach(row => {
+                        document.querySelectorAll('#timetable tbody tr').forEach((row, i) => {
+                            const period = periods[i];
+                            const dateStr = now.toISOString().split('T')[0];
+                            const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
+                            if (isPeriodExcluded) return; // Skip if period is excluded
                             const cells = row.querySelectorAll('td');
                             for (let j = todayColumnOffset; j < todayColumnOffset + 2; j++) {
                                 if (cells[j]) {
@@ -2603,6 +2709,13 @@
                     return currentMinutes >= st.hours * 60 + st.minutes && currentMinutes < en.hours * 60 + en.minutes;
                 });
                 if (currentPeriod) {
+                    // NEW: Check for period-specific exclusions for this specific date
+                    const dateStr = now.toISOString().split('T')[0];
+                    const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(currentPeriod);
+                    if (isPeriodExcluded) {
+                        progressBarContainer.style.display = 'none';
+                        return;
+                    }
                     const timeRange = currentDayData[currentPeriod].time;
                     const [startStr, endStr] = timeRange.split(' - ');
                     const start = parseTime(startStr);
@@ -2784,9 +2897,31 @@
         function populateNonInclusiveDatesList() {
             const list = document.getElementById('non-inclusive-dates-list');
             list.innerHTML = '';
+            const now = new Date();
+            // NEW: Define descriptions for the dates
+            const dateDescriptions = {
+                "2025-09-01": "Insert Day",
+                "2025-09-02": "Insert Day",
+                "2025-09-25": "Open Evening Y6 (Period 4b & 5)",
+                "2025-10-09": "Open Evening 6 Form (Period 4b & 5)",
+                "2025-11-21": "Insert Day",
+                "2025-12-19": "Christmas Celebration",
+                "2026-01-05": "Insert Day",
+                "2026-03-19": "Option Evening (Period 4b & 5)",
+                "2026-05-04": "Bank Holiday",
+                "2026-06-26": "STM Day",
+                "2026-07-03": "Sport Day",
+                "2026-07-16": "Culture Day",
+                "2026-07-17": "End Year Celebration"
+            };
             nonInclusiveDates.forEach(date => {
                 const li = document.createElement('li');
-                li.textContent = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+                const dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+                const desc = dateDescriptions[date.toISOString().split('T')[0]];
+                li.innerHTML = `<span class="date-label">${dateStr}</span> <span class="desc-label">${desc}</span>`;
+                if (date < now) {
+                    li.classList.add('past');
+                }
                 list.appendChild(li);
             });
         }
@@ -2837,7 +2972,7 @@
         updateDynamicBackgroundAndShadows();
         renderLessonsCountTable();
         const today = new Date().getDate().toString().padStart(2, '0');
-        document.getElementById('version-badge').textContent = `ver.3.1107.01`;
+        document.getElementById('version-badge').textContent = `ver.3.1111.01`;
     </script>
 </body>
 </html>

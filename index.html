@@ -1577,6 +1577,7 @@
                     <div id="term-end-date">—</div>
                     <div class="lessons-filter-controls">
                         <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="month">This Month</button>
                         <button class="filter-btn" data-filter="week">This Week</button>
                         <button class="filter-btn" data-filter="day">Today</button>
                     </div>
@@ -1693,7 +1694,7 @@
             </div>
         </div>
     </div>
-    <div class="version-badge" id="version-badge">ver.3.1111.01</div>
+    <div class="version-badge" id="version-badge">ver.31111.01</div>
     <script>
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
@@ -2242,6 +2243,69 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
+        // NEW: Function to count non-inclusive lessons for a specific filter mode
+        function countNonInclusiveLessons(filterMode = 'all') {
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const currentTerm = getNextTerm();
+            if (!currentTerm) return { counts: {}, byTeacher: {} };
+            const cutOffDate = getCutOffDate(currentTerm.startDate);
+            const thisWeekStart = new Date(todayStart);
+            const dayOfWeek = thisWeekStart.getDay();
+            thisWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+            const thisWeekEnd = new Date(thisWeekStart);
+            thisWeekEnd.setDate(thisWeekStart.getDate() + 4);
+            const subjectCount = {};
+            const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
+            let currentDate = new Date(todayStart);
+            if (filterMode === 'week') {
+                currentDate = new Date(thisWeekStart);
+            } else if (filterMode === 'day') {
+                currentDate = new Date(todayStart);
+            } else if (filterMode === 'month') {
+                currentDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            }
+            let endDate = cutOffDate;
+            if (filterMode === 'week') {
+                endDate = thisWeekEnd;
+            } else if (filterMode === 'day') {
+                endDate = todayStart;
+            } else if (filterMode === 'month') {
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            }
+            while (currentDate <= endDate) {
+                // NEW: Check if the current date is non-inclusive
+                if (isNonInclusiveDate(currentDate)) {
+                    const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                    if (['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
+                        const weekType = getWeekTypeForDate(new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000)); // Check week type for previous week
+                        if (weekType) {
+                            const weekData = weekType === 'A' ? timetableData.weekA : timetableData.weekB;
+                            const dayData = weekData[dayName];
+                            if (dayData) {
+                                for (const period in dayData) {
+                                    const entry = dayData[period];
+                                    if (!entry || !entry.teachers) continue;
+                                    for (const teacher of teachers) {
+                                        const subject = entry.teachers[teacher]?.subject;
+                                        if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
+                                        // NEW: Check for period-specific exclusions
+                                        const dateStr = currentDate.toISOString().split('T')[0];
+                                        if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                            continue;
+                                        }
+                                        subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+                                        teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return { counts: subjectCount, byTeacher: teacherCounts };
+        }
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -2334,6 +2398,8 @@
         }
         function renderLessonsCountTable() {
             const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode); // Removed currentTeacherFilter
+            // NEW: Count non-inclusive lessons for the current filter mode
+            const { counts: nonInclCounts, byTeacher: nonInclByTeacher } = countNonInclusiveLessons(lessonsFilterMode);
             const sortedSubjects = Object.keys(counts).sort((a, b) => {
                 const aNum = extractClassNumber(a);
                 const bNum = extractClassNumber(b);
@@ -2346,26 +2412,68 @@
                 const aCount = byTeacher['Ms K Arakelian'][subject] || 0;
                 const jCount = byTeacher['Ms N Jenkins'][subject] || 0;
                 const total = aCount + jCount;
+                const aNonInclCount = nonInclByTeacher['Ms K Arakelian'][subject] || 0;
+                const jNonInclCount = nonInclByTeacher['Ms N Jenkins'][subject] || 0;
+                const totalNonIncl = aNonInclCount + jNonInclCount;
                 const className = total <= 2 ? 'low-count' : '';
                 const tr = document.createElement('tr');
                 const isArakelianToday = todayLessons['Ms K Arakelian'].has(subject);
                 const isJenkinsToday = todayLessons['Ms N Jenkins'].has(subject);
+                // NEW: Add non-inclusive count in brackets with blue color
+                let arakelianDisplay = aCount;
+                if (aNonInclCount > 0) {
+                    arakelianDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${aNonInclCount}]</span>`;
+                }
+                let jenkinsDisplay = jCount;
+                if (jNonInclCount > 0) {
+                    jenkinsDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${jNonInclCount}]</span>`;
+                }
+                let totalDisplay = total;
+                if (totalNonIncl > 0) {
+                    totalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${totalNonIncl}]</span>`;
+                }
                 tr.innerHTML = `
                     <td class="${className}">${subject}</td>
-                    <td class="${aCount <= 2 ? 'low-count' : ''} ${isArakelianToday ? 'today-arakelian' : ''}">${aCount}</td>
-                    <td class="${jCount <= 2 ? 'low-count' : ''} ${isJenkinsToday ? 'today-jenkins' : ''}">${jCount}</td>
-                    <td class="${total <= 2 ? 'low-count' : ''}">${total}</td>
+                    <td class="${aCount <= 2 ? 'low-count' : ''} ${isArakelianToday ? 'today-arakelian' : ''}">${arakelianDisplay}</td>
+                    <td class="${jCount <= 2 ? 'low-count' : ''} ${isJenkinsToday ? 'today-jenkins' : ''}">${jenkinsDisplay}</td>
+                    <td class="${total <= 2 ? 'low-count' : ''}">${totalDisplay}</td>
                 `;
                 tbody.appendChild(tr);
             }
             // Calcola totali per il box Lessons Until Half Term
             let totalA = 0, totalJ = 0, grandTotal = 0;
-            totalA = Object.values(byTeacher['Ms K Arakelian']).reduce((sum, n) => sum + n, 0);
-            totalJ = Object.values(byTeacher['Ms N Jenkins']).reduce((sum, n) => sum + n, 0);
+            let totalA_NonIncl = 0, totalJ_NonIncl = 0, grandTotal_NonIncl = 0;
+            for (const subject in byTeacher['Ms K Arakelian']) {
+                totalA += byTeacher['Ms K Arakelian'][subject];
+            }
+            for (const subject in byTeacher['Ms N Jenkins']) {
+                totalJ += byTeacher['Ms N Jenkins'][subject];
+            }
             grandTotal = totalA + totalJ;
-            document.getElementById('arakelian-total').textContent = totalA;
-            document.getElementById('jenkins-total').textContent = totalJ;
-            document.getElementById('lessons-total-count').textContent = grandTotal;
+            // Calcola totali non inclusi
+            for (const subject in nonInclByTeacher['Ms K Arakelian']) {
+                totalA_NonIncl += nonInclByTeacher['Ms K Arakelian'][subject];
+            }
+            for (const subject in nonInclByTeacher['Ms N Jenkins']) {
+                totalJ_NonIncl += nonInclByTeacher['Ms N Jenkins'][subject];
+            }
+            grandTotal_NonIncl = totalA_NonIncl + totalJ_NonIncl;
+            // NEW: Add non-inclusive count to totals
+            let arakelianTotalDisplay = totalA;
+            if (totalA_NonIncl > 0) {
+                arakelianTotalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${totalA_NonIncl}]</span>`;
+            }
+            let jenkinsTotalDisplay = totalJ;
+            if (totalJ_NonIncl > 0) {
+                jenkinsTotalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${totalJ_NonIncl}]</span>`;
+            }
+            let grandTotalDisplay = grandTotal;
+            if (grandTotal_NonIncl > 0) {
+                grandTotalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${grandTotal_NonIncl}]</span>`;
+            }
+            document.getElementById('arakelian-total').innerHTML = arakelianTotalDisplay;
+            document.getElementById('jenkins-total').innerHTML = jenkinsTotalDisplay;
+            document.getElementById('lessons-total-count').innerHTML = grandTotalDisplay;
             const nextTerm = getNextTerm();
             const termDate = nextTerm?.startDate 
                 ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
@@ -2972,7 +3080,7 @@
         updateDynamicBackgroundAndShadows();
         renderLessonsCountTable();
         const today = new Date().getDate().toString().padStart(2, '0');
-        document.getElementById('version-badge').textContent = `ver.3.1111.01`;
+        document.getElementById('version-badge').textContent = `ver.31111.01`;
     </script>
 </body>
 </html>

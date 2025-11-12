@@ -134,8 +134,46 @@
             pointer-events: auto;
             overflow: hidden;
         }
+        /* --- NEW: Header Content Box --- */
+        .header-content-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            margin-bottom: 20px; /* Spazio sotto il box */
+            /* NEW: Apply blue border style */
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        [data-theme="dark"] .header-content-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .header-content-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        /* --- END NEW: Header Content Box --- */
         .header {
-            margin-bottom: 20px;
+            /* margin-bottom: 20px; REMOVED: margin moved to header-content-box */
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
@@ -379,6 +417,7 @@
             color: #28a745;
             font-weight: bold;
         }
+        /* --- MODIFIED: Now Context Bar Style (moved outside header box) --- */
         .now-context-bar {
             display: flex;
             justify-content: space-between;
@@ -386,17 +425,21 @@
             position: relative;
             background: linear-gradient(135deg, var(--now-context-bg) 0%, #e9ecef 100%);
             border-radius: 15px;
-            margin: 0 5px 5px 20px;
-            padding: 10px 10px;
+            /* margin: 0 5px 5px 20px; REMOVED */
+            margin: 20px auto 20px auto; /* Spazio sopra e sotto, centrato */
+            padding: 8px 10px; /* Ridotto il padding */
             box-shadow: 
                 0 8px 25px rgba(0,0,0,0.15),
                 inset 0 1px 0 rgba(255,255,255,0.8);
-            border-left: 6px solid var(--header-bg);
+            /* border-left: 6px solid var(--header-bg); MODIFIED */
+            border-left: 4px solid var(--header-bg); /* Allineato al design degli altri box */
             border-right: 2px solid rgba(255,255,255,0.5);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
-            height: auto;
+            /* height: auto; REMOVED */
+            min-height: 50px; /* Imposta un'altezza minima coerente con navbar */
+            width: 100%; /* Prendi tutta la larghezza disponibile */
             font-size: 14px;
             color: var(--now-context-text);
             transition: all 0.3s ease;
@@ -1263,6 +1306,39 @@
                 height: auto;
             }
         }
+        /* --- NEW: Responsive adjustments for header content box --- */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            .clock-section, .title-section, .countdown-section {
+                align-items: center;
+            }
+            .clock-container, .countdown-row, .countdown-lower-row {
+                justify-content: center;
+            }
+            .title {
+                font-size: 36px;
+                margin-top: 10px;
+            }
+            .date-info {
+                font-size: 20px;
+                text-align: center;
+            }
+            .date-day {
+                font-size: 28px;
+            }
+            .countdown-title-row {
+                justify-content: center;
+            }
+            .main-content {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+        }
+        /* --- END NEW: Responsive adjustments --- */
         .version-badge, .refresh-badge {
             position: fixed;
             bottom: 10px;
@@ -1412,63 +1488,67 @@
     <div class="dynamic-bg" id="dynamic-bg"></div>
     <div id="offline-banner">⚠️ You are offline. Some features may not work.</div>
     <div class="container">
-        <div class="header">
-            <div class="clock-section">
-                <div class="clock-title">St Thomas More Time</div>
-                <div class="clock-container">
-                    <div class="clock-box">
-                        <div class="clock-value" id="hours">00</div>
-                        <div class="clock-label">Hours</div>
+        <!-- NEW: Wrapping the header content in the new box -->
+        <div class="header-content-box">
+            <div class="header">
+                <div class="clock-section">
+                    <div class="clock-title">St Thomas More Time</div>
+                    <div class="clock-container">
+                        <div class="clock-box">
+                            <div class="clock-value" id="hours">00</div>
+                            <div class="clock-label">Hours</div>
+                        </div>
+                        <div class="clock-box">
+                            <div class="clock-value" id="minutes">00</div>
+                            <div class="clock-label">Minutes</div>
+                        </div>
+                        <div class="clock-box">
+                            <div class="clock-value" id="seconds">00</div>
+                            <div class="clock-label">Seconds</div>
+                        </div>
                     </div>
-                    <div class="clock-box">
-                        <div class="clock-value" id="minutes">00</div>
-                        <div class="clock-label">Minutes</div>
-                    </div>
-                    <div class="clock-box">
-                        <div class="clock-value" id="seconds">00</div>
-                        <div class="clock-label">Seconds</div>
-                    </div>
-                </div>
-                <div class="logged-in-user-box">
-                    Logged in as: Administrator
-                </div>
-            </div>
-            <div class="title-section">
-                <div class="title">Time Table 2025-2026</div>
-                <div class="date-info" id="date-info">Loading...</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-title-wrapper">
-                    <div class="countdown-title-row">
-                        <div class="countdown-title" id="countdown-title">October Half Term</div>
-                        <div id="week-info">Current Week: A</div>
+                    <div class="logged-in-user-box">
+                        Logged in as: Administrator
                     </div>
                 </div>
-                <div class="countdown-row">
-                    <div class="countdown-box">
-                        <div class="countdown-value" id="countdown-days">000</div>
-                        <div class="clock-label">Days</div>
-                    </div>
-                    <div class="countdown-box">
-                        <div class="countdown-value" id="countdown-hours">00</div>
-                        <div class="clock-label">Hours</div>
-                    </div>
-                    <div class="countdown-box">
-                        <div class="countdown-value" id="countdown-minutes">00</div>
-                        <div class="clock-label">Minutes</div>
-                    </div>
-                    <div class="countdown-box">
-                        <div class="countdown-value" id="countdown-seconds">00</div>
-                        <div class="clock-label">Seconds</div>
-                    </div>
+                <div class="title-section">
+                    <div class="title">Time Table 2025-2026</div>
+                    <div class="date-info" id="date-info">Loading...</div>
                 </div>
-                <div class="countdown-lower-row">
-                    <div class="term-info-box" id="term-info-box">
-                        Loading...
+                <div class="countdown-section">
+                    <div class="countdown-title-wrapper">
+                        <div class="countdown-title-row">
+                            <div class="countdown-title" id="countdown-title">October Half Term</div>
+                            <div id="week-info">Current Week: A</div>
+                        </div>
+                    </div>
+                    <div class="countdown-row">
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-days">000</div>
+                            <div class="clock-label">Days</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-hours">00</div>
+                            <div class="clock-label">Hours</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-minutes">00</div>
+                            <div class="clock-label">Minutes</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-seconds">00</div>
+                            <div class="clock-label">Seconds</div>
+                        </div>
+                    </div>
+                    <div class="countdown-lower-row">
+                        <div class="term-info-box" id="term-info-box">
+                            Loading...
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- NEW: Moved now-context-bar outside header-content-box -->
         <div class="now-context-bar" id="now-context-bar">
             <div id="now-summary-box" class="now-summary-box">
                 <div class="now-summary-icon" id="now-summary-icon">
@@ -1486,6 +1566,7 @@
                 </div>
             </div>
         </div>
+        <!-- END NEW -->
         <nav class="navbar">
             <div class="nav-main">
                 <a href="index.html" class="nav-item">
@@ -2601,14 +2682,12 @@
             document.querySelectorAll('.subject-cell.now-lesson, .subject-cell.now-break').forEach(el => {
                 el.classList.remove('now-lesson', 'now-break');
             });
-
             let summaryText = "No scheduled activity";
             let iconType = 'default';
             let inPeriod = false;
             let isBreakOrLunch = false;
             let nextLessonTime = null;
             let nextLessonStartTime = null;
-
             if (isTodayVisible && currentDayData) {
                 const visibleDays = currentViewDay === 'all' ? days : [currentViewDay];
                 const todayIndexInVisible = visibleDays.indexOf(today);
@@ -2623,26 +2702,21 @@
                         document.getElementById('now-summary-icon').innerHTML = ICONS['default'] || ICONS.default;
                         return; // Interrompi qui se è una data non inclusiva
                     }
-
                     let todayColumnOffset = 2;
                     if (!statisticsVisible && todayIndexInVisible !== -1) {
                         todayColumnOffset = 2 + (todayIndexInVisible * 2);
                     }
-
                     // Cerca la lezione corrente
                     for (let i = 0; i < periods.length; i++) {
                         const period = periods[i];
                         const timeRange = currentDayData[period]?.time;
                         if (!timeRange) continue;
-
                         const [startStr, endStr] = timeRange.split(' - ');
                         const start = parseTime(startStr);
                         const end = parseTime(endStr);
                         if (!start || !end) continue;
-
                         const startMinutes = start.hours * 60 + start.minutes;
                         const endMinutes = end.hours * 60 + end.minutes;
-
                         if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
                             const row = document.querySelectorAll('#timetable tbody tr')[i];
                             if (row) {
@@ -2652,7 +2726,6 @@
                                         const cellData = JSON.parse(cells[j].dataset.cell || '{}');
                                         const subject = cellData.subject || '';
                                         const teacher = cellData.teacher || '';
-
                                         // NEW: Check for period-specific exclusions for this specific date
                                         const dateStr = now.toISOString().split('T')[0];
                                         const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
@@ -2663,11 +2736,9 @@
                                             if (existingBadge) existingBadge.remove();
                                             continue; // Salta l'elaborazione per questo periodo escluso
                                         }
-
                                         let teacherClass = '';
                                         if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
                                         else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
-
                                         // Gestione badge 'Now' e 'Break' durante la pausa 10:20-10:40 per lezioni 7 e 8
                                         let showNowBadge = true;
                                         if (period === '2' && timeRange === '10:20 - 11:30') {
@@ -2677,7 +2748,6 @@
                                                 }
                                             }
                                         }
-
                                         if (subject === 'Lunch' || subject === 'Form Time') {
                                             cells[j].classList.add('now-break');
                                         } else {
@@ -2692,7 +2762,6 @@
                                     }
                                 }
                             }
-
                             // Aggiorna il contenuto della barra con i dettagli della lezione corrente
                             const periodLabel = period === 'Form Time' ? 'Form Time' : `Period ${period}`;
                             let teacherDetails = [];
@@ -2722,7 +2791,6 @@
                             break; // Esci dal ciclo una volta trovata la lezione corrente
                         }
                     }
-
                     // Se non è in un periodo attivo, cerca la prossima lezione o mostra stato di attesa
                     if (!inPeriod) {
                         // Cerca la prossima lezione
@@ -2743,7 +2811,6 @@
                                 }
                             }
                         }
-
                         // Controlla se è in un periodo di pausa o pranzo
                         const break1Start = 10 * 60 + 20;
                         const break1End = 10 * 60 + 40;
@@ -2753,7 +2820,6 @@
                         const lunch1End = 13 * 60 + 30;
                         const lunch2Start = 13 * 60 + 30;
                         const lunch2End = 14 * 60 + 30;
-
                         const dateStr = now.toISOString().split('T')[0];
                         if (currentMinutes >= break1Start && currentMinutes < break1End) {
                             const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('2');
@@ -2810,7 +2876,6 @@
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • No more lessons today`;
                             }
                         }
-
                         // Applica lo stile 'now-break' alle celle di pausa/pranzo
                         if (isBreakOrLunch) {
                             const todayColumnOffset = 2 + (visibleDays.indexOf(today) * 2);
@@ -2833,17 +2898,14 @@
                 // Se oggi non è visibile e non siamo in vista stats
                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Today not visible`;
             }
-
             // Aggiorna il contenuto HTML della barra
             document.getElementById('now-summary-content').innerHTML = summaryText;
             document.getElementById('now-summary-icon').innerHTML = ICONS[iconType] || ICONS.default;
-
             // Gestione della barra di progresso
             const progressBarContainer = document.getElementById('progress-bar-container');
             const progressFill = document.getElementById('progress-fill');
             const progressLabel = document.getElementById('progress-label');
             const progressOverlayText = document.getElementById('progress-overlay-text');
-
             if (isTodayVisible && inPeriod && currentDayData) {
                 const currentPeriod = periods.find(p => {
                     const tr = currentDayData[p]?.time;
@@ -2854,7 +2916,6 @@
                     if (!st || !en) return false;
                     return currentMinutes >= st.hours * 60 + st.minutes && currentMinutes < en.hours * 60 + en.minutes;
                 });
-
                 if (currentPeriod) {
                     const dateStr = now.toISOString().split('T')[0];
                     const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(currentPeriod);
@@ -2862,7 +2923,6 @@
                         progressBarContainer.style.display = 'none';
                         return;
                     }
-
                     const timeRange = currentDayData[currentPeriod].time;
                     const [startStr, endStr] = timeRange.split(' - ');
                     const start = parseTime(startStr);
@@ -2875,11 +2935,9 @@
                         const percent = totalTime > 0 ? 100 - (timeLeft / totalTime) * 100 : 0;
                         const minsLeft = Math.floor(timeLeft / 60);
                         const secsLeft = timeLeft % 60;
-
                         progressFill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
                         progressLabel.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')} left`;
                         progressOverlayText.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')}`;
-
                         progressFill.classList.remove('warning', 'critical', 'blink');
                         if (timeLeft < 5 * 60) {
                             progressFill.classList.add('warning');
@@ -2899,8 +2957,6 @@
             progressBarContainer.style.display = 'none';
         }
         // *** FINE CORREZIONE PRINCIPALE ***
-
-
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement && 

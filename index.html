@@ -3078,13 +3078,16 @@
             const weekCount = countLessonsInWeek(weekType); // Removed currentTeacherFilter
             const now = new Date();
             // NEW: Use updated countLessonsInMonth
-            const monthCount = countLessonsInMonth(now.getMonth(), now.getFullYear()); // Removed currentTeacherFilter
+            // CORREZIONE: Calcola il conteggio per il mese corrente fino ad oggi
+            const monthCount = countLessonsUntilTerm('month').counts; // Ottieni l'oggetto counts
+            const monthTotal = Object.values(monthCount).reduce((a, b) => a + b, 0); // Somma i valori
+
             const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all'); // Removed currentTeacherFilter
             const halfTermTotal = Object.values(_).reduce((a, b) => a + b, 0);
             // NEW: Use updated countLessonsUntilYearEnd
             const yearEndTotal = countLessonsUntilYearEnd(); // Removed currentTeacherFilter
             document.getElementById('stat-week').textContent = weekCount;
-            document.getElementById('stat-month').textContent = monthCount;
+            document.getElementById('stat-month').textContent = monthTotal; // Mostra il totale calcolato
             document.getElementById('stat-half-term').textContent = halfTermTotal;
             document.getElementById('stat-year-end').textContent = yearEndTotal;
             // Update progress bars
@@ -3093,7 +3096,7 @@
             const maxHalfTerm = 1000; // Assumed max
             const maxYearEnd = 2000; // Assumed max
             document.getElementById('progress-week').style.width = `${Math.min(100, (weekCount / maxWeek) * 100)}%`;
-            document.getElementById('progress-month').style.width = `${Math.min(100, (monthCount / maxMonth) * 100)}%`;
+            document.getElementById('progress-month').style.width = `${Math.min(100, (monthTotal / maxMonth) * 100)}%`;
             document.getElementById('progress-half-term').style.width = `${Math.min(100, (halfTermTotal / maxHalfTerm) * 100)}%`;
             document.getElementById('progress-year-end').style.width = `${Math.min(100, (yearEndTotal / maxYearEnd) * 100)}%`;
             // Teacher-specific rows removed, no need to update them

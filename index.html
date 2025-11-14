@@ -499,8 +499,8 @@
             width: 24px;
             height: 24px;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             animation: iconPulse 2s ease-in-out infinite;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
@@ -1071,6 +1071,22 @@
             font-size: 15px;
             font-weight: bold;
             color: #dc3545; /* NEW: Red header text */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .refresh-lessons-btn { /* NEW: Style for refresh button */
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+            margin-left: 8px;
+        }
+        .refresh-lessons-btn:hover {
+            opacity: 1;
         }
         #term-end-date {
             display: block;
@@ -1654,7 +1670,10 @@
             </div>
             <div class="lessons-sidebar">
                 <div class="lessons-count-box">
-                    <div class="lessons-count-header">Lessons Until Half Term</div>
+                    <div class="lessons-count-header">
+                        Lessons Until Half Term
+                        <button id="refresh-lessons-btn" class="refresh-lessons-btn" title="Refresh Lessons">🔄</button>
+                    </div>
                     <div id="term-end-date">—</div>
                     <div class="lessons-filter-controls">
                         <button class="filter-btn active" data-filter="all">All</button>
@@ -3075,20 +3094,51 @@
         }
         function updateStatisticsValues() {
             if (!statisticsVisible) return;
-            const weekType = getCurrentWeek();
-            const weekCount = countLessonsInWeek(weekType); // Removed currentTeacherFilter
+            // CORREZIONE: Ottieni il conteggio per la settimana corrente usando la logica di 'countLessonsUntilTerm'
             const now = new Date();
-            // NEW: Use updated countLessonsInMonth
-            // CORREZIONE: Calcola il conteggio per il mese corrente fino ad oggi
-            const monthCount = countLessonsUntilTerm('month').counts; // Ottieni l'oggetto counts
-            const monthTotal = Object.values(monthCount).reduce((a, b) => a + b, 0); // Somma i valori
-
-            const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all'); // Removed currentTeacherFilter
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const currentWeekStart = new Date(todayStart);
+            const dayOfWeek = currentWeekStart.getDay();
+            currentWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+            const currentWeekEnd = new Date(currentWeekStart);
+            currentWeekEnd.setDate(currentWeekStart.getDate() + 4);
+            // Conteggio lezioni rimanenti dalla data odierna (inclusa) fino a venerdì di questa settimana
+            let weekCount = 0;
+            let currentDate = new Date(todayStart); // Inizia da oggi
+            while (currentDate <= currentWeekEnd) {
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                if (['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'].includes(dayName)) {
+                    const weekType = getWeekTypeForDate(currentDate);
+                    if (weekType) {
+                        const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
+                        const dayData = weekData[dayName];
+                        for (const period in dayData) {
+                            const entry = dayData[period];
+                            if (!entry || !entry.teachers) continue;
+                            for (const teacher of teachers) {
+                                const subject = entry.teachers[teacher]?.subject;
+                                if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                    // NEW: Check for period-specific exclusions
+                                    const dateStr = currentDate.toISOString().split('T')[0];
+                                    if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                        continue;
+                                    }
+                                    weekCount++;
+                                }
+                            }
+                        }
+                    }
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            // Calcolo per 'This Month' e 'Until Half Term' rimane invariato
+            const monthCount = countLessonsUntilTerm('month').counts;
+            const monthTotal = Object.values(monthCount).reduce((a, b) => a + b, 0);
+            const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all');
             const halfTermTotal = Object.values(_).reduce((a, b) => a + b, 0);
-            // NEW: Use updated countLessonsUntilYearEnd
-            const yearEndTotal = countLessonsUntilYearEnd(); // Removed currentTeacherFilter
+            const yearEndTotal = countLessonsUntilYearEnd();
             document.getElementById('stat-week').textContent = weekCount;
-            document.getElementById('stat-month').textContent = monthTotal; // Mostra il totale calcolato
+            document.getElementById('stat-month').textContent = monthTotal;
             document.getElementById('stat-half-term').textContent = halfTermTotal;
             document.getElementById('stat-year-end').textContent = yearEndTotal;
             // Update progress bars
@@ -3100,7 +3150,6 @@
             document.getElementById('progress-month').style.width = `${Math.min(100, (monthTotal / maxMonth) * 100)}%`;
             document.getElementById('progress-half-term').style.width = `${Math.min(100, (halfTermTotal / maxHalfTerm) * 100)}%`;
             document.getElementById('progress-year-end').style.width = `${Math.min(100, (yearEndTotal / maxYearEnd) * 100)}%`;
-            // Teacher-specific rows removed, no need to update them
         }
         function handleRefreshStats() {
             updateStatisticsValues();
@@ -3138,6 +3187,10 @@
                 list.appendChild(li);
             });
         }
+        // NEW: Add refresh lessons button functionality
+        function handleRefreshLessons() {
+             renderLessonsCountTable();
+        }
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -3150,6 +3203,7 @@
             toggleStatistics();
         });
         document.getElementById('refresh-stats-btn').addEventListener('click', handleRefreshStats);
+        document.getElementById('refresh-lessons-btn').addEventListener('click', handleRefreshLessons); // NEW: Event listener for refresh button
         // Removed event listener for teacher-stats-select
         // NEW: Call the function to populate the list on initial load
         populateNonInclusiveDatesList();

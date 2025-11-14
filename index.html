@@ -3126,7 +3126,23 @@
                                     if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
                                         continue;
                                     }
-                                    weekCount++;
+                                    // NEW: Check if lesson is in the past for today
+                                    const timeRange = entry.time;
+                                    let includeLesson = true;
+                                    if (currentDate.toDateString() === todayStart.toDateString() && timeRange) {
+                                        const [_, endStr] = timeRange.split(' - ');
+                                        const endTime = parseTime(endStr);
+                                        if (endTime) {
+                                            const nowMins = now.getHours() * 60 + now.getMinutes();
+                                            const endMins = endTime.hours * 60 + endTime.minutes;
+                                            if (nowMins >= endMins) {
+                                                includeLesson = false; // Lesson has ended
+                                            }
+                                        }
+                                    }
+                                    if (includeLesson) {
+                                        weekCount++;
+                                    }
                                 }
                             }
                         }
@@ -3134,6 +3150,7 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
+
             // Calcolo per 'This Month' e 'Until Half Term' rimane invariato
             const monthCount = countLessonsUntilTerm('month').counts;
             const monthTotal = Object.values(monthCount).reduce((a, b) => a + b, 0);

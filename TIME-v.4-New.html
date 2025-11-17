@@ -1,0 +1,3611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St Thomas More Timetable 2025-2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f8f9fa;
+            --text-color: #333333;
+            --border-color: #dee2e6;
+            --header-bg: #007bff;
+            --header-text: #ffffff;
+            --form-time-bg: #404040;
+            --form-time-text: #ffffff;
+            --lunch-bg: #e9ecef;
+            --lunch-text: #333333;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(0, 0, 0, 0.2);
+            --button-active: #dc3545;
+            --button-hover: #0056b3;
+            --cell-shadow-morning: 0 8px 16px rgba(0, 0, 0, 0.2);
+            --cell-shadow-afternoon: 0 4px 8px rgba(0, 0, 0, 0.15);
+            --cell-shadow-evening: 0 8px 16px rgba(0, 0, 0, 0.2);
+            --cell-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.25);
+            --countdown-bg: #ffffff;
+            --countdown-text: #333333;
+            --countdown-border: #dee2e6;
+            --nav-bg: #f0f0f0;
+            --nav-text: #333;
+            --nav-active-bg: #007bff;
+            --nav-active-text: #fff;
+            --nav-controls-bg: #e9ecef;
+            --fullscreen-active-bg: #28a745;
+            --countdown-warning: #dc3545;
+            --now-context-bg: #f0f0f0;
+            --now-context-lesson: #d4edda;
+            --now-context-break: #fff3cd;
+            --now-context-lunch: #cce5ff;
+            --now-context-text: #333333;
+            /* Teacher-specific colors */
+            --teacher-arakelian-color: #34c759;
+            --teacher-jenkins-color: #af52de;
+            /* NEW: Technology Department colors */
+            --teacher-tech1-color: #ff9500;
+            --teacher-tech2-color: #5856d6;
+            --teacher-tech3-color: #ff2d55;
+        }
+        [data-theme="dark"] {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --border-color: #404040;
+            --header-bg: #0056b3;
+            --header-text: #ffffff;
+            --form-time-bg: #404040;
+            --form-time-text: #ffffff;
+            --lunch-bg: #404040;
+            --lunch-text: #ffffff;
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --hover-shadow: rgba(0, 0, 0, 0.5);
+            --button-active: #dc3545;
+            --button-hover: #007bff;
+            --cell-shadow-morning: 0 8px 20px rgba(0, 0, 0, 0.4);
+            --cell-shadow-afternoon: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --cell-shadow-evening: 0 8px 20px rgba(0, 0, 0, 0.4);
+            --cell-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.6);
+            --countdown-bg: #2d2d2d;
+            --countdown-text: #ffffff;
+            --countdown-border: #404040;
+            --nav-bg: #2d2d2d;
+            --nav-text: #fff;
+            --nav-active-bg: #0056b3;
+            --nav-active-text: #fff;
+            --nav-controls-bg: #404040;
+            --fullscreen-active-bg: #28a745;
+            --countdown-warning: #ff6b6b;
+            --now-context-bg: #252525;
+            --now-context-lesson: #2d4a35;
+            --now-context-break: #4a422d;
+            --now-context-lunch: #2d3a4a;
+            --now-context-text: #ffffff;
+        }
+        body.theme-transition {
+            transition: background-color 0.5s ease, color 0.5s ease !important;
+            opacity: 0.9;
+        }
+        .dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: background-color 1.5s ease;
+            pointer-events: none;
+        }
+        .morning-bg { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
+        .afternoon-bg { background: linear-gradient(135deg, #ffe0b2, #ffcc80); }
+        .evening-bg { background: linear-gradient(135deg, #f0f5ff, #e6f0ff); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'DM Serif Text', serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(circle at 20% 20%, 
+                rgba(255,255,255,0.15) 0%, 
+                transparent 60%);
+            pointer-events: none;
+            z-index: 1000;
+            mix-blend-mode: overlay;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 1;
+            pointer-events: auto;
+            overflow: hidden;
+        }
+        /* --- NEW: Header Content Box --- */
+        .header-content-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            margin-bottom: 20px; /* Spazio sotto il box */
+            /* NEW: Apply blue border style */
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        [data-theme="dark"] .header-content-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .header-content-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        /* --- END NEW: Header Content Box --- */
+        .header {
+            /* margin-bottom: 20px; REMOVED: margin moved to header-content-box */
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 30px;
+            position: relative;
+        }
+        .clock-section, .countdown-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex-shrink: 0;
+        }
+        .clock-title, .countdown-title-wrapper {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .clock-container {
+            display: flex;
+            gap: 11px;
+        }
+        .countdown-row {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+        }
+        .clock-box, .countdown-box, .term-info-box {
+            transform-style: preserve-3d;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            /* NEW: Apply blue border style */
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        [data-theme="dark"] .clock-box,
+        [data-theme="dark"] .countdown-box,
+        [data-theme="dark"] .term-info-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .clock-box::before, .countdown-box::before, .term-info-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 8px; /* NEW: Match border-radius */
+            pointer-events: none;
+        }
+        .clock-box:hover, .countdown-box:hover {
+            transform: translateY(-3px) translateZ(5px);
+        }
+        .clock-box, .countdown-box {
+            background: var(--countdown-bg);
+            /* REMOVED: original border */
+            border: none; /* NEW: Remove original border */
+            border-radius: 8px;
+            padding: 12px 10px;
+            text-align: center;
+            min-width: 70px;
+            /* REMOVED: original box-shadow */
+            box-shadow: none; /* NEW: Remove original shadow */
+        }
+        .clock-value, .countdown-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--countdown-text);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .clock-label, .countdown-label {
+            font-size: 12px;
+            color: var(--text-color);
+            text-transform: capitalize;
+            opacity: 0.8;
+        }
+        .logged-in-user-box {
+            margin-top: 12px;
+            background: var(--countdown-bg);
+            border: 1px solid var(--countdown-border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            text-align: center;
+            min-width: 200px;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--countdown-text);
+        }
+        .title-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            flex-grow: 1;
+            gap: 10px;
+        }
+        .title {
+            font-size: 50px;
+            font-weight: 400;
+            color: var(--text-color);
+            margin: 0;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            opacity: 1;
+            text-shadow: 
+                0 1px 0 #ccc, 
+                0 2px 0 #c9c9c9,
+                0 3px 0 #bbb,
+                0 4px 0 #b9b9b9,
+                0 5px 0 #aaa,
+                0 6px 1px rgba(0,0,0,.1),
+                0 0 5px rgba(0,0,0,.1),
+                0 1px 3px rgba(0,0,0,.3),
+                0 3px 5px rgba(0,0,0,.2),
+                0 5px 10px rgba(0,0,0,.25);
+            transform: translateZ(20px);
+        }
+        .date-info {
+            font-size: 25px;
+            color: var(--text-color);
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .date-weekday {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .date-day {
+            color: #dc3545;
+            font-size: 35px;
+            border: 1px solid black;
+            padding: 2px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            background: var(--primary-bg);
+        }
+        .today-badge-inline {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 1px 5px;
+            border-radius: 8px;
+            animation: pulseToday 2s infinite;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        @keyframes pulseToday {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .room-free-badge {
+            display: inline-block;
+            background: #218838; /* verde scuro */
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 1px 5px;
+            border-radius: 8px;
+            animation: pulseToday 2s infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+        .countdown-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Allineato a destra */
+            gap: 12px;
+            width: 100%;
+        }
+        #week-info {
+            font-size: 20px;
+            color: #dc3545;
+            font-weight: normal;
+            border: 1px solid black;
+            padding: 4px 7.5px;
+            border-radius: 8px;
+            display: inline-block;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .countdown-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .term-info-box {
+            background: var(--countdown-bg);
+            /* REMOVED: original border */
+            border: none; /* NEW: Remove original border */
+            border-radius: 12px;
+            padding: 12px 16px;
+            text-align: center;
+            min-width: 200px;
+            /* REMOVED: original box-shadow */
+            box-shadow: none; /* NEW: Remove original shadow */
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--countdown-text);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .term-info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 12px rgba(0, 0, 0, 0.15),
+                inset 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        html body.authenticated.time-evening div.container div.header div.countdown-section div.countdown-lower-row div#term-info-box.term-info-box,
+        html body.time-evening div.container div.header div.countdown-section div.countdown-lower-row div#term-info-box.term-info-box {
+            padding: 8px 8px;
+        }
+        .period-red {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .room-green {
+            color: #28a745;
+            font-weight: bold;
+        }
+        /* --- MODIFIED: Now Context Bar Style (moved outside header box) --- */
+        .now-context-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--now-context-bg) 0%, #e9ecef 100%);
+            border-radius: 15px;
+            /* margin: 0 5px 5px 20px; REMOVED */
+            margin: 20px auto 20px auto; /* Spazio sopra e sotto, centrato */
+            padding: 8px 10px; /* Ridotto il padding */
+            box-shadow: 
+                0 8px 25px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            /* border-left: 6px solid var(--header-bg); MODIFIED */
+            border-left: 4px solid var(--header-bg); /* Allineato al design degli altri box */
+            border-right: 2px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            /* height: auto; REMOVED */
+            min-height: 50px; /* Imposta un'altezza minima coerente con navbar */
+            width: 100%; /* Prendi tutta la larghezza disponibile */
+            font-size: 14px;
+            color: var(--now-context-text);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .now-context-bar.lesson.arakelian { border-left-color: var(--teacher-arakelian-color); }
+        .now-context-bar.lesson.jenkins { border-left-color: var(--teacher-jenkins-color); }
+        .now-context-bar::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            width: 90%;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+            border-radius: 0 0 10px 10px;
+            transform: translateZ(-5px) rotateX(85deg);
+            filter: blur(5px);
+            opacity: 0.7;
+        }
+        .now-context-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                #ff6b6b, #ffd93d, #6bcf7f, #4d96ff, #9b51e0);
+            background-size: 200% 100%;
+            animation: rainbowBorder 3s linear infinite;
+        }
+        @keyframes rainbowBorder {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .now-context-bar.lesson {
+            background: linear-gradient(135deg, var(--now-context-lesson) 0%, #d4edda 100%);
+        }
+        .now-context-bar.break {
+            background: linear-gradient(135deg, var(--now-context-break) 0%, #fff3cd 100%);
+            border-left-color: #ffc107;
+        }
+        .now-context-bar.lunch {
+            background: linear-gradient(135deg, var(--now-context-lunch) 0%, #cce5ff 100%);
+            border-left-color: #17a2b8;
+        }
+        .now-summary-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--now-context-text);
+            flex: 1;
+            overflow: hidden;
+        }
+        .now-summary-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: iconPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        @keyframes iconPulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            }
+            50% { 
+                transform: scale(1.1) rotate(5deg);
+                filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            }
+        }
+        .now-context-bar.lesson .now-summary-icon {
+            animation: lessonIcon 3s ease-in-out infinite;
+        }
+        @keyframes lessonIcon {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(5deg); }
+            50% { transform: scale(1.05) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(3deg); }
+        }
+        .now-context-bar.break .now-summary-icon {
+            animation: breakIcon 2s ease-in-out infinite;
+        }
+        @keyframes breakIcon {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+        }
+        .now-summary-content {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .now-summary-highlight {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 4px;
+            animation: textShine 3s ease-in-out infinite;
+        }
+        .now-summary-warning {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            animation: warningText 2s ease-in-out infinite;
+        }
+        @keyframes textShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes warningText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 15px;
+            padding: 4px 8px;
+            background: rgba(220,53,69,0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(220,53,69,0.3);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #dc3545;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220,53,69,0.7);
+            }
+            50% { 
+                transform: scale(1.2);
+                box-shadow: 0 0 0 4px rgba(220,53,69,0);
+            }
+        }
+        .now-timeline {
+            display: none;
+        }
+        .progress-bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            min-width: 180px;
+            margin-left: 20px;
+            position: relative;
+            background: rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        .progress-label {
+            font-size: 12px;
+            color: var(--text-color);
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.1),
+                0 1px 0 rgba(255,255,255,0.5);
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 8px;
+            background: linear-gradient(90deg, 
+                #007bff 0%, 
+                #0056b3 50%, 
+                #007bff 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite, progressGradient 3s ease-in-out infinite;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 
+                0 0 10px rgba(0,123,255,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        @keyframes progressGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .progress-fill.warning {
+            background: linear-gradient(90deg, 
+                #ffc107 0%, 
+                #e0a800 50%, 
+                #ffc107 100%);
+            animation: warningPulse 1s ease-in-out infinite, progressGradient 3s ease-in-out infinite;
+        }
+        .progress-fill.critical {
+            background: linear-gradient(90deg, 
+                #dc3545 0%, 
+                #c82333 50%, 
+                #dc3545 100%);
+            animation: criticalPulse 0.5s ease-in-out infinite, progressGradient 3s ease-in-out infinite;
+        }
+        @keyframes warningPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        @keyframes criticalPulse {
+            0%, 100% { 
+                transform: scaleX(1);
+                box-shadow: 0 0 20px rgba(220,53,69,0.6);
+            }
+            50% { 
+                transform: scaleX(1.02);
+                box-shadow: 0 0 30px rgba(220,53,69,0.8);
+            }
+        }
+        .progress-overlay-text {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+        @keyframes blinkRed {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .progress-fill.blink {
+            animation: blinkRed 1s infinite;
+        }
+        .now-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.95);
+            animation: pulse 2s infinite, bounce 1s ease-in-out infinite alternate;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .now-badge.arakelian { background: linear-gradient(135deg, var(--teacher-arakelian-color), #2a9d4a); }
+        .now-badge.jenkins { background: linear-gradient(135deg, var(--teacher-jenkins-color), #9a47c2); }
+        @keyframes bounce {
+            from { transform: scale(1) translateY(0); }
+            to { transform: scale(1.1) translateY(-2px); }
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.95); }
+            50% { box-shadow: 0 4px 15px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.95); }
+        }
+        .subject-cell {
+            padding: 5px 5px 5px 5px;
+            background: var(--primary-bg);
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            animation: cellEntrance 0.6s ease-out backwards;
+        }
+        @keyframes cellEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px) translateZ(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0) scale(1);
+            }
+        }
+        .subject-cell:hover {
+    transform: translateY(-2px) translateZ(10px) rotateX(2deg);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        0 5px 15px rgba(0, 0, 0, 0.1);
+    /* NEW: Effetto di evidenziazione sul colore di sfondo */
+    filter: brightness(0.95); /* Leggermente piu scuro */
+    transition: all 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Mantieni transizioni fluide */
+}
+        .time-morning .subject-cell { box-shadow: var(--cell-shadow-morning), inset 0 1px 2px rgba(0,0,0,0.05); }
+        .time-afternoon .subject-cell { box-shadow: var(--cell-shadow-afternoon), inset 0 1px 2px rgba(0,0,0,0.05); }
+        .time-evening .subject-cell { box-shadow: var(--cell-shadow-evening), inset 0 1px 2px rgba(0,0,0,0.05); }
+        .subject-cell.now-lesson.arakelian {
+            border: 2px solid var(--teacher-arakelian-color) !important;
+            box-shadow: 0 0 30px rgba(52, 199, 89, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        .subject-cell.now-lesson.jenkins {
+            border: 2px solid var(--teacher-jenkins-color) !important;
+            box-shadow: 0 0 30px rgba(175, 82, 222, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        .subject-cell.now-lesson.tech1 {
+            border: 2px solid var(--teacher-tech1-color) !important;
+            box-shadow: 0 0 30px rgba(255, 149, 0, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        .subject-cell.now-lesson.tech2 {
+            border: 2px solid var(--teacher-tech2-color) !important;
+            box-shadow: 0 0 30px rgba(88, 86, 214, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        .subject-cell.now-lesson.tech3 {
+            border: 2px solid var(--teacher-tech3-color) !important;
+            box-shadow: 0 0 30px rgba(255, 45, 85, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        .form-time {
+            background: var(--form-time-bg) !important;
+            color: var(--form-time-text) !important;
+        }
+        .lunch {
+            background: var(--lunch-bg) !important;
+            color: var(--lunch-text) !important;
+        }
+        .navbar {
+            background-color: var(--nav-bg);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px var(--card-shadow);
+            height: 50px;
+            position: relative;
+            transform-style: preserve-3d;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        [data-theme="dark"] .navbar {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .navbar::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 5%;
+            width: 90%;
+            height: 8px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.15), transparent);
+            border-radius: 0 0 20px 20px;
+            transform: translateZ(-8px) rotateX(75deg);
+            filter: blur(4px);
+            opacity: 0.6;
+        }
+        .nav-main {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            color: var(--nav-text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--nav-active-bg);
+            color: var(--nav-active-text);
+            transform: translateY(-2px) translateZ(8px);
+        }
+        /* NEW: Style for active Statistics nav item */
+        .nav-item.stats-active {
+            background-color: var(--fullscreen-active-bg) !important;
+            color: white !important;
+        }
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--nav-controls-bg);
+            padding: 6px 12px;
+            border-radius: 15px;
+            flex-wrap: wrap;
+        }
+        .control-btn, .fullscreen-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .control-btn:hover, .control-btn.active,
+        .fullscreen-btn:hover {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            transform: translateY(-1px);
+        }
+        .fullscreen-btn.active {
+            background-color: var(--fullscreen-active-bg) !important;
+            color: white !important;
+        }
+        .dark-mode-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 8px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background: var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .toggle-switch.active {
+            background: var(--header-bg);
+        }
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
+        }
+        .main-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-left: 30px;
+            overflow: hidden;
+        }
+        .timetable-container {
+            flex: 1;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            width: 100%;
+        }
+        .lessons-sidebar {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .teachers-sidebar {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .timetable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 3px;
+            table-layout: auto;
+        }
+        .timetable th, .timetable td {
+            border: none;
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 8px;
+        }
+        .timetable th {
+            background: var(--header-bg);
+            color: var(--header-text);
+            height: 50px;
+        }
+        .timetable td {
+            height: 50px;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.1),
+                0 1px 2px rgba(0,0,0,0.08),
+                inset 0 1px 1px rgba(255,255,255,0.5);
+        }
+        .period-cell {
+            width: 50px !important;
+            min-width: 50px !important;
+            height: 50px !important;
+            padding: 0 !important;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+        }
+        .time-cell {
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: bold;
+            width: 110px;
+            min-width: 110px;
+        }
+        .teacher-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            transform-style: preserve-3d;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            /* NEW: Apply blue border style */
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        [data-theme="dark"] .teacher-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .teacher-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        .teacher-box:hover {
+            transform: translateY(-3px) translateZ(10px) rotateY(2deg);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.15),
+                0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        .teacher-header h3 {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--header-bg);
+            margin-bottom: 8px;
+        }
+        .lesson-info {
+            margin-bottom: 6px;
+        }
+        .lesson-label {
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .lesson-details {
+            font-size: 11px;
+            padding: 4px;
+            background: var(--primary-bg);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+        .lessons-count-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            height: 500px; /* Altezza fissa */
+            /* NEW: Apply red border style */
+            border: 1px solid #dc3545;
+            border-left: 4px solid #dc3545;
+            transform: translateZ(5px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        [data-theme="dark"] .lessons-count-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .lessons-count-box::before { /* NEW: Add ::before for red box */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        .lessons-count-header {
+            text-align: center;
+            margin-bottom: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #dc3545; /* NEW: Red header text */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .refresh-lessons-btn { /* NEW: Style for refresh button */
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+        .refresh-lessons-btn:hover {
+            opacity: 1;
+        }
+        #term-end-date {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #dc3545; /* NEW: Red text */
+            text-align: center;
+        }
+        .lessons-filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .filter-btn {
+            font-size: 11px;
+            padding: 3px 6px;
+            border: 1px solid var(--border-color);
+            background: var(--primary-bg);
+            color: var(--text-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .filter-btn.active {
+            background: #dc3545; /* NEW: Red active button */
+            color: white;
+            border-color: #dc3545; /* NEW: Red active border */
+        }
+        .lessons-count-table-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1; /* occupa spazio rimanente */
+            overflow: hidden;
+        }
+        .lessons-count-table-header {
+            background: #dc3545; /* NEW: Red header */
+            color: white; /* NEW: White text for red header */
+            font-size: 12px;
+        }
+        .lessons-count-table-header th {
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .lessons-count-scrollable {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .lessons-count-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            table-layout: fixed;
+        }
+        .lessons-count-table thead,
+        .lessons-count-table tbody,
+        .lessons-count-table tfoot {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .lessons-count-table td,
+        .lessons-count-table th {
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .low-count {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .today-arakelian {
+            background-color: rgba(52, 199, 89, 0.08) !important;
+            border-left: 3px solid var(--teacher-arakelian-color);
+        }
+        .today-jenkins {
+            background-color: rgba(175, 82, 222, 0.08) !important;
+            border-left: 3px solid var(--teacher-jenkins-color);
+        }
+        /* --- Statistics Box Style --- */
+        .statistics-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            width: 280px;
+            display: none;
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+        }
+        [data-theme="dark"] .statistics-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .statistics-header {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--header-bg);
+            text-align: center;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .refresh-stats-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+        .refresh-stats-btn:hover {
+            opacity: 1;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+        .stat-row:hover {
+            background-color: var(--secondary-bg);
+            border-radius: 6px;
+            padding: 6px 8px;
+            margin: 0 -8px;
+        }
+        .stat-label {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stat-icon {
+            width: 14px;
+            height: 14px;
+            vertical-align: middle;
+            color: var(--header-bg);
+        }
+        .stat-value {
+            font-weight: bold;
+            color: var(--header-bg);
+        }
+        .mini-progress-bar {
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+            width: 60px;
+            margin-left: 8px;
+        }
+        .mini-progress-fill {
+            height: 100%;
+            background: var(--header-bg);
+            transition: width 0.5s ease;
+        }
+        /* NEW: Non Inclusive Dates Box */
+        .non-inclusive-dates-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 11px; /* Ridotto il font */
+            width: 280px;
+            border: 1px solid #6c757d;
+            border-left: 4px solid #6c757d;
+            display: none; /* Inizialmente nascosto */
+            /* NEW: Compact and centered style */
+            margin: 10px auto; /* Centrato e con margine */
+            width: calc(100% - 20px); /* Leggermente piu piccolo per il padding */
+            max-width: 250px; /* Larghezza massima */
+            box-sizing: border-box; /* Include padding e border nella larghezza */
+        }
+        [data-theme="dark"] .non-inclusive-dates-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .non-inclusive-dates-header {
+            font-size: 13px; /* Ridotto il font */
+            font-weight: bold;
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .non-inclusive-dates-list {
+            max-height: 150px; /* Altezza fissa per lo scroll */
+            overflow-y: auto;
+            padding: 5px;
+        }
+        .non-inclusive-dates-list li {
+            padding: 3px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        .non-inclusive-dates-list li.past {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .non-inclusive-dates-list li:last-child {
+            border-bottom: none;
+        }
+        .non-inclusive-dates-list .date-label {
+            font-weight: bold;
+        }
+        .non-inclusive-dates-list .desc-label {
+            flex-grow: 1;
+            margin-left: 5px;
+            text-align: right;
+        }
+        /* NEW: Technology Timetable Specific Styles */
+        .tech-timetable-container {
+            flex: 1;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            width: 100%;
+            display: none; /* Hidden by default */
+        }
+        .tech-timetable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 3px;
+            table-layout: auto;
+        }
+        .tech-timetable th, .tech-timetable td {
+            border: none;
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 8px;
+        }
+        .tech-timetable th {
+            background: var(--header-bg);
+            color: var(--header-text);
+            height: 50px;
+        }
+        .tech-timetable td {
+            width: 110px !important;
+            height: 50px !important;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.1),
+                0 1px 2px rgba(0,0,0,0.08),
+                inset 0 1px 1px rgba(255,255,255,0.5);
+        }
+        .tech-period-cell {
+            width: 50px !important;
+            min-width: 50px !important;
+            height: 50px !important;
+            padding: 0 !important;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+        }
+        .tech-time-cell {
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: bold;
+            width: 110px;
+            min-width: 110px;
+        }
+        .tech-subject-cell {
+            padding: 5px 5px 5px 5px;
+            background: var(--primary-bg);
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            animation: cellEntrance 0.6s ease-out backwards;
+        }
+        .tech-subject-cell:hover {
+            transform: translateY(-2px) translateZ(10px) rotateX(2deg);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.15),
+                0 5px 15px rgba(0, 0, 0, 0.1);
+            filter: brightness(0.95);
+            transition: all 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .time-morning .tech-subject-cell { box-shadow: var(--cell-shadow-morning), inset 0 1px 2px rgba(0,0,0,0.05); }
+        .time-afternoon .tech-subject-cell { box-shadow: var(--cell-shadow-afternoon), inset 0 1px 2px rgba(0,0,0,0.05); }
+        .time-evening .tech-subject-cell { box-shadow: var(--cell-shadow-evening), inset 0 1px 2px rgba(0,0,0,0.05); }
+        .tech-subject-cell.now-lesson.tech1 {
+            border: 2px solid var(--teacher-tech1-color) !important;
+            box-shadow: 0 0 30px rgba(255, 149, 0, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        .tech-subject-cell.now-lesson.tech2 {
+            border: 2px solid var(--teacher-tech2-color) !important;
+            box-shadow: 0 0 30px rgba(88, 86, 214, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        .tech-subject-cell.now-lesson.tech3 {
+            border: 2px solid var(--teacher-tech3-color) !important;
+            box-shadow: 0 0 30px rgba(255, 45, 85, 0.4), 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .lessons-sidebar,
+            .teachers-sidebar,
+            .statistics-box,
+            .non-inclusive-dates-box {
+                width: 100%;
+                min-width: auto;
+            }
+            .teacher-box, .lessons-count-box, .statistics-box, .non-inclusive-dates-box {
+                min-width: 48%;
+                height: auto;
+            }
+        }
+        /* --- NEW: Responsive adjustments for header content box --- */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            .clock-section, .title-section, .countdown-section {
+                align-items: center;
+            }
+            .clock-container, .countdown-row, .countdown-lower-row {
+                justify-content: center;
+            }
+            .title {
+                font-size: 36px;
+                margin-top: 10px;
+            }
+            .date-info {
+                font-size: 20px;
+                text-align: center;
+            }
+            .date-day {
+                font-size: 28px;
+            }
+            .countdown-title-row {
+                justify-content: center;
+            }
+            .main-content {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+        }
+        /* --- END NEW: Responsive adjustments --- */
+        .version-badge, .refresh-badge {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #888888;
+            z-index: 100;
+            pointer-events: none;
+        }
+        .refresh-badge {
+            bottom: 30px;
+        }
+        .icon-wrapper {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+        }
+        .home-icon .door,
+        .request-icon .check {
+            fill: currentColor;
+        }
+        .nav-item:hover .home-icon .roof {
+            transform: translateY(-2px);
+            transform-origin: center bottom;
+        }
+        .nav-item:hover .timetable-icon .page {
+            transform: translateX(3px);
+            transform-origin: left center;
+        }
+        .nav-item:hover .clock-icon .hand {
+            transform: rotate(90deg);
+            transform-origin: center;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .nav-item:hover .data-icon .bar-1 { height: 8px; }
+        .nav-item:hover .data-icon .bar-2 { height: 14px; }
+        .nav-item:hover .data-icon .bar-3 { height: 18px; }
+        .nav-item:hover .data-icon .bar-4 { height: 10px; }
+        .nav-item:hover .request-icon .paper {
+            transform: rotate(3deg) translateY(-2px);
+            transform-origin: center;
+        }
+        .nav-item:hover .request-icon .check {
+            stroke-dashoffset: 0;
+        }
+        .home-icon .roof,
+        .timetable-icon .page,
+        .clock-icon .hand,
+        .request-icon .paper {
+            transition: transform 0.3s ease;
+        }
+        .data-icon .bar {
+            transition: height 0.4s ease;
+            height: 0;
+        }
+        .request-icon .check {
+            stroke-dasharray: 15;
+            stroke-dashoffset: 15;
+            transition: stroke-dashoffset 0.4s ease 0.1s;
+        }
+        #offline-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #dc3545;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-weight: bold;
+            z-index: 10000;
+            display: none;
+        }
+        #day-filter-select {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--nav-controls-bg);
+            color: var(--text-color);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #day-filter-select:hover {
+            background: var(--header-bg);
+            color: var(--header-text);
+        }
+        #week-selector {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--nav-controls-bg);
+            color: var(--text-color);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #week-selector:hover {
+            background: var(--header-bg);
+            color: var(--header-text);
+        }
+        .countdown-lower-row {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .subject-12-dt-textile { background-color: #ff9500 !important; color: white !important; }
+        .subject-11-art { background-color: #34c759 !important; color: white !important; }
+        .subject-12-13-art { background-color: #34c759 !important; color: white !important; }
+        .subject-9m { background-color: #007aff !important; color: white !important; }
+        .subject-9a { background-color: #007aff !important; color: white !important; }
+        .subject-9s { background-color: #007aff !important; color: white !important; }
+        .subject-9c { background-color: #007aff !important; color: white !important; }
+        .subject-9h { background-color: #007aff !important; color: white !important; }
+        .subject-9s-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-9ac-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-9hm-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-7ac { background-color: #ffcc00 !important; color: black !important; }
+        .subject-7ac-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-7h { background-color: #ffcc00 !important; color: black !important; }
+        .subject-7h-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-7ms { background-color: #ffcc00 !important; color: black !important; }
+        .subject-7ms-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8ac { background-color: #5ac8fa !important; color: white !important; }
+        .subject-8ac-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8y { background-color: #5ac8fa !important; color: white !important; }
+        .subject-8y-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8hm { background-color: #5ac8fa !important; color: white !important; }
+        .subject-8hm-dt { background-color: #ff3b30 !important; color: white !important; }
+        .subject-8mh { background-color: #5ac8fa !important; color: white !important; }
+        .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
+        .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
+        .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
+    </style>
+</head>
+<body class="authenticated">
+    <div class="dynamic-bg" id="dynamic-bg"></div>
+    <div id="offline-banner">⚠️ You are offline. Some features may not work.</div>
+    <div class="container">
+        <!-- NEW: Wrapping the header content in the new box -->
+        <div class="header-content-box">
+            <div class="header">
+                <div class="clock-section">
+                    <div class="clock-title">St Thomas More Time</div>
+                    <div class="clock-container">
+                        <div class="clock-box">
+                            <div class="clock-value" id="hours">00</div>
+                            <div class="clock-label">Hours</div>
+                        </div>
+                        <div class="clock-box">
+                            <div class="clock-value" id="minutes">00</div>
+                            <div class="clock-label">Minutes</div>
+                        </div>
+                        <div class="clock-box">
+                            <div class="clock-value" id="seconds">00</div>
+                            <div class="clock-label">Seconds</div>
+                        </div>
+                    </div>
+                    <div class="logged-in-user-box">
+                        Logged in as: Administrator
+                    </div>
+                </div>
+                <div class="title-section">
+                    <div class="title">Time Table 2025-2026</div>
+                    <div class="date-info" id="date-info">Loading...</div>
+                </div>
+                <div class="countdown-section">
+                    <div class="countdown-title-wrapper">
+                        <div class="countdown-title-row">
+                            <div class="countdown-title" id="countdown-title">October Half Term</div>
+                            <div id="week-info">Current Week: A</div>
+                        </div>
+                    </div>
+                    <div class="countdown-row">
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-days">000</div>
+                            <div class="clock-label">Days</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-hours">00</div>
+                            <div class="clock-label">Hours</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-minutes">00</div>
+                            <div class="clock-label">Minutes</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="countdown-seconds">00</div>
+                            <div class="clock-label">Seconds</div>
+                        </div>
+                    </div>
+                    <div class="countdown-lower-row">
+                        <div class="term-info-box" id="term-info-box">
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- NEW: Moved now-context-bar outside header-content-box -->
+        <div class="now-context-bar" id="now-context-bar">
+            <div id="now-summary-box" class="now-summary-box">
+                <div class="now-summary-icon" id="now-summary-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="now-summary-content" id="now-summary-content">
+                    Loading...
+                </div>
+            </div>
+            <div id="progress-bar-container" class="progress-bar-container">
+                <div class="progress-label" id="progress-label">--:-- left</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                    <div class="progress-overlay-text" id="progress-overlay-text">0:00</div>
+                </div>
+            </div>
+        </div>
+        <!-- END NEW -->
+        <nav class="navbar">
+            <div class="nav-main">
+                <a href="index.html" class="nav-item">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon home-icon" viewBox="0 0 100 100">
+                            <path class="roof" d="M20,55 L50,25 L80,55" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="30" y="55" width="40" height="25" rx="3" stroke-width="8"/>
+                            <rect class="door" x="45" y="65" width="10" height="15" rx="2"/>
+                        </svg>
+                    </div>
+                    <span>Home</span>
+                </a>
+                <a href="timetable.html" class="nav-item active">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon timetable-icon" viewBox="0 0 100 100">
+                            <rect class="page" x="15" y="20" width="70" height="60" rx="8" stroke-width="8"/>
+                            <line x1="30" y1="35" x2="70" y2="35" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="30" y1="50" x2="70" y2="50" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="30" y1="65" x2="55" y2="65" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="25" cy="35" r="4"/>
+                            <circle cx="25" cy="50" r="4"/>
+                            <circle cx="25" cy="65" r="4"/>
+                        </svg>
+                    </div>
+                    <span id="nav-title">Timetable</span>
+                </a>
+                <a href="exam-clock.html" class="nav-item">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon clock-icon" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" stroke-width="8"/>
+                            <circle cx="50" cy="50" r="4"/>
+                            <line class="hand" x1="50" y1="50" x2="50" y2="30" stroke-width="6" stroke-linecap="round"/>
+                            <line x1="50" y1="50" x2="65" y2="50" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Exam Clock</span>
+                </a>
+                <!-- NEW: Statistics Nav Item with Icon -->
+                <a href="#" class="nav-item" id="stats-nav">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon data-icon" viewBox="0 0 100 100">
+                            <rect class="bar bar-1" x="25" y="70" width="6" height="0" rx="2"/>
+                            <rect class="bar bar-2" x="38" y="70" width="6" height="0" rx="2"/>
+                            <rect class="bar bar-3" x="51" y="70" width="6" height="0" rx="2"/>
+                            <rect class="bar bar-4" x="64" y="70" width="6" height="0" rx="2"/>
+                            <path d="M20,80 L80,80" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M20,80 L20,30" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Statistics</span>
+                </a>
+                <!-- NEW: Subjects Nav Item with Icon -->
+                <a href="#" class="nav-item" id="subjects-nav">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5v-15a2.5 2.5 0 0 1 2.5-2.5h11a2.5 2.5 0 0 1 2.5 2.5v15"></path>
+                            <polyline points="1 6 4 6 7 6"></polyline>
+                            <polyline points="1 12 4 12 7 12"></polyline>
+                            <polyline points="1 18 4 18 7 18"></polyline>
+                        </svg>
+                    </div>
+                    <span>Subjects</span>
+                </a>
+            </div>
+            <div class="nav-controls">
+                <select id="day-filter-select">
+                    <option value="all">All Days</option>
+                    <option value="MONDAY">Monday</option>
+                    <option value="TUESDAY">Tuesday</option>
+                    <option value="WEDNESDAY">Wednesday</option>
+                    <option value="THURSDAY">Thursday</option>
+                    <option value="FRIDAY">Friday</option>
+                </select>
+                <!-- NEW: Week Selector Dropdown -->
+                <select id="week-selector">
+                    <option value="auto">Automatic</option>
+                    <option value="A">Week A</option>
+                    <option value="B">Week B</option>
+                </select>
+                <button id="fullscreen-btn" class="fullscreen-btn">
+                    <span>⛶</span>
+                    <span>Full Screen</span>
+                </button>
+                <div class="dark-mode-control">
+                    <span>🌙</span>
+                    <div class="toggle-switch" id="dark-mode-toggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <a href="login.html" class="nav-item" style="padding:6px 10px; font-size:12px;">Login</a>
+            </div>
+        </nav>
+        <div class="main-content">
+            <!-- NEW: Technology Timetable Container -->
+            <div class="tech-timetable-container" id="tech-timetable-container">
+                <table id="tech-timetable" class="tech-timetable">
+                    <!-- Generated by JS -->
+                </table>
+            </div>
+            <!-- OLD: Main Timetable Container -->
+            <div class="timetable-container" id="main-timetable-container">
+                <table id="timetable" class="timetable">
+                </table>
+            </div>
+            <div class="lessons-sidebar">
+                <div class="lessons-count-box">
+                    <div class="lessons-count-header">
+                        Lessons Until Half Term
+                        <button id="refresh-lessons-btn" class="refresh-lessons-btn" title="Refresh Lessons">🔄</button>
+                    </div>
+                    <div id="term-end-date">—</div>
+                    <div class="lessons-filter-controls">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="month">This Month</button>
+                        <button class="filter-btn" data-filter="week">This Week</button>
+                        <button class="filter-btn" data-filter="day">Today</button>
+                    </div>
+                    <div class="lessons-count-table-wrapper">
+                        <table class="lessons-count-table-header">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>Arakelian</th>
+                                    <th>Jenkins</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="lessons-count-scrollable">
+                            <table class="lessons-count-table">
+                                <tbody id="lessons-count-tbody"></tbody>
+                                <tfoot>
+                                    <tr style="border-top:1px solid var(--border-color); font-weight:bold;">
+                                        <td>TOTAL</td>
+                                        <td id="arakelian-total">0</td>
+                                        <td id="jenkins-total">0</td>
+                                        <td id="lessons-total-count">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- OLD: Non Inclusive Dates Box removed from here -->
+            </div>
+            <div class="teachers-sidebar">
+                <div class="teacher-box">
+                    <div class="teacher-header">
+                        <h3>Ms K. Arakelian</h3>
+                    </div>
+                    <div class="lesson-info">
+                        <div class="lesson-label">Current:</div>
+                        <div class="lesson-details" id="current-arakelian">No Lesson Now</div>
+                    </div>
+                    <div class="lesson-info">
+                        <div class="lesson-label">Next:</div>
+                        <div class="lesson-details" id="next-arakelian">No Lesson Next</div>
+                    </div>
+                </div>
+                <div class="teacher-box">
+                    <div class="teacher-header">
+                        <h3>Ms N. Jenkins</h3>
+                    </div>
+                    <div class="lesson-info">
+                        <div class="lesson-label">Current:</div>
+                        <div class="lesson-details" id="current-jenkins">No Lesson Now</div>
+                    </div>
+                    <div class="lesson-info">
+                        <div class="lesson-label">Next:</div>
+                        <div class="lesson-details" id="next-jenkins">No Lesson Next</div>
+                    </div>
+                </div>
+            </div>
+            <!-- NEW: Statistics Box (posizionato accanto a teachers-sidebar) -->
+            <div class="statistics-box" id="statistics-box">
+                <div class="statistics-header">
+                    Lesson Statistics
+                    <button id="refresh-stats-btn" class="refresh-stats-btn" title="Refresh Stats">🔄</button>
+                </div>
+                <!-- NEW: Teacher filter removed -->
+                <div class="stat-row">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        This Week:
+                    </span>
+                    <span class="stat-value" id="stat-week">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-week" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 2v4M16 2v4M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>
+                        This Month:
+                    </span>
+                    <span class="stat-value" id="stat-month">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-month" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        Until Half Term:
+                    </span>
+                    <span class="stat-value" id="stat-half-term">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-half-term" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">
+                        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Until Year End:
+                    </span>
+                    <span class="stat-value" id="stat-year-end">0</span>
+                    <div class="mini-progress-bar">
+                        <div class="mini-progress-fill" id="progress-year-end" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- NEW: Non Inclusive Dates Box moved here inside statistics box -->
+                <div class="non-inclusive-dates-box" id="non-inclusive-dates-box">
+                    <div class="non-inclusive-dates-header">Non Inclusive Dates</div>
+                    <ul id="non-inclusive-dates-list" class="non-inclusive-dates-list">
+                        <!-- Popolato via JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="version-badge" id="version-badge">ver.31111.01</div>
+    <script>
+        const ICONS = {
+            default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+            lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
+            break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+            lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
+        };
+        function updateDynamicBackgroundAndShadows() {
+            const now = new Date();
+            const hour = now.getHours();
+            const bg = document.getElementById('dynamic-bg');
+            const body = document.body;
+            body.classList.remove('time-morning', 'time-afternoon', 'time-evening');
+            bg.className = 'dynamic-bg';
+            if (hour >= 5 && hour < 12) {
+                bg.classList.add('morning-bg');
+                body.classList.add('time-morning');
+            } else if (hour >= 12 && hour < 18) {
+                bg.classList.add('afternoon-bg');
+                body.classList.add('time-afternoon');
+            } else {
+                bg.classList.add('evening-bg');
+                body.classList.add('time-evening');
+            }
+        }
+        window.addEventListener('online', () => {
+            document.getElementById('offline-banner').style.display = 'none';
+        });
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-banner').style.display = 'block';
+        });
+        const timetableData = {
+            "weekA": {
+                "MONDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "12 DT Textile", "room": "T1" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "12 / 13 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "9S DT", "room": "T1" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "9M", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "9A", "room": "A1" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "12 DT Textile", "room": "T1" }, "Ms N Jenkins": { "subject": "10 Art", "room": "A1" } } }
+                },
+                "TUESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "9S", "room": "A2" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "7AC", "room": "A1" }, "Ms N Jenkins": { "subject": "7AC DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "8AC", "room": "A1" }, "Ms N Jenkins": { "subject": "8AC DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9AC DT", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "WEDNESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "9HM Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "9C", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "7AC", "room": "A1" }, "Ms N Jenkins": { "subject": "7AC DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "7H", "room": "A1" }, "Ms N Jenkins": { "subject": "7H DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "THURSDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "10 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "9H", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "10 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "8S", "room": "A1" }, "Ms N Jenkins": { "subject": "8S DT", "room": "A2" } } }
+                },
+                "FRIDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "7MS", "room": "A1" }, "Ms N Jenkins": { "subject": "7MS DT", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "8HM", "room": "A1" }, "Ms N Jenkins": { "subject": "8HM DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "8AC", "room": "A1" }, "Ms N Jenkins": { "subject": "8AC DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "7H", "room": "A1" }, "Ms N Jenkins": { "subject": "7H DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9AC DT", "room": "A1" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A2" } } }
+                }
+            },
+            "weekB": {
+                "MONDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "8S", "room": "A1" }, "Ms N Jenkins": { "subject": "8S DT", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "9S", "room": "A2" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "7MS", "room": "A1" }, "Ms N Jenkins": { "subject": "7MS DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9S Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "TUESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "", "room": "A1" }, "Ms N Jenkins": { "subject": "10 Art", "room": "A1" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "PSHE", "room": "A1" }, "Ms N Jenkins": { "subject": "PSHE", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } }
+                },
+                "WEDNESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "10 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "11 Art", "room": "A1" }, "Ms N Jenkins": { "subject": "9C", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "8S", "room": "A1" }, "Ms N Jenkins": { "subject": "8S DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "9M", "room": "A1" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "12 / 13 Art", "room": "A1" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "", "room": "" }, "Ms N Jenkins": { "subject": "9A", "room": "A2" } } }
+                },
+                "THURSDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "9S Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "", "room": "" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "12 / 13 Art", "room": "A2" }, "Ms N Jenkins": { "subject": "11 Photography", "room": "A1" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "9AC DT", "room": "A1" }, "Ms N Jenkins": { "subject": "9H", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "8HM", "room": "A1" }, "Ms N Jenkins": { "subject": "8HM DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "7MS", "room": "A1" }, "Ms N Jenkins": { "subject": "7MS DT", "room": "A2" } } }
+                },
+                "FRIDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Ms K Arakelian": { "subject": "Form Time", "room": "A1" }, "Ms N Jenkins": { "subject": "Form Time", "room": "A2" } } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Ms K Arakelian": { "subject": "7AC", "room": "A1" }, "Ms N Jenkins": { "subject": "7AC DT", "room": "A2" } } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Ms K Arakelian": { "subject": "8AC", "room": "A1" }, "Ms N Jenkins": { "subject": "8AC DT", "room": "A2" } } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Ms K Arakelian": { "subject": "8HM", "room": "A1" }, "Ms N Jenkins": { "subject": "8HM DT", "room": "A2" } } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Ms K Arakelian": { "subject": "Lunch", "room": "" }, "Ms N Jenkins": { "subject": "Lunch", "room": "" } } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Ms K Arakelian": { "subject": "7H", "room": "A1" }, "Ms N Jenkins": { "subject": "7H DT", "room": "A2" } } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Ms K Arakelian": { "subject": "9HM Food", "room": "HE1" }, "Ms N Jenkins": { "subject": "9HM DT", "room": "A2" } } }
+                }
+            }
+        };
+        // NEW: Technology Department Data
+        const techTimetableData = {
+            "weekA": {
+                "MONDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "TUESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "WEDNESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "THURSDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "FRIDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                }
+            },
+            "weekB": {
+                // Similar structure as weekA
+                "MONDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "TUESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "WEDNESDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "THURSDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                },
+                "FRIDAY": {
+                    "Form Time": { "time": "09:00 - 09:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "1": { "time": "09:30 - 10:20", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "2": { "time": "10:20 - 11:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "3": { "time": "11:30 - 12:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4a": { "time": "12:30 - 13:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "4b": { "time": "13:30 - 14:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } },
+                    "5": { "time": "14:30 - 15:30", "teachers": { "Mr. Tech 1": {}, "Mr. Tech 2": {}, "Ms. Tech 3": {} } }
+                }
+            }
+        };
+
+        let currentMode = 'auto';
+        let currentWeek = 'A';
+        let currentViewDay = 'all';
+        let lessonsFilterMode = 'all';
+        let statisticsVisible = false;
+        let subjectsVisible = false; // NEW: Flag for subjects view
+        // currentTeacherFilter removed
+        const weekAStartDate = new Date(2025, 8, 1); // Set reference date to start of Week A
+        const schoolTerms = [
+            { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
+            { name: "Christmas Term", startDate: new Date(2025, 11, 22), endDate: new Date(2026, 0, 2) },
+            { name: "February Half Term", startDate: new Date(2026, 1, 16), endDate: new Date(2026, 1, 20) },
+            { name: "Easter Term", startDate: new Date(2026, 2, 30), endDate: new Date(2026, 3, 10) },
+            { name: "May Half Term", startDate: new Date(2026, 4, 25), endDate: new Date(2026, 4, 29) },
+            { name: "Summer Term", startDate: new Date(2026, 6, 20), endDate: new Date(2026, 7, 31) }
+        ];
+        // *** AGGIUNGI NUOVE DATE NON INCLUSIVE QUI ***
+        // Le date qui definite saranno escluse dal conteggio delle lezioni.
+        // Segui il formato: new Date(anno, mese - 1, giorno)
+        // Esempio: 21 Novembre 2025 -> new Date(2025, 10, 21)
+        // Esempio: 19 Dicembre 2025 -> new Date(2025, 11, 19)
+        const nonInclusiveDates = [
+            new Date(2025, 8, 1),   // 01/09/2025
+            new Date(2025, 8, 2),   // 02/09/2025
+            new Date(2025, 8, 25),  // 25/09/2025
+            new Date(2025, 9, 9),   // 09/10/2025
+            new Date(2025, 10, 21), // 21/11/2025
+            new Date(2025, 11, 19), // 19/12/2025
+            new Date(2026, 0, 5),   // 05/01/2026
+            new Date(2026, 2, 19),  // 19/03/2026
+            new Date(2026, 4, 4),   // 04/05/2026
+            new Date(2026, 5, 26),  // 26/06/2026
+            new Date(2026, 6, 3),   // 03/07/2026
+            new Date(2026, 6, 16),  // 16/07/2026
+            new Date(2026, 6, 17),  // 17/07/2026
+            // Aggiungi altre date qui, ad esempio:
+            // new Date(2026, 0, 1),  // 1 Jan 2026
+            // new Date(2026, 4, 3),  // 3 May 2026
+        ];
+        const nonInclusiveWeeks = []; // Array per settimane intere, se necessario in futuro
+        // NEW: Specifica periodi per alcune date
+        const nonInclusivePeriods = {
+            "2025-09-25": ["4b", "5"], // Open Evening Y6
+            "2025-10-09": ["4b", "5"], // Open Evening 6 Form
+            "2026-03-19": ["4b", "5"]  // Option Evening
+        };
+        const schoolYearEnd = new Date(2026, 7, 31); // 31 Aug 2026
+        const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
+        const techTeachers = ['Mr. Tech 1', 'Mr. Tech 2', 'Ms. Tech 3']; // NEW: Tech teachers
+        const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+        const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
+
+        function extractClassNumber(subject) {
+            const match = subject.match(/^(\d+)/);
+            return match ? parseInt(match[1], 10) : 999;
+        }
+        function parseTime(timeStr) {
+            const match = timeStr.match(/(\d{1,2}):(\d{2})/);
+            if (!match) return null;
+            return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
+        }
+        function getCurrentWeekCorrect() {
+            const now = new Date();
+            let lastTermEnd = new Date(2025, 8, 1);
+            for (let term of schoolTerms) {
+                if (term.endDate < now) {
+                    lastTermEnd = new Date(term.endDate);
+                } else {
+                    break;
+                }
+            }
+            const nextMonday = new Date(lastTermEnd);
+            nextMonday.setDate(lastTermEnd.getDate() + 3);
+            const dayOfWeek = nextMonday.getDay();
+            if (dayOfWeek !== 1) {
+                nextMonday.setDate(nextMonday.getDate() + (1 - dayOfWeek + 7) % 7);
+            }
+            const diffTime = now.getTime() - nextMonday.getTime();
+            const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+            // CORREZIONE: Utilizzo di 'diffWeeks' invece di 'diffWks'
+            return diffWeeks % 2 === 0 ? 'A' : 'B';
+        }
+        function getCurrentWeek() {
+            if (currentMode === 'auto') return getCurrentWeekCorrect();
+            return currentWeek;
+        }
+        function getSubjectClass(subject) {
+            if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
+            let clean = subject.toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/\//g, '-')
+                .replace(/[^a-z0-9-]/g, '');
+            clean = clean.replace(/-+/g, '-').replace(/^-|-$/g, '');
+            return `subject-${clean}`;
+        }
+        function formatDate(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const full = date.toLocaleDateString('en-US', options);
+            const parts = full.split(' ');
+            const weekday = parts[0].replace(',', '');
+            const month = parts[1];
+            const day = parts[2]?.replace(',', '') || parts[3]?.replace(',', '');
+            const year = parts[parts.length - 1];
+            const today = new Date();
+            const isToday = date.toDateString() === today.toDateString();
+            return `<div class="date-weekday">${weekday} <span class="date-day">${day}</span> ${month} ${year}</div>`;
+        }
+        function isCurrentTime(timeRange) {
+            if (!timeRange) return false;
+            const now = new Date();
+            const [start, end] = timeRange.split(' - ');
+            const s = parseTime(start);
+            const e = parseTime(end);
+            if (!s || !e) return false;
+            const nowMins = now.getHours() * 60 + now.getMinutes();
+            const startMins = s.hours * 60 + s.minutes;
+            const endMins = e.hours * 60 + e.minutes;
+            return nowMins >= startMins && nowMins < endMins;
+        }
+        // CORREZIONE PRINCIPALE: Funzione per ottenere la data corretta di un giorno specifico in una settimana (A o B)
+        function getDayDate(day, week) {
+            const now = new Date();
+            const targetWeekIsA = (week === 'A');
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const dayIndex = days.indexOf(day);
+            if (dayIndex === -1) return new Date(); // Restituisci oggi se il giorno non è valido
+            // Trova la settimana corrente (A o B) per oggi
+            const currentWeekType = getCurrentWeekCorrect();
+            const isTodayTargetWeek = (currentWeekType === week);
+            if (isTodayTargetWeek) {
+                // Se oggi è della settimana richiesta, calcola la data del giorno richiesto
+                const todayIndex = days.indexOf(today.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase());
+                const dayDiff = dayIndex - todayIndex;
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() + dayDiff);
+                return targetDate;
+            } else {
+                // Se oggi non è della settimana richiesta, dobbiamo trovare una settimana futura o passata della settimana richiesta
+                // Cerchiamo a partire da oggi
+                let searchDate = new Date(today);
+                let foundDate = null;
+                // Cerca avanti nel tempo
+                for (let i = 0; i < 14; i++) { // Cerca entro 14 giorni
+                    const checkDate = new Date(searchDate);
+                    checkDate.setDate(searchDate.getDate() + i);
+                    const checkWeekType = getWeekTypeForDate(checkDate);
+                    const checkDayName = checkDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                    if (checkWeekType === week && checkDayName === day) {
+                        foundDate = checkDate;
+                        break;
+                    }
+                }
+                if (foundDate) {
+                    return foundDate;
+                } else {
+                    // Se non trovato avanti, cerca indietro
+                    for (let i = 1; i < 14; i++) { // Cerca entro 14 giorni indietro
+                        const checkDate = new Date(today);
+                        checkDate.setDate(today.getDate() - i);
+                        const checkWeekType = getWeekTypeForDate(checkDate);
+                        const checkDayName = checkDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                        if (checkWeekType === week && checkDayName === day) {
+                            foundDate = checkDate;
+                            break;
+                        }
+                    }
+                }
+                return foundDate || new Date(); // Restituisci la data trovata o oggi come fallback
+            }
+        }
+        function getNextPeriod(currentPeriodIndex, day, week) {
+            for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
+                const p = periods[i];
+                const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
+                if (wd[day] && wd[day][p]) return { period: p, index: i };
+            }
+            return null;
+        }
+        function getNextTerm() {
+            const now = new Date();
+            for (let term of schoolTerms) {
+                if (now < term.endDate) return term;
+            }
+            return null;
+        }
+        function formatTermDates(term) {
+            const start = term.startDate;
+            const end = term.endDate;
+            const now = new Date();
+            let weeksRemaining = 0;
+            if (now < start) {
+                const diffTime = start - now;
+                weeksRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
+            } else if (now <= end) {
+                const diffTime = end - now;
+                weeksRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
+            }
+            const startDateStr = `${start.getDate()} ${start.toLocaleDateString('en-US', { month: 'short' })}`;
+            const endDateStr = `${end.getDate()} ${end.toLocaleDateString('en-US', { month: 'short' })} ${start.getFullYear()}`;
+            const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
+            return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
+        }
+        function getCutOffDate(termStartDate) {
+            const termMonday = new Date(termStartDate);
+            const day = termMonday.getDay();
+            const diff = termMonday.getDate() - day + (day === 0 ? -6 : 1);
+            const mondayOfTermWeek = new Date(termMonday.setDate(diff));
+            const fridayBefore = new Date(mondayOfTermWeek);
+            fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
+            return fridayBefore;
+        }
+        // NEW: Check if a date is non-inclusive
+        function isNonInclusiveDate(date) {
+            const dateStr = date.toDateString();
+            return nonInclusiveDates.some(d => d.toDateString() === dateStr);
+        }
+        function getWeekTypeForDate(date) {
+            const searchDate = new Date(date);
+            // NEW: Check for non-inclusive dates first
+            if (isNonInclusiveDate(searchDate)) {
+                return null;
+            }
+            const day = searchDate.getDay();
+            const monday = new Date(searchDate);
+            monday.setDate(searchDate.getDate() - (day === 0 ? 6 : day - 1));
+            // NEW: Check for non-inclusive weeks
+            for (const week of nonInclusiveWeeks) {
+                if (monday >= week.start && monday <= week.end) {
+                    return null;
+                }
+            }
+            for (const term of schoolTerms) {
+                const termStart = new Date(term.startDate);
+                const termEnd = new Date(term.endDate);
+                const termMon = new Date(termStart);
+                termMon.setDate(termStart.getDate() - (termStart.getDay() === 0 ? 6 : termStart.getDay() - 1));
+                if (monday >= termMon && monday <= termEnd) {
+                    return null;
+                }
+            }
+            let refMonday = new Date(weekAStartDate); // Usa la data di riferimento
+            let weekCount = 0;
+            while (refMonday <= monday) {
+                let skip = false;
+                for (const term of schoolTerms) {
+                    const termStart = new Date(term.startDate);
+                    const termEnd = new Date(term.endDate);
+                    const termMon = new Date(termStart);
+                    termMon.setDate(termStart.getDate() - (termStart.getDay() === 0 ? 6 : termStart.getDay() - 1));
+                    if (refMonday >= termMon && refMonday <= termEnd) {
+                        skip = true;
+                        break;
+                    }
+                }
+                if (!skip) {
+                    if (refMonday < monday) weekCount++;
+                }
+                const next = new Date(refMonday);
+                next.setDate(refMonday.getDate() + 7);
+                refMonday = next;
+            }
+            return weekCount % 2 === 0 ? 'A' : 'B';
+        }
+        function countLessonsInWeek(weekType) { // Removed teacherFilter parameter
+            const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
+            let count = 0;
+            for (const day of days) {
+                const dayData = weekData[day];
+                for (const period in dayData) {
+                    const entry = dayData[period];
+                    if (!entry || !entry.teachers) continue;
+                    for (const teacher of teachers) {
+                        const subject = entry.teachers[teacher]?.subject;
+                        if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                            // NEW: Check for period-specific exclusions
+                            const dateStr = getDayDate(day, weekType).toISOString().split('T')[0];
+                            if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                continue;
+                            }
+                            count++;
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+        // NEW: Updated countLessonsInMonth to exclude non-inclusive dates
+        function countLessonsInMonth(month, year) { // Removed teacherFilter parameter
+            const now = new Date();
+            let count = 0;
+            let currentDate = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            while (currentDate.getDate() <= lastDay) {
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                if (['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'].includes(dayName)) {
+                    const weekType = getWeekTypeForDate(currentDate);
+                    if (weekType) {
+                        const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
+                        const dayData = weekData[dayName];
+                        for (const period in dayData) {
+                            const entry = dayData[period];
+                            if (!entry || !entry.teachers) continue;
+                            for (const teacher of teachers) {
+                                const subject = entry.teachers[teacher]?.subject;
+                                if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                    // NEW: Check for period-specific exclusions
+                                    const dateStr = currentDate.toISOString().split('T')[0];
+                                    if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                        continue;
+                                    }
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return count;
+        }
+        // NEW: Updated countLessonsUntilYearEnd to exclude non-inclusive dates
+        function countLessonsUntilYearEnd() { // Removed teacherFilter parameter
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let count = 0;
+            let currentDate = new Date(todayStart);
+            while (currentDate <= schoolYearEnd) {
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                if (['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'].includes(dayName)) {
+                    const weekType = getWeekTypeForDate(currentDate);
+                    if (weekType) {
+                        const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
+                        const dayData = weekData[dayName];
+                        for (const period in dayData) {
+                            const entry = dayData[period];
+                            if (!entry || !entry.teachers) continue;
+                            for (const teacher of teachers) {
+                                const subject = entry.teachers[teacher]?.subject;
+                                if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                    // NEW: Check for period-specific exclusions
+                                    const dateStr = currentDate.toISOString().split('T')[0];
+                                    if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                        continue;
+                                    }
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return count;
+        }
+        // *** CORREZIONE PRINCIPALE ***
+        // Funzione aggiornata per calcolare correttamente le lezioni rimanenti
+        function countLessonsUntilTerm(filterMode = 'all') {
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const currentTerm = getNextTerm();
+            if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
+            // Determina il periodo di conteggio
+            let startDate = new Date(todayStart);
+            let endDate = new Date(todayStart);
+            if (filterMode === 'month') {
+                // Lezioni rimanenti NEL MESE CORRENTE, a partire da OGGI
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0); // ultimo giorno del mese
+            } else if (filterMode === 'week') {
+                // Lezioni rimanenti NELLA SETTIMANA CORRENTE, a partire da OGGI
+                const dayOfWeek = todayStart.getDay(); // 0=Domenica, 1=Lunedì...
+                const daysUntilFriday = (5 - dayOfWeek + 7) % 7; // Venerdì è il 5° giorno lavorativo
+                endDate = new Date(todayStart);
+                endDate.setDate(todayStart.getDate() + daysUntilFriday);
+            } else if (filterMode === 'day') {
+                // Lezioni rimanenti OGGI
+                endDate = new Date(todayStart);
+            } else { // filterMode === 'all'
+                // Lezioni rimanenti fino al termine
+                endDate = getCutOffDate(currentTerm.startDate);
+            }
+            const subjectCount = {};
+            const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
+            const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
+            let currentDate = new Date(startDate);
+            const endDateTime = endDate.getTime();
+            while (currentDate.getTime() <= endDateTime) {
+                const isToday = currentDate.toDateString() === todayStart.toDateString();
+                // Salta le date non inclusive
+                if (isNonInclusiveDate(currentDate)) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    continue;
+                }
+                // Salta i weekend
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                if (!['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    continue;
+                }
+                const weekType = getWeekTypeForDate(currentDate);
+                if (!weekType) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    continue;
+                }
+                const dayData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'][dayName];
+                if (dayData) {
+                    for (const period in dayData) {
+                        const entry = dayData[period];
+                        if (!entry || !entry.teachers) continue;
+                        for (const teacher of teachers) {
+                            const subject = entry.teachers[teacher]?.subject;
+                            if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
+                            // Salta i periodi esclusi specifici
+                            const dateStr = currentDate.toISOString().split('T')[0];
+                            if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                continue;
+                            }
+                            let includeLesson = false;
+                            if (isToday) {
+                                // Per oggi, includi solo le lezioni non ancora finite
+                                const timeRange = entry.time;
+                                if (timeRange) {
+                                    const [_, endStr] = timeRange.split(' - ');
+                                    const endTime = parseTime(endStr);
+                                    if (endTime) {
+                                        const nowMins = now.getHours() * 60 + now.getMinutes();
+                                        const endMins = endTime.hours * 60 + endTime.minutes;
+                                        if (nowMins < endMins) {
+                                            includeLesson = true;
+                                            todayLessons[teacher].add(subject);
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Per date future, includi tutte le lezioni
+                                includeLesson = true;
+                            }
+                            if (includeLesson) {
+                                subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+                                teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
+                            }
+                        }
+                    }
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
+        }
+        // Resto del codice identico...
+        // NEW: Function to count non-inclusive lessons for a specific filter mode
+        function countNonInclusiveLessons(filterMode = 'all') {
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const currentTerm = getNextTerm();
+            if (!currentTerm) return { counts: {}, byTeacher: {} };
+            const cutOffDate = getCutOffDate(currentTerm.startDate);
+            const thisWeekStart = new Date(todayStart);
+            const dayOfWeek = thisWeekStart.getDay();
+            thisWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+            const thisWeekEnd = new Date(thisWeekStart);
+            thisWeekEnd.setDate(thisWeekStart.getDate() + 4);
+            const subjectCount = {};
+            const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
+            let currentDate = new Date(todayStart);
+            if (filterMode === 'week') {
+                currentDate = new Date(thisWeekStart);
+            } else if (filterMode === 'day') {
+                currentDate = new Date(todayStart);
+            } else if (filterMode === 'month') {
+                currentDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            }
+            let endDate = cutOffDate;
+            if (filterMode === 'week') {
+                endDate = thisWeekEnd;
+            } else if (filterMode === 'day') {
+                endDate = todayStart;
+            } else if (filterMode === 'month') {
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            }
+            while (currentDate <= endDate) {
+                // NEW: Check if the current date is non-inclusive
+                if (isNonInclusiveDate(currentDate)) {
+                    const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                    if (['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
+                        const weekType = getWeekTypeForDate(new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000)); // Check week type for previous week
+                        if (weekType) {
+                            const weekData = weekType === 'A' ? timetableData.weekA : timetableData.weekB;
+                            const dayData = weekData[dayName];
+                            if (dayData) {
+                                for (const period in dayData) {
+                                    const entry = dayData[period];
+                                    if (!entry || !entry.teachers) continue;
+                                    for (const teacher of teachers) {
+                                        const subject = entry.teachers[teacher]?.subject;
+                                        if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
+                                        // NEW: Check for period-specific exclusions
+                                        const dateStr = currentDate.toISOString().split('T')[0];
+                                        if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                            continue;
+                                        }
+                                        subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+                                        teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return { counts: subjectCount, byTeacher: teacherCounts };
+        }
+        // NEW: Generate Technology Timetable
+        function generateTechTimetable() {
+            const week = getCurrentWeek();
+            const wd = week === 'A' ? techTimetableData.weekA : techTimetableData.weekB;
+            const table = document.getElementById('tech-timetable');
+            const today = new Date().toDateString();
+            let html = '<thead><tr><th class="tech-period-cell">Period</th><th class="tech-time-cell">Time</th>';
+            days.forEach(day => {
+                const d = getDayDate(day, week);
+                const formattedDate = `${d.getDate()} ${d.toLocaleDateString('en-US', { month: 'long' })} ${d.getFullYear()}`;
+                const dayDate = new Date(d).toDateString();
+                const dayName = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
+                let dayHeader = dayName;
+                if (dayDate === today) {
+                    dayHeader += ` <span class="today-badge-inline">Today</span>`;
+                }
+                html += `<th colspan="${techTeachers.length}">${dayHeader}<br><small>${formattedDate}</small></th>`;
+            });
+            html += '</tr><tr><th class="tech-period-cell"></th><th class="tech-time-cell"></th>';
+            days.forEach(() => {
+                techTeachers.forEach(teacher => {
+                    html += `<th>${teacher}</th>`;
+                });
+            });
+            html += '</tr></thead><tbody>';
+            periods.forEach((period, idx) => {
+                const time = wd[days[0]]?.[period]?.time || '';
+                html += `<tr><td class="tech-period-cell">${period}</td>`;
+                html += `<td class="tech-time-cell">${time}</td>`;
+                days.forEach(day => {
+                    techTeachers.forEach(teacher => {
+                        const cellData = JSON.stringify({
+                            subject: '',
+                            room: '',
+                            teacher,
+                            time,
+                            period,
+                            day,
+                            week
+                        });
+                        html += `<td class="tech-subject-cell" data-cell='${cellData}' data-teacher="${teacher.toLowerCase().replace(/\s+/g, '-')}" data-period="${period}" data-day="${day}"></td>`;
+                    });
+                });
+                html += '</tr>';
+            });
+            table.innerHTML = html;
+        }
+        function generateTimetable() {
+            const week = getCurrentWeek();
+            const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
+            const table = document.getElementById('timetable');
+            let visibleDays = days;
+            if (currentViewDay !== 'all') {
+                visibleDays = [currentViewDay];
+            } else if (statisticsVisible) {
+                // Mostra solo oggi quando stats è attivo
+                const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                visibleDays = [today];
+            }
+            const today = new Date().toDateString();
+            let html = '<thead><tr><th class="period-cell">Period</th><th class="time-cell">Time</th>';
+            visibleDays.forEach(day => {
+                const d = getDayDate(day, week);
+                const formattedDate = `${d.getDate()} ${d.toLocaleDateString('en-US', { month: 'long' })} ${d.getFullYear()}`;
+                const dayDate = new Date(d).toDateString();
+                const dayName = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
+                let dayHeader = dayName;
+                if (dayDate === today) {
+                    dayHeader += ` <span class="today-badge-inline">Today</span>`;
+                }
+                html += `<th colspan="2">${dayHeader}<br><small>${formattedDate}</small></th>`;
+            });
+            html += '</tr><tr><th class="period-cell"></th><th class="time-cell"></th>';
+            visibleDays.forEach(() => {
+                html += '<th>Ms K. Arakelian</th><th>Ms N. Jenkins</th>';
+            });
+            html += '</tr></thead><tbody>';
+            periods.forEach((period, idx) => {
+                const time = wd[days[0]]?.[period]?.time || '';
+                html += `<tr><td class="period-cell">${period}</td>`;
+                html += `<td class="time-cell">${time}</td>`;
+                visibleDays.forEach(day => {
+                    const dayDate = getDayDate(day, week).toDateString();
+                    const isToday = (dayDate === today);
+                    // NEW: Check if the day date is non-inclusive
+                    const isNonIncl = isNonInclusiveDate(getDayDate(day, week));
+                    // NEW: Check for period-specific exclusions for this specific date
+                    const dateStr = getDayDate(day, week).toISOString().split('T')[0];
+                    const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
+                    teachers.forEach(teacher => {
+                        const data = wd[day]?.[period]?.teachers?.[teacher];
+                        let cls = 'subject-cell';
+                        let content = '';
+                        if (data?.subject && !isPeriodExcluded) {
+                            if (data.subject === 'Form Time') {
+                                cls += ' form-time';
+                                content = 'Form Time';
+                            } else if (data.subject === 'Lunch') {
+                                cls += ' lunch';
+                                content = 'Lunch';
+                            } else {
+                                cls += ` ${getSubjectClass(data.subject)}`;
+                                content = `<div class="subject-name">${data.subject}</div>${data.room ? `<div class="room-name">${data.room}</div>` : ''}`;
+                            }
+                        } else {
+                            // NEW: Show Room Free only if the date is not non-inclusive and period is not excluded
+                            if (isToday && time && period !== 'Form Time' && period !== 'Lunch' && !isNonIncl && !isPeriodExcluded) {
+                                const [startStr, endStr] = time.split(' - ');
+                                const start = parseTime(startStr);
+                                const end = parseTime(endStr);
+                                if (start && end) {
+                                    const now = new Date();
+                                    const nowMins = now.getHours() * 60 + now.getMinutes();
+                                    const startMins = start.hours * 60 + start.minutes;
+                                    const endMins = end.hours * 60 + end.minutes;
+                                    if (nowMins < endMins) {
+                                        content = `<div class="room-free-badge">Room Free</div>`;
+                                    }
+                                }
+                            }
+                        }
+                        const cellData = JSON.stringify({
+                            subject: data?.subject || '',
+                            room: data?.room || '',
+                            teacher,
+                            time,
+                            period,
+                            day,
+                            week
+                        });
+                        html += `<td class="${cls}" data-cell='${cellData}' data-teacher="${teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins'}">${content}</td>`;
+                    });
+                });
+                html += '</tr>';
+            });
+            table.innerHTML = html;
+        }
+        function renderLessonsCountTable() {
+            const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode); // Removed currentTeacherFilter
+            // NEW: Count non-inclusive lessons for the current filter mode
+            const { counts: nonInclCounts, byTeacher: nonInclByTeacher } = countNonInclusiveLessons(lessonsFilterMode);
+            const sortedSubjects = Object.keys(counts).sort((a, b) => {
+                const aNum = extractClassNumber(a);
+                const bNum = extractClassNumber(b);
+                if (aNum !== bNum) return aNum - bNum;
+                return a.localeCompare(b);
+            });
+            const tbody = document.getElementById('lessons-count-tbody');
+            tbody.innerHTML = '';
+            for (const subject of sortedSubjects) {
+                const aCount = byTeacher['Ms K Arakelian'][subject] || 0;
+                const jCount = byTeacher['Ms N Jenkins'][subject] || 0;
+                const total = aCount + jCount;
+                const aNonInclCount = nonInclByTeacher['Ms K Arakelian'][subject] || 0;
+                const jNonInclCount = nonInclByTeacher['Ms N Jenkins'][subject] || 0;
+                const totalNonIncl = aNonInclCount + jNonInclCount;
+                const className = total <= 2 ? 'low-count' : '';
+                const tr = document.createElement('tr');
+                const isArakelianToday = todayLessons['Ms K Arakelian'].has(subject);
+                const isJenkinsToday = todayLessons['Ms N Jenkins'].has(subject);
+                // NEW: Add non-inclusive count in brackets with blue color
+                let arakelianDisplay = aCount;
+                if (aNonInclCount > 0) {
+                    arakelianDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${aNonInclCount}]</span>`;
+                }
+                let jenkinsDisplay = jCount;
+                if (jNonInclCount > 0) {
+                    jenkinsDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${jNonInclCount}]</span>`;
+                }
+                let totalDisplay = total;
+                if (totalNonIncl > 0) {
+                    totalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${totalNonIncl}]</span>`;
+                }
+                tr.innerHTML = `
+                    <td class="${className}">${subject}</td>
+                    <td class="${aCount <= 2 ? 'low-count' : ''} ${isArakelianToday ? 'today-arakelian' : ''}">${arakelianDisplay}</td>
+                    <td class="${jCount <= 2 ? 'low-count' : ''} ${isJenkinsToday ? 'today-jenkins' : ''}">${jenkinsDisplay}</td>
+                    <td class="${total <= 2 ? 'low-count' : ''}">${totalDisplay}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+            // Calcola totali per il box Lessons Until Half Term
+            let totalA = 0, totalJ = 0, grandTotal = 0;
+            let totalA_NonIncl = 0, totalJ_NonIncl = 0, grandTotal_NonIncl = 0;
+            for (const subject in byTeacher['Ms K Arakelian']) {
+                totalA += byTeacher['Ms K Arakelian'][subject];
+            }
+            for (const subject in byTeacher['Ms N Jenkins']) {
+                totalJ += byTeacher['Ms N Jenkins'][subject];
+            }
+            grandTotal = totalA + totalJ;
+            // Calcola totali non inclusi
+            for (const subject in nonInclByTeacher['Ms K Arakelian']) {
+                totalA_NonIncl += nonInclByTeacher['Ms K Arakelian'][subject];
+            }
+            for (const subject in nonInclByTeacher['Ms N Jenkins']) {
+                totalJ_NonIncl += nonInclByTeacher['Ms N Jenkins'][subject];
+            }
+            grandTotal_NonIncl = totalA_NonIncl + totalJ_NonIncl;
+            // NEW: Add non-inclusive count to totals
+            let arakelianTotalDisplay = totalA;
+            if (totalA_NonIncl > 0) {
+                arakelianTotalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${totalA_NonIncl}]</span>`;
+            }
+            let jenkinsTotalDisplay = totalJ;
+            if (totalJ_NonIncl > 0) {
+                jenkinsTotalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${totalJ_NonIncl}]</span>`;
+            }
+            let grandTotalDisplay = grandTotal;
+            if (grandTotal_NonIncl > 0) {
+                grandTotalDisplay += ` <span style="color: #007bff; font-size: 0.9em;">[${grandTotal_NonIncl}]</span>`;
+            }
+            document.getElementById('arakelian-total').innerHTML = arakelianTotalDisplay;
+            document.getElementById('jenkins-total').innerHTML = jenkinsTotalDisplay;
+            document.getElementById('lessons-total-count').innerHTML = grandTotalDisplay;
+            const nextTerm = getNextTerm();
+            const termDate = nextTerm?.startDate 
+                ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
+                : '—';
+            document.getElementById('term-end-date').textContent = termDate;
+        }
+        function updateTeacherBoxes() {
+            const now = new Date();
+            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            const week = getCurrentWeek();
+            const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
+            const todayData = wd[today];
+            teachers.forEach(teacher => {
+                const key = teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins';
+                let current = 'No Lesson Now';
+                let next = 'No Lesson Next';
+                let currentIdx = -1;
+                periods.forEach((p, i) => {
+                    if (todayData?.[p] && isCurrentTime(todayData[p].time)) {
+                        currentIdx = i;
+                        const d = todayData[p].teachers[teacher];
+                        if (d?.subject) {
+                            current = d.subject === 'Form Time' || d.subject === 'Lunch' 
+                                ? d.subject 
+                                : `${d.subject}${d.room ? ` - ${d.room}` : ''}`;
+                        }
+                    }
+                });
+                if (currentIdx >= 0) {
+                    const nextInfo = getNextPeriod(currentIdx, today, week);
+                    if (nextInfo) {
+                        const d = todayData[nextInfo.period].teachers[teacher];
+                        if (d?.subject) {
+                            next = d.subject === 'Form Time' || d.subject === 'Lunch' 
+                                ? d.subject 
+                                : `${d.subject}${d.room ? ` - ${d.room}` : ''}`;
+                        }
+                    }
+                } else {
+                    periods.forEach(p => {
+                        if (next === 'No Lesson Next' && todayData?.[p]) {
+                            const start = parseTime(todayData[p].time.split(' - ')[0]);
+                            if (start) {
+                                const nowMins = now.getHours() * 60 + now.getMinutes();
+                                const startMins = start.hours * 60 + start.minutes;
+                                if (nowMins < startMins) {
+                                    const d = todayData[p].teachers[teacher];
+                                    if (d?.subject) {
+                                        next = d.subject === 'Form Time' || d.subject === 'Lunch' 
+                                            ? d.subject 
+                                            : `${d.subject}${d.room ? ` - ${d.room}` : ''}`;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                document.getElementById(`current-${key}`).textContent = current;
+                document.getElementById(`next-${key}`).textContent = next;
+            });
+        }
+        function updateClockPrecise() {
+            const now = new Date();
+            document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('date-info').innerHTML = formatDate(now);
+            const w = getCurrentWeek();
+            document.getElementById('week-info').textContent = `Current Week: ${w}`;
+        }
+        function updateCountdownPrecise() {
+            const now = new Date();
+            const nextTerm = getNextTerm();
+            if (nextTerm) {
+                const diff = nextTerm.startDate.getTime() - now.getTime();
+                if (diff > 0) {
+                    const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+                    document.getElementById('countdown-title').textContent = nextTerm.name;
+                    document.getElementById('countdown-days').textContent = totalDays.toString().padStart(3, '0');
+                    document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('countdown-minutes').textContent = mins.toString().padStart(2, '0');
+                    document.getElementById('countdown-seconds').textContent = secs.toString().padStart(2, '0');
+                    document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
+                } else {
+                    document.getElementById('countdown-title').textContent = nextTerm.name;
+                    document.getElementById('countdown-days').textContent = "000";
+                    document.getElementById('countdown-hours').textContent = "00";
+                    document.getElementById('countdown-minutes').textContent = "00";
+                    document.getElementById('countdown-seconds').textContent = "00";
+                    document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
+                }
+            } else {
+                document.getElementById('countdown-title').textContent = "No More Terms";
+                document.getElementById('countdown-days').textContent = "000";
+                document.getElementById('countdown-hours').textContent = "00";
+                document.getElementById('countdown-minutes').textContent = "00";
+                document.getElementById('countdown-seconds').textContent = "00";
+                document.getElementById('term-info-box').textContent = "Academic year completed";
+            }
+        }
+        // *** CORREZIONE PRINCIPALE ***
+        function updateNowContextBar() {
+            const now = new Date();
+            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            const isTodayVisible = (currentViewDay === 'all') || (currentViewDay === today) || statisticsVisible || subjectsVisible; // NEW: Check subjectsVisible
+            const currentDayData = (getCurrentWeek() === 'A' ? timetableData.weekA : timetableData.weekB)[today];
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const nowContextBar = document.getElementById('now-context-bar');
+            nowContextBar.className = 'now-context-bar'; // Resetta le classi
+            // Rimuovi tutti i badge e le classi 'now-*' dalle celle
+            document.querySelectorAll('.now-badge').forEach(el => el.remove());
+            document.querySelectorAll('.subject-cell.now-lesson, .subject-cell.now-break, .tech-subject-cell.now-lesson, .tech-subject-cell.now-break').forEach(el => { // NEW: Include tech cells
+                el.classList.remove('now-lesson', 'now-break');
+            });
+            let summaryText = "No scheduled activity";
+            let iconType = 'default';
+            let inPeriod = false;
+            let isBreakOrLunch = false;
+            let nextLessonTime = null;
+            let nextLessonStartTime = null;
+            if (isTodayVisible && currentDayData) {
+                const visibleDays = currentViewDay === 'all' ? days : [currentViewDay];
+                const todayIndexInVisible = visibleDays.indexOf(today);
+                if (todayIndexInVisible === -1 && !statisticsVisible && !subjectsVisible) { // NEW: Check subjectsVisible
+                    // Se oggi non è visibile e non siamo in vista stats o subjects, mostra messaggio
+                    summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Today not visible`;
+                } else {
+                    // NEW: Check if today is non-inclusive
+                    if (isNonInclusiveDate(now)) {
+                        summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date`;
+                        document.getElementById('now-summary-content').innerHTML = summaryText;
+                        document.getElementById('now-summary-icon').innerHTML = ICONS['default'] || ICONS.default;
+                        return; // Interrompi qui se è una data non inclusiva
+                    }
+                    let todayColumnOffset = 2;
+                    if (!statisticsVisible && !subjectsVisible && todayIndexInVisible !== -1) { // NEW: Check subjectsVisible
+                        todayColumnOffset = 2 + (todayIndexInVisible * 2);
+                    }
+                    // NEW: Determine if we are viewing the main or tech timetable
+                    const isMainTimetable = !subjectsVisible;
+                    const timetableToUse = isMainTimetable ? timetableData : techTimetableData;
+                    const teachersToUse = isMainTimetable ? teachers : techTeachers;
+                    const cellClass = isMainTimetable ? 'subject-cell' : 'tech-subject-cell';
+                    // Cerca la lezione corrente
+                    for (let i = 0; i < periods.length; i++) {
+                        const period = periods[i];
+                        const timeRange = currentDayData[period]?.time;
+                        if (!timeRange) continue;
+                        const [startStr, endStr] = timeRange.split(' - ');
+                        const start = parseTime(startStr);
+                        const end = parseTime(endStr);
+                        if (!start || !end) continue;
+                        const startMinutes = start.hours * 60 + start.minutes;
+                        const endMinutes = end.hours * 60 + end.minutes;
+                        if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                            const row = document.querySelectorAll(`#${isMainTimetable ? 'timetable' : 'tech-timetable'} tbody tr`)[i];
+                            if (row) {
+                                const cells = row.querySelectorAll('td');
+                                // NEW: Calculate offset based on number of teachers in the current timetable
+                                const teacherCount = isMainTimetable ? teachers.length : techTeachers.length;
+                                const dayOffset = visibleDays.indexOf(today);
+                                if (dayOffset !== -1) {
+                                    let cellOffset = 2 + (dayOffset * teacherCount); // 2 for Period and Time columns
+                                    for (let j = 0; j < teacherCount; j++) {
+                                        const cellIndex = cellOffset + j;
+                                        if (cells[cellIndex]) {
+                                            const cellData = JSON.parse(cells[cellIndex].dataset.cell || '{}');
+                                            const subject = cellData.subject || '';
+                                            const teacher = cellData.teacher || '';
+                                            // NEW: Check for period-specific exclusions for this specific date
+                                            const dateStr = now.toISOString().split('T')[0];
+                                            const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
+                                            if (isPeriodExcluded) {
+                                                // Clear any existing classes and badges for excluded periods
+                                                cells[cellIndex].classList.remove('now-lesson', 'arakelian', 'jenkins', 'tech1', 'tech2', 'tech3', 'now-break');
+                                                const existingBadge = cells[cellIndex].querySelector('.now-badge');
+                                                if (existingBadge) existingBadge.remove();
+                                                continue; // Salta l'elaborazione per questo periodo escluso
+                                            }
+                                            let teacherClass = '';
+                                            if (isMainTimetable) {
+                                                if (teacher === 'Ms K Arakelian') teacherClass = 'arakelian';
+                                                else if (teacher === 'Ms N Jenkins') teacherClass = 'jenkins';
+                                            } else { // Tech timetable
+                                                if (teacher === 'Mr. Tech 1') teacherClass = 'tech1';
+                                                else if (teacher === 'Mr. Tech 2') teacherClass = 'tech2';
+                                                else if (teacher === 'Ms. Tech 3') teacherClass = 'tech3';
+                                            }
+                                            // Gestione badge 'Now' e 'Break' durante la pausa 10:20-10:40 per lezioni 7 e 8
+                                            let showNowBadge = true;
+                                            if (period === '2' && timeRange === '10:20 - 11:30') {
+                                                if (currentMinutes >= (10 * 60 + 20) && currentMinutes < (10 * 60 + 40)) {
+                                                    if (/^(7|8)/.test(subject)) {
+                                                        showNowBadge = false;
+                                                    }
+                                                }
+                                            }
+                                            if (subject === 'Lunch' || subject === 'Form Time') {
+                                                cells[cellIndex].classList.add('now-break');
+                                            } else {
+                                                cells[cellIndex].classList.add('now-lesson', teacherClass);
+                                                if (subject && !['Lunch', 'Form Time', ''].includes(subject) && showNowBadge) {
+                                                    const badge = document.createElement('div');
+                                                    badge.className = `now-badge ${teacherClass}`;
+                                                    badge.textContent = 'Now';
+                                                    cells[cellIndex].appendChild(badge);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            // Aggiorna il contenuto della barra con i dettagli della lezione corrente
+                            const periodLabel = period === 'Form Time' ? 'Form Time' : `Period ${period}`;
+                            let teacherDetails = [];
+                            const currentPeriodData = currentDayData[period];
+                            if (currentPeriodData && currentPeriodData.teachers) {
+                                for (const teacher of teachersToUse) {
+                                    const lesson = currentPeriodData.teachers[teacher];
+                                    if (lesson && lesson.subject && !['Lunch', ''].includes(lesson.subject)) {
+                                        const displaySubject = lesson.subject === 'Form Time' ? 'Form Time' : lesson.subject;
+                                        const room = lesson.room ? `(${lesson.room})` : '';
+                                        let teacherColor = '';
+                                        if (isMainTimetable) {
+                                            teacherColor = teacher === 'Ms K Arakelian' ? 'var(--teacher-arakelian-color)' : 'var(--teacher-jenkins-color)';
+                                        } else { // Tech timetable
+                                            teacherColor = teacher === 'Mr. Tech 1' ? 'var(--teacher-tech1-color)' : teacher === 'Mr. Tech 2' ? 'var(--teacher-tech2-color)' : 'var(--teacher-tech3-color)';
+                                        }
+                                        teacherDetails.push(`<span style="color:${teacherColor};font-weight:bold;">${teacher}</span>: ${displaySubject} ${room}`);
+                                    }
+                                }
+                            }
+                            let liveIndicator = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div>`;
+                            if (teacherDetails.length > 0) {
+                                summaryText = `${liveIndicator} • <span class="now-summary-highlight">${periodLabel}</span> • ${timeRange} • ${teacherDetails.join(' | ')}`;
+                            } else {
+                                summaryText = `${liveIndicator} • <span class="now-summary-highlight">${periodLabel}</span> • ${timeRange}`;
+                            }
+                            iconType = 'lesson';
+                            nowContextBar.classList.add('lesson');
+                            if (teacherDetails.some(t => t.includes('Arakelian'))) nowContextBar.classList.add('arakelian');
+                            if (teacherDetails.some(t => t.includes('Jenkins'))) nowContextBar.classList.add('jenkins');
+                            if (teacherDetails.some(t => t.includes('Tech 1'))) nowContextBar.classList.add('tech1');
+                            if (teacherDetails.some(t => t.includes('Tech 2'))) nowContextBar.classList.add('tech2');
+                            if (teacherDetails.some(t => t.includes('Tech 3'))) nowContextBar.classList.add('tech3');
+                            inPeriod = true;
+                            break; // Esci dal ciclo una volta trovata la lezione corrente
+                        }
+                    }
+                    // Se non è in un periodo attivo, cerca la prossima lezione o mostra stato di attesa
+                    if (!inPeriod) {
+                        // Cerca la prossima lezione
+                        for (let i = 0; i < periods.length; i++) {
+                            const period = periods[i];
+                            const timeRange = currentDayData[period]?.time;
+                            if (!timeRange) continue;
+                            const start = parseTime(timeRange.split(' - ')[0]);
+                            if (start) {
+                                const startMins = start.hours * 60 + start.minutes;
+                                if (currentMinutes < startMins) {
+                                    const diffMins = startMins - currentMinutes;
+                                    const h = Math.floor(diffMins / 60);
+                                    const m = diffMins % 60;
+                                    nextLessonTime = `${h > 0 ? h + 'h ' : ''}${m}m`;
+                                    nextLessonStartTime = timeRange.split(' - ')[0];
+                                    break;
+                                }
+                            }
+                        }
+                        // Controlla se è in un periodo di pausa o pranzo
+                        const break1Start = 10 * 60 + 20;
+                        const break1End = 10 * 60 + 40;
+                        const break2Start = 11 * 60 + 10;
+                        const break2End = 11 * 60 + 30;
+                        const lunch1Start = 12 * 60 + 30;
+                        const lunch1End = 13 * 60 + 30;
+                        const lunch2Start = 13 * 60 + 30;
+                        const lunch2End = 14 * 60 + 30;
+                        const dateStr = now.toISOString().split('T')[0];
+                        if (currentMinutes >= break1Start && currentMinutes < break1End) {
+                            const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('2');
+                            if (isPeriodExcluded) {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                                iconType = 'default';
+                                nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins', 'tech1', 'tech2', 'tech3');
+                            } else {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 7–8`;
+                                iconType = 'break';
+                                nowContextBar.classList.add('break');
+                                isBreakOrLunch = true;
+                            }
+                        } else if (currentMinutes >= break2Start && currentMinutes < break2End) {
+                            const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('3');
+                            if (isPeriodExcluded) {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                                iconType = 'default';
+                                nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins', 'tech1', 'tech2', 'tech3');
+                            } else {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 9–13`;
+                                iconType = 'break';
+                                nowContextBar.classList.add('break');
+                                isBreakOrLunch = true;
+                            }
+                        } else if (currentMinutes >= lunch1Start && currentMinutes < lunch1End) {
+                            const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('4a');
+                            if (isPeriodExcluded) {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                                iconType = 'default';
+                                nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins', 'tech1', 'tech2', 'tech3');
+                            } else {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 7–8`;
+                                iconType = 'lunch';
+                                nowContextBar.classList.add('lunch');
+                                isBreakOrLunch = true;
+                            }
+                        } else if (currentMinutes >= lunch2Start && currentMinutes < lunch2End) {
+                            const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes('4b');
+                            if (isPeriodExcluded) {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
+                                iconType = 'default';
+                                nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins', 'tech1', 'tech2', 'tech3');
+                            } else {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 9–13`;
+                                iconType = 'lunch';
+                                nowContextBar.classList.add('lunch');
+                                isBreakOrLunch = true;
+                            }
+                        } else {
+                            if (nextLessonTime && nextLessonStartTime) {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Next lesson in <span class="now-summary-highlight">${nextLessonTime}</span> at ${nextLessonStartTime}`;
+                            } else {
+                                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • No more lessons today`;
+                            }
+                        }
+                        // Applica lo stile 'now-break' alle celle di pausa/pranzo
+                        if (isBreakOrLunch) {
+                            const todayColumnOffset = 2 + (visibleDays.indexOf(today) * (isMainTimetable ? teachers.length : techTeachers.length));
+                            const cellClass = isMainTimetable ? 'subject-cell' : 'tech-subject-cell';
+                            document.querySelectorAll(`#${isMainTimetable ? 'timetable' : 'tech-timetable'} tbody tr`).forEach((row, i) => {
+                                const period = periods[i];
+                                const dateStr = now.toISOString().split('T')[0];
+                                const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period);
+                                if (isPeriodExcluded) return;
+                                const cells = row.querySelectorAll('td');
+                                const teacherCount = isMainTimetable ? teachers.length : techTeachers.length;
+                                for (let j = todayColumnOffset; j < todayColumnOffset + teacherCount; j++) {
+                                    if (cells[j]) {
+                                        cells[j].classList.add('now-break');
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            } else {
+                // Se oggi non è visibile e non siamo in vista stats o subjects
+                summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Today not visible`;
+            }
+            // Aggiorna il contenuto HTML della barra
+            document.getElementById('now-summary-content').innerHTML = summaryText;
+            document.getElementById('now-summary-icon').innerHTML = ICONS[iconType] || ICONS.default;
+            // Gestione della barra di progresso
+            const progressBarContainer = document.getElementById('progress-bar-container');
+            const progressFill = document.getElementById('progress-fill');
+            const progressLabel = document.getElementById('progress-label');
+            const progressOverlayText = document.getElementById('progress-overlay-text');
+            if (isTodayVisible && inPeriod && currentDayData) {
+                const currentPeriod = periods.find(p => {
+                    const tr = currentDayData[p]?.time;
+                    if (!tr) return false;
+                    const [s, e] = tr.split(' - ');
+                    const st = parseTime(s);
+                    const en = parseTime(e);
+                    if (!st || !en) return false;
+                    return currentMinutes >= st.hours * 60 + st.minutes && currentMinutes < en.hours * 60 + en.minutes;
+                });
+                if (currentPeriod) {
+                    const dateStr = now.toISOString().split('T')[0];
+                    const isPeriodExcluded = nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(currentPeriod);
+                    if (isPeriodExcluded) {
+                        progressBarContainer.style.display = 'none';
+                        return;
+                    }
+                    const timeRange = currentDayData[currentPeriod].time;
+                    const [startStr, endStr] = timeRange.split(' - ');
+                    const start = parseTime(startStr);
+                    const end = parseTime(endStr);
+                    if (start && end) {
+                        const startMins = start.hours * 60 + start.minutes;
+                        const endMins = end.hours * 60 + end.minutes;
+                        const totalTime = endMins - startMins;
+                        const timeLeft = endMins - currentMinutes;
+                        const percent = totalTime > 0 ? 100 - (timeLeft / totalTime) * 100 : 0;
+                        const minsLeft = Math.floor(timeLeft / 60);
+                        const secsLeft = timeLeft % 60;
+                        progressFill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+                        progressLabel.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')} left`;
+                        progressOverlayText.textContent = `${minsLeft}:${secsLeft.toString().padStart(2, '0')}`;
+                        progressFill.classList.remove('warning', 'critical', 'blink');
+                        if (timeLeft < 5 * 60) {
+                            progressFill.classList.add('warning');
+                        }
+                        if (timeLeft < 2 * 60) {
+                            progressFill.classList.add('critical');
+                        }
+                        if (timeLeft < 30) {
+                            progressFill.classList.add('blink');
+                        }
+                        progressBarContainer.style.display = 'block';
+                        return; // Esci dopo aver aggiornato la barra
+                    }
+                }
+            }
+            // Nascondi la barra di progresso se non in un periodo attivo o non visibile
+            progressBarContainer.style.display = 'none';
+        }
+        // *** FINE CORREZIONE PRINCIPALE ***
+        function toggleFullScreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && !document.mozFullScreenElement && 
+                !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+                btn.classList.add('active');
+                btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                btn.classList.remove('active');
+                btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+            }
+        }
+        document.addEventListener('fullscreenchange', updateFullScreenButton);
+        document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
+        document.addEventListener('mozfullscreenchange', updateFullScreenButton);
+        document.addEventListener('MSFullscreenChange', updateFullScreenButton);
+        function updateFullScreenButton() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement || document.mozFullScreenElement || 
+                document.webkitFullscreenElement || document.msFullscreenElement) {
+                btn.classList.add('active');
+                btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+            }
+        }
+        function updateWeekSelector() {
+            document.getElementById('week-selector').value = currentMode === 'auto' ? 'auto' : currentWeek;
+        }
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.getElementById('dark-mode-toggle');
+            body.classList.add('theme-transition');
+            if (body.hasAttribute('data-theme')) {
+                body.removeAttribute('data-theme');
+                toggle.classList.remove('active');
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                toggle.classList.add('active');
+                localStorage.setItem('darkMode', 'true');
+            }
+            setTimeout(() => body.classList.remove('theme-transition'), 500);
+        }
+        function handleDayFilter() {
+            currentViewDay = document.getElementById('day-filter-select').value;
+            statisticsVisible = false;
+            subjectsVisible = false; // NEW: Reset subjects view
+            document.getElementById('statistics-box').style.display = 'none';
+            document.getElementById('tech-timetable-container').style.display = 'none'; // NEW: Hide tech timetable
+            document.getElementById('main-timetable-container').style.display = 'block'; // NEW: Show main timetable
+            generateTimetable();
+            renderLessonsCountTable();
+        }
+        function handleWeekSelector(e) {
+            const val = e.target.value;
+            if (val === 'auto') {
+                currentMode = 'auto';
+            } else {
+                currentMode = 'manual';
+                currentWeek = val;
+            }
+            statisticsVisible = false;
+            subjectsVisible = false; // NEW: Reset subjects view
+            document.getElementById('statistics-box').style.display = 'none';
+            document.getElementById('tech-timetable-container').style.display = 'none'; // NEW: Hide tech timetable
+            document.getElementById('main-timetable-container').style.display = 'block'; // NEW: Show main timetable
+            updateWeekSelector();
+            generateTimetable();
+            updateTeacherBoxes();
+            renderLessonsCountTable();
+        }
+        function handleLessonsFilter(e) {
+            const filter = e.target.dataset.filter;
+            if (!filter) return;
+            lessonsFilterMode = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+            renderLessonsCountTable();
+        }
+        function toggleStatistics() {
+            statisticsVisible = !statisticsVisible;
+            subjectsVisible = false; // NEW: Reset subjects view
+            if (statisticsVisible) {
+                // Disattiva altri filtri
+                currentViewDay = 'all';
+                document.getElementById('day-filter-select').value = 'all';
+                document.getElementById('tech-timetable-container').style.display = 'none'; // NEW: Hide tech timetable
+                document.getElementById('main-timetable-container').style.display = 'block'; // NEW: Show main timetable
+                document.getElementById('statistics-box').style.display = 'block';
+                // NEW: Update nav item state
+                document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
+                // NEW: Show non-inclusive dates box (now inside statistics box)
+                document.getElementById('non-inclusive-dates-box').style.display = 'block';
+            } else {
+                document.getElementById('statistics-box').style.display = 'none';
+                // NEW: Update nav item state
+                document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
+                // NEW: Hide non-inclusive dates box (now inside statistics box)
+                document.getElementById('non-inclusive-dates-box').style.display = 'none';
+            }
+            generateTimetable();
+            updateStatisticsValues();
+        }
+        // NEW: Toggle Subjects View
+        function toggleSubjects() {
+            subjectsVisible = !subjectsVisible;
+            statisticsVisible = false; // NEW: Reset statistics view
+            if (subjectsVisible) {
+                // Disattiva altri filtri
+                currentViewDay = 'all';
+                document.getElementById('day-filter-select').value = 'all';
+                document.getElementById('statistics-box').style.display = 'none';
+                document.getElementById('main-timetable-container').style.display = 'none'; // NEW: Hide main timetable
+                document.getElementById('tech-timetable-container').style.display = 'block'; // NEW: Show tech timetable
+                generateTechTimetable(); // NEW: Generate tech timetable
+            } else {
+                document.getElementById('main-timetable-container').style.display = 'block'; // NEW: Show main timetable
+                document.getElementById('tech-timetable-container').style.display = 'none'; // NEW: Hide tech timetable
+            }
+            // NEW: Update nav item state
+            document.getElementById('subjects-nav').classList.toggle('active', subjectsVisible);
+            updateNowContextBar(); // NEW: Update context bar when switching views
+        }
+        function updateStatisticsValues() {
+            if (!statisticsVisible) return;
+            // CORREZIONE: Ottieni il conteggio per la settimana corrente usando la logica di 'countLessonsUntilTerm'
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const currentWeekStart = new Date(todayStart);
+            const dayOfWeek = currentWeekStart.getDay();
+            currentWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+            const currentWeekEnd = new Date(currentWeekStart);
+            currentWeekEnd.setDate(currentWeekStart.getDate() + 4);
+            // Conteggio lezioni rimanenti dalla data odierna (inclusa) fino a venerdì di questa settimana
+            let weekCount = 0;
+            let currentDate = new Date(todayStart); // Inizia da oggi
+            while (currentDate <= currentWeekEnd) {
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                if (['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'].includes(dayName)) {
+                    const weekType = getWeekTypeForDate(currentDate);
+                    if (weekType) {
+                        const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
+                        const dayData = weekData[dayName];
+                        for (const period in dayData) {
+                            const entry = dayData[period];
+                            if (!entry || !entry.teachers) continue;
+                            for (const teacher of teachers) {
+                                const subject = entry.teachers[teacher]?.subject;
+                                if (subject && !['Lunch', 'Form Time', ''].includes(subject)) {
+                                    // NEW: Check for period-specific exclusions
+                                    const dateStr = currentDate.toISOString().split('T')[0];
+                                    if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
+                                        continue;
+                                    }
+                                    // NEW: Check if lesson is in the past for today
+                                    const timeRange = entry.time;
+                                    let includeLesson = true;
+                                    if (currentDate.toDateString() === todayStart.toDateString() && timeRange) {
+                                        const [_, endStr] = timeRange.split(' - ');
+                                        const endTime = parseTime(endStr);
+                                        if (endTime) {
+                                            const nowMins = now.getHours() * 60 + now.getMinutes();
+                                            const endMins = endTime.hours * 60 + endTime.minutes;
+                                            if (nowMins >= endMins) {
+                                                includeLesson = false; // Lesson has ended
+                                            }
+                                        }
+                                    }
+                                    if (includeLesson) {
+                                        weekCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            // Calcolo per 'This Month' e 'Until Half Term' rimane invariato
+            const monthCount = countLessonsUntilTerm('month').counts;
+            const monthTotal = Object.values(monthCount).reduce((a, b) => a + b, 0);
+            const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all');
+            const halfTermTotal = Object.values(_).reduce((a, b) => a + b, 0);
+            const yearEndTotal = countLessonsUntilYearEnd();
+            document.getElementById('stat-week').textContent = weekCount;
+            document.getElementById('stat-month').textContent = monthTotal;
+            document.getElementById('stat-half-term').textContent = halfTermTotal;
+            document.getElementById('stat-year-end').textContent = yearEndTotal;
+            // Update progress bars
+            const maxWeek = 14; // 7 periods * 2 teachers
+            const maxMonth = 300; // Assumed max
+            const maxHalfTerm = 1000; // Assumed max
+            const maxYearEnd = 2000; // Assumed max
+            document.getElementById('progress-week').style.width = `${Math.min(100, (weekCount / maxWeek) * 100)}%`;
+            document.getElementById('progress-month').style.width = `${Math.min(100, (monthTotal / maxMonth) * 100)}%`;
+            document.getElementById('progress-half-term').style.width = `${Math.min(100, (halfTermTotal / maxHalfTerm) * 100)}%`;
+            document.getElementById('progress-year-end').style.width = `${Math.min(100, (yearEndTotal / maxYearEnd) * 100)}%`;
+        }
+        function handleRefreshStats() {
+            updateStatisticsValues();
+        }
+        // handleTeacherFilterChange function removed
+        // NEW: Function to populate non-inclusive dates list
+        function populateNonInclusiveDatesList() {
+            const list = document.getElementById('non-inclusive-dates-list');
+            list.innerHTML = '';
+            const now = new Date();
+            // NEW: Define descriptions for the dates
+            const dateDescriptions = {
+                "2025-09-01": "Insert Day",
+                "2025-09-02": "Insert Day",
+                "2025-09-25": "Open Evening Y6 (Period 4b & 5)",
+                "2025-10-09": "Open Evening 6 Form (Period 4b & 5)",
+                "2025-11-21": "Insert Day",
+                "2025-12-19": "Christmas Celebration",
+                "2026-01-05": "Insert Day",
+                "2026-03-19": "Option Evening (Period 4b & 5)",
+                "2026-05-04": "Bank Holiday",
+                "2026-06-26": "STM Day",
+                "2026-07-03": "Sport Day",
+                "2026-07-16": "Culture Day",
+                "2026-07-17": "End Year Celebration"
+            };
+            nonInclusiveDates.forEach(date => {
+                const li = document.createElement('li');
+                const dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+                const desc = dateDescriptions[date.toISOString().split('T')[0]];
+                li.innerHTML = `<span class="date-label">${dateStr}</span> <span class="desc-label">${desc}</span>`;
+                if (date < now) {
+                    li.classList.add('past');
+                }
+                list.appendChild(li);
+            });
+        }
+        // NEW: Add refresh lessons button functionality
+        function handleRefreshLessons() {
+             renderLessonsCountTable();
+        }
+        document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
+        document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', handleLessonsFilter);
+        });
+        document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
+        document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
+        document.getElementById('stats-nav').addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleStatistics();
+        });
+        // NEW: Add event listener for subjects nav
+        document.getElementById('subjects-nav').addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleSubjects();
+        });
+        document.getElementById('refresh-stats-btn').addEventListener('click', handleRefreshStats);
+        document.getElementById('refresh-lessons-btn').addEventListener('click', handleRefreshLessons); // NEW: Event listener for refresh button
+        // Removed event listener for teacher-stats-select
+        // NEW: Apply green active state to 'Automatic' option in week selector on initial load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('week-selector').value = 'auto';
+        });
+        // NEW: Call the function to populate the list on initial load
+        populateNonInclusiveDatesList();
+        generateTimetable();
+        generateTechTimetable(); // NEW: Generate tech timetable initially
+        updateTeacherBoxes();
+        renderLessonsCountTable();
+        // NEW: Update interval logic
+        let lastLessonsUpdate = Date.now();
+        const lessonsUpdateInterval = 30 * 60 * 1000; // 30 minuti in millisecondi
+        setInterval(() => {
+            updateClockPrecise();
+            updateCountdownPrecise();
+            updateTeacherBoxes();
+            updateNowContextBar(); // CORREZIONE: Aggiunto questo aggiornamento
+            updateDynamicBackgroundAndShadows();
+            if (statisticsVisible) updateStatisticsValues();
+        }, 1000);
+        setInterval(() => {
+            if (statisticsVisible) {
+                const now = Date.now();
+                if (now - lastLessonsUpdate >= lessonsUpdateInterval) {
+                    renderLessonsCountTable();
+                    lastLessonsUpdate = now;
+                }
+            } else {
+                // Se non è attiva la vista statistiche, aggiorna ogni secondo come prima
+                renderLessonsCountTable();
+            }
+        }, 1000); // Controlla ogni secondo se aggiornare la tabella
+        updateClockPrecise();
+        updateCountdownPrecise();
+        updateNowContextBar();
+        updateDynamicBackgroundAndShadows();
+        renderLessonsCountTable();
+        const today = new Date().getDate().toString().padStart(2, '0');
+        document.getElementById('version-badge').textContent = `ver.31111.01`;
+    </script>
+</body>
+</html>

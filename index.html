@@ -1086,7 +1086,6 @@
             font-size: 12px;
             opacity: 0.7;
             transition: opacity 0.2s ease;
-            margin-left: 8px;
         }
         .refresh-lessons-btn:hover {
             opacity: 1;
@@ -1931,7 +1930,7 @@
         let lessonsFilterMode = 'all';
         let statisticsVisible = false;
         // currentTeacherFilter removed
-        const weekAStartDate = new Date(2025, 8, 1);
+        const weekAStartDate = new Date(2025, 8, 1); // Set reference date to start of Week A
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
             { name: "Christmas Term", startDate: new Date(2025, 11, 22), endDate: new Date(2026, 0, 2) },
@@ -2041,35 +2040,63 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
+        // CORREZIONE PRINCIPALE: Funzione per ottenere la data corretta di un giorno specifico in una settimana (A o B)
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
-            let lastTermEnd = new Date(2025, 8, 1);
-            for (let term of schoolTerms) {
-                if (term.endDate < now) {
-                    lastTermEnd = new Date(term.endDate);
-                } else {
-                    break;
-                }
-            }
-            const nextMonday = new Date(lastTermEnd);
-            nextMonday.setDate(lastTermEnd.getDate() + 3);
-            const dayOfWeek = nextMonday.getDay();
-            if (dayOfWeek !== 1) {
-                nextMonday.setDate(nextMonday.getDate() + (1 - dayOfWeek + 7) % 7);
-            }
-            const diffWeeks = targetWeekIsA ? 0 : 1;
-            const baseMonday = new Date(nextMonday);
-            baseMonday.setDate(nextMonday.getDate() + diffWeeks * 7);
-            const currentWeekIsA = getCurrentWeekCorrect() === 'A';
-            if ((targetWeekIsA && !currentWeekIsA) || (!targetWeekIsA && currentWeekIsA)) {
-                baseMonday.setDate(baseMonday.getDate() + (targetWeekIsA ? -7 : 7));
-            }
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const dayIndex = days.indexOf(day);
-            const resultDate = new Date(baseMonday);
-            resultDate.setDate(baseMonday.getDate() + dayIndex);
-            return resultDate;
+            if (dayIndex === -1) return new Date(); // Restituisci oggi se il giorno non è valido
+
+            // Trova la settimana corrente (A o B) per oggi
+            const currentWeekType = getCurrentWeekCorrect();
+            const isTodayTargetWeek = (currentWeekType === week);
+
+            if (isTodayTargetWeek) {
+                // Se oggi è della settimana richiesta, calcola la data del giorno richiesto
+                const todayIndex = days.indexOf(today.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase());
+                const dayDiff = dayIndex - todayIndex;
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() + dayDiff);
+                return targetDate;
+            } else {
+                // Se oggi non è della settimana richiesta, dobbiamo trovare una settimana futura o passata della settimana richiesta
+                // Cerchiamo a partire da oggi
+                let searchDate = new Date(today);
+                let foundDate = null;
+
+                // Cerca avanti nel tempo
+                for (let i = 0; i < 14; i++) { // Cerca entro 14 giorni
+                    const checkDate = new Date(searchDate);
+                    checkDate.setDate(searchDate.getDate() + i);
+                    const checkWeekType = getWeekTypeForDate(checkDate);
+                    const checkDayName = checkDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                    if (checkWeekType === week && checkDayName === day) {
+                        foundDate = checkDate;
+                        break;
+                    }
+                }
+
+                if (foundDate) {
+                    return foundDate;
+                } else {
+                    // Se non trovato avanti, cerca indietro
+                    for (let i = 1; i < 14; i++) { // Cerca entro 14 giorni indietro
+                        const checkDate = new Date(today);
+                        checkDate.setDate(today.getDate() - i);
+                        const checkWeekType = getWeekTypeForDate(checkDate);
+                        const checkDayName = checkDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                        if (checkWeekType === week && checkDayName === day) {
+                            foundDate = checkDate;
+                            break;
+                        }
+                    }
+                }
+
+                return foundDate || new Date(); // Restituisci la data trovata o oggi come fallback
+            }
         }
+
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -2140,7 +2167,7 @@
                     return null;
                 }
             }
-            let refMonday = new Date(2025, 8, 1);
+            let refMonday = new Date(weekAStartDate); // Usa la data di riferimento
             let weekCount = 0;
             while (refMonday <= monday) {
                 let skip = false;
@@ -2261,11 +2288,9 @@
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const currentTerm = getNextTerm();
             if (!currentTerm) return { counts: {}, byTeacher: {}, todayLessons: {} };
-
             // Determina il periodo di conteggio
             let startDate = new Date(todayStart);
             let endDate = new Date(todayStart);
-
             if (filterMode === 'month') {
                 // Lezioni rimanenti NEL MESE CORRENTE, a partire da OGGI
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0); // ultimo giorno del mese
@@ -2282,52 +2307,42 @@
                 // Lezioni rimanenti fino al termine
                 endDate = getCutOffDate(currentTerm.startDate);
             }
-
             const subjectCount = {};
             const teacherCounts = { 'Ms K Arakelian': {}, 'Ms N Jenkins': {} };
             const todayLessons = { 'Ms K Arakelian': new Set(), 'Ms N Jenkins': new Set() };
-
             let currentDate = new Date(startDate);
             const endDateTime = endDate.getTime();
-
             while (currentDate.getTime() <= endDateTime) {
                 const isToday = currentDate.toDateString() === todayStart.toDateString();
-
                 // Salta le date non inclusive
                 if (isNonInclusiveDate(currentDate)) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
-
                 // Salta i weekend
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (!['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'].includes(dayName)) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
-
                 const weekType = getWeekTypeForDate(currentDate);
                 if (!weekType) {
                     currentDate.setDate(currentDate.getDate() + 1);
                     continue;
                 }
-
                 const dayData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'][dayName];
                 if (dayData) {
                     for (const period in dayData) {
                         const entry = dayData[period];
                         if (!entry || !entry.teachers) continue;
-
                         for (const teacher of teachers) {
                             const subject = entry.teachers[teacher]?.subject;
                             if (!subject || ['Lunch', 'Form Time', ''].includes(subject)) continue;
-
                             // Salta i periodi esclusi specifici
                             const dateStr = currentDate.toISOString().split('T')[0];
                             if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
                                 continue;
                             }
-
                             let includeLesson = false;
                             if (isToday) {
                                 // Per oggi, includi solo le lezioni non ancora finite
@@ -2348,7 +2363,6 @@
                                 // Per date future, includi tutte le lezioni
                                 includeLesson = true;
                             }
-
                             if (includeLesson) {
                                 subjectCount[subject] = (subjectCount[subject] || 0) + 1;
                                 teacherCounts[teacher][subject] = (teacherCounts[teacher][subject] || 0) + 1;
@@ -2358,10 +2372,8 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-
             return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
-
         // Resto del codice identico...
         // NEW: Function to count non-inclusive lessons for a specific filter mode
         function countNonInclusiveLessons(filterMode = 'all') {
@@ -3230,6 +3242,12 @@
         document.getElementById('refresh-stats-btn').addEventListener('click', handleRefreshStats);
         document.getElementById('refresh-lessons-btn').addEventListener('click', handleRefreshLessons); // NEW: Event listener for refresh button
         // Removed event listener for teacher-stats-select
+
+        // NEW: Apply green active state to 'Automatic' option in week selector on initial load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('week-selector').value = 'auto';
+        });
+
         // NEW: Call the function to populate the list on initial load
         populateNonInclusiveDatesList();
         generateTimetable();

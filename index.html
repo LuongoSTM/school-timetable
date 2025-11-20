@@ -62,7 +62,7 @@
             --cell-shadow-morning: 0 8px 20px rgba(0, 0, 0, 0.4);
             --cell-shadow-afternoon: 0 4px 12px rgba(0, 0, 0, 0.3);
             --cell-shadow-evening: 0 8px 20px rgba(0, 0, 0, 0.4);
-            --cell-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.6);
+            --cell-shadow-hover: 0 6 12px rgba(0, 0, 0, 0.6);
             --countdown-bg: #2d2d2d;
             --countdown-text: #ffffff;
             --countdown-border: #404040;
@@ -119,8 +119,8 @@
             left: -30%;
             width: 160%;
             height: 160%;
-            background: radial-gradient(circle at 20% 20%, 
-                rgba(255,255,255,0.15) 0%, 
+            background: radial-gradient(circle at 20% 20%,
+                rgba(255,255,255,0.15) 0%,
                 transparent 60%);
             pointer-events: none;
             z-index: 1000;
@@ -149,7 +149,7 @@
             border: 1px solid var(--header-bg);
             border-left: 4px solid var(--header-bg);
             transform: translateZ(5px);
-            box-shadow: 
+            box-shadow:
                 0 10px 30px rgba(0, 0, 0, 0.1),
                 inset 0 2px 4px rgba(255, 255, 255, 0.3),
                 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
@@ -164,8 +164,8 @@
             left: 0;
             right: 0;
             height: 100%;
-            background: linear-gradient(135deg, 
-                rgba(255,255,255,0.1) 0%, 
+            background: linear-gradient(135deg,
+                rgba(255,255,255,0.1) 0%,
                 transparent 50%,
                 rgba(0,0,0,0.05) 100%);
             border-radius: 10px;
@@ -213,7 +213,7 @@
             border: 1px solid var(--header-bg);
             border-left: 4px solid var(--header-bg);
             transform: translateZ(5px);
-            box-shadow: 
+            box-shadow:
                 0 10px 30px rgba(0, 0, 0, 0.1),
                 inset 0 2px 4px rgba(255, 255, 255, 0.3),
                 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
@@ -230,8 +230,8 @@
             left: 0;
             right: 0;
             height: 100%;
-            background: linear-gradient(135deg, 
-                rgba(255,255,255,0.1) 0%, 
+            background: linear-gradient(135deg,
+                rgba(255,255,255,0.1) 0%,
                 transparent 50%,
                 rgba(0,0,0,0.05) 100%);
             border-radius: 8px; /* NEW: Match border-radius */
@@ -272,7 +272,7 @@
             padding: 10px 16px;
             text-align: center;
             min-width: 200px;
-            box-shadow: 
+            box-shadow:
                 0 4px 8px rgba(0, 0, 0, 0.1),
                 inset 0 2px 4px rgba(0, 0, 0, 0.05);
             font-size: 16px;
@@ -295,8 +295,8 @@
             margin-top: 25px;
             margin-bottom: 10px;
             opacity: 1;
-            text-shadow: 
-                0 1px 0 #ccc, 
+            text-shadow:
+                0 1px 0 #ccc,
                 0 2px 0 #c9c9c9,
                 0 3px 0 #bbb,
                 0 4px 0 #b9b9b9,
@@ -401,7 +401,7 @@
         }
         .term-info-box:hover {
             transform: translateY(-2px);
-            box-shadow: 
+            box-shadow:
                 0 6px 12px rgba(0, 0, 0, 0.15),
                 inset 0 3px 6px rgba(0, 0, 0, 0.1);
         }
@@ -419,26 +419,24 @@
         }
         /* --- MODIFIED: Now Context Bar Style (moved outside header box) --- */
         .now-context-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; /* Changed from column to row */
+            flex-direction: row; /* Explicitly set row */
+            justify-content: space-between; /* Distribute space between content and progress */
+            align-items: center; /* Vertically center items */
             position: relative;
             background: linear-gradient(135deg, var(--now-context-bg) 0%, #e9ecef 100%);
             border-radius: 15px;
-            /* margin: 0 5px 5px 20px; REMOVED */
             margin: 20px auto 20px auto; /* Spazio sopra e sotto, centrato */
             padding: 8px 10px; /* Ridotto il padding */
-            box-shadow: 
+            box-shadow:
                 0 8px 25px rgba(0,0,0,0.15),
                 inset 0 1px 0 rgba(255,255,255,0.8);
-            /* border-left: 6px solid var(--header-bg); MODIFIED */
             border-left: 4px solid var(--header-bg); /* Allineato al design degli altri box */
             border-right: 2px solid rgba(255,255,255,0.5);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
-            /* height: auto; REMOVED */
-            min-height: 50px; /* Imposta un'altezza minima coerente con navbar */
+            min-height: 60px; /* Aumentata per ospitare due righe */
             width: 100%; /* Prendi tutta la larghezza disponibile */
             font-size: 14px;
             color: var(--now-context-text);
@@ -467,7 +465,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, 
+            background: linear-gradient(90deg,
                 #ff6b6b, #ffd93d, #6bcf7f, #4d96ff, #9b51e0);
             background-size: 200% 100%;
             animation: rainbowBorder 3s linear infinite;
@@ -489,11 +487,17 @@
         }
         .now-summary-box {
             display: flex;
+            flex-direction: column; /* Keep summary content column */
+            gap: 4px; /* Spazio tra le righe */
+            color: var(--now-context-text);
+            flex: 1; /* Takes remaining space on the left */
+            overflow: hidden;
+            padding-right: 10px; /* Add some space from the progress bar */
+        }
+        .now-summary-row {
+            display: flex;
             align-items: center;
             gap: 12px;
-            color: var(--now-context-text);
-            flex: 1;
-            overflow: hidden;
         }
         .now-summary-icon {
             width: 24px;
@@ -505,11 +509,11 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
         @keyframes iconPulse {
-            0%, 100% { 
+            0%, 100% {
                 transform: scale(1) rotate(0deg);
                 filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
             }
-            50% { 
+            50% {
                 transform: scale(1.1) rotate(5deg);
                 filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
             }
@@ -541,6 +545,17 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+        .now-summary-next {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.3;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-color);
+            opacity: 0.9;
         }
         .now-summary-highlight {
             background: linear-gradient(135deg, #007bff, #0056b3);
@@ -588,11 +603,11 @@
             animation: livePulse 1.5s ease-in-out infinite;
         }
         @keyframes livePulse {
-            0%, 100% { 
+            0%, 100% {
                 transform: scale(1);
                 box-shadow: 0 0 0 0 rgba(220,53,69,0.7);
             }
-            50% { 
+            50% {
                 transform: scale(1.2);
                 box-shadow: 0 0 0 4px rgba(220,53,69,0);
             }
@@ -600,49 +615,52 @@
         .now-timeline {
             display: none;
         }
+        /* --- NEW: Reduced Progress Bar Container (Right side of now-context-bar) --- */
         .progress-bar-container {
-            display: flex;
+            display: flex; /* Keep for layout if needed */
             flex-direction: column;
             align-items: flex-end;
-            min-width: 180px;
-            margin-left: 20px;
+            min-width: 180px; /* Reduced width */
+            margin-left: 10px; /* Reduced space */
             position: relative;
             background: rgba(255,255,255,0.1);
-            padding: 12px 15px;
-            border-radius: 10px;
+            padding: 6px 8px; /* Reduced padding */
+            border-radius: 8px; /* Smaller radius */
             backdrop-filter: blur(5px);
+            flex: 0 0 auto; /* Don't grow, don't shrink, use auto width */
         }
         .progress-label {
-            font-size: 12px;
+            font-size: 11px; /* Smaller font */
             color: var(--text-color);
-            margin-bottom: 2px;
+            margin-bottom: 1px; /* Reduced margin */
             font-weight: 600;
+            text-align: right; /* Align to right */
         }
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 8px; /* Reduced height */
             background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
-            border-radius: 8px;
+            border-radius: 6px; /* Smaller radius */
             overflow: hidden;
             position: relative;
-            box-shadow: 
+            box-shadow:
                 inset 0 2px 4px rgba(0,0,0,0.1),
                 0 1px 0 rgba(255,255,255,0.5);
         }
         .progress-fill {
             height: 100%;
             width: 0;
-            border-radius: 8px;
-            background: linear-gradient(90deg, 
-                #007bff 0%, 
-                #0056b3 50%, 
+            border-radius: 6px; /* Match bar */
+            background: linear-gradient(90deg,
+                #007bff 0%,
+                #0056b3 50%,
                 #007bff 100%);
             background-size: 200% 100%;
             animation: shimmer 2s infinite, progressGradient 3s ease-in-out infinite;
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            box-shadow: 
-                0 0 10px rgba(0,123,255,0.4),
+            box-shadow:
+                0 0 8px rgba(0,123,255,0.4), /* Reduced glow */
                 inset 0 1px 0 rgba(255,255,255,0.3);
         }
         @keyframes progressGradient {
@@ -654,16 +672,16 @@
             100% { transform: translateX(100%); }
         }
         .progress-fill.warning {
-            background: linear-gradient(90deg, 
-                #ffc107 0%, 
-                #e0a800 50%, 
+            background: linear-gradient(90deg,
+                #ffc107 0%,
+                #e0a800 50%,
                 #ffc107 100%);
             animation: warningPulse 1s ease-in-out infinite, progressGradient 3s ease-in-out infinite;
         }
         .progress-fill.critical {
-            background: linear-gradient(90deg, 
-                #dc3545 0%, 
-                #c82333 50%, 
+            background: linear-gradient(90deg,
+                #dc3545 0%,
+                #c82333 50%,
                 #dc3545 100%);
             animation: criticalPulse 0.5s ease-in-out infinite, progressGradient 3s ease-in-out infinite;
         }
@@ -672,24 +690,25 @@
             50% { opacity: 0.8; }
         }
         @keyframes criticalPulse {
-            0%, 100% { 
+            0%, 100% {
                 transform: scaleX(1);
-                box-shadow: 0 0 20px rgba(220,53,69,0.6);
+                box-shadow: 0 0 16px rgba(220,53,69,0.6); /* Reduced glow */
             }
-            50% { 
+            50% {
                 transform: scaleX(1.02);
-                box-shadow: 0 0 30px rgba(220,53,69,0.8);
+                box-shadow: 0 0 24px rgba(220,53,69,0.8); /* Reduced glow */
             }
         }
         .progress-overlay-text {
             position: absolute;
-            top: -20px;
+            top: -18px; /* Position above the bar */
             right: 0;
-            font-size: 12px;
+            font-size: 11px; /* Smaller font */
             font-weight: bold;
             color: var(--text-color);
             white-space: nowrap;
         }
+        /* --- END NEW: Reduced Progress Bar Styles --- */
         @keyframes blinkRed {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
@@ -748,7 +767,7 @@
         }
         .subject-cell:hover {
     transform: translateY(-2px) translateZ(10px) rotateX(2deg);
-    box-shadow: 
+    box-shadow:
         0 8px 25px rgba(0, 0, 0, 0.15),
         0 5px 15px rgba(0, 0, 0, 0.1);
     /* NEW: Effetto di evidenziazione sul colore di sfondo */
@@ -914,17 +933,16 @@
             width: 100%;
         }
         .lessons-sidebar {
-            width: 280px;
+            width: 580px; /* Aumentata la larghezza per ospitare due box affiancati */
             display: flex;
             flex-direction: column;
             gap: 15px;
-        }
-        .teachers-sidebar {
-            width: 220px;
+            /* NEW: Style for lessons sidebar to contain two boxes side by side */
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: 15px;
         }
+        /* REMOVED: .teachers-sidebar */
         .timetable {
             width: 100%;
             border-collapse: separate;
@@ -944,7 +962,7 @@
         }
         .timetable td {
             height: 50px;
-            box-shadow: 
+            box-shadow:
                 0 2px 4px rgba(0,0,0,0.1),
                 0 1px 2px rgba(0,0,0,0.08),
                 inset 0 1px 1px rgba(255,255,255,0.5);
@@ -966,70 +984,7 @@
             width: 110px;
             min-width: 110px;
         }
-        .teacher-box {
-            background: var(--secondary-bg);
-            border-radius: 10px;
-            padding: 12px;
-            box-shadow: 0 4px 8px var(--card-shadow);
-            transform-style: preserve-3d;
-            position: relative;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
-            /* NEW: Apply blue border style */
-            border: 1px solid var(--header-bg);
-            border-left: 4px solid var(--header-bg);
-            transform: translateZ(5px);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.1),
-                inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-        }
-        [data-theme="dark"] .teacher-box {
-            background: rgba(45, 45, 45, 0.9);
-        }
-        .teacher-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            background: linear-gradient(135deg, 
-                rgba(255,255,255,0.1) 0%, 
-                transparent 50%,
-                rgba(0,0,0,0.05) 100%);
-            border-radius: 10px;
-            pointer-events: none;
-        }
-        .teacher-box:hover {
-            transform: translateY(-3px) translateZ(10px) rotateY(2deg);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.15),
-                0 6px 20px rgba(0, 0, 0, 0.1);
-        }
-        .teacher-header h3 {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--header-bg);
-            margin-bottom: 8px;
-        }
-        .lesson-info {
-            margin-bottom: 6px;
-        }
-        .lesson-label {
-            font-weight: bold;
-            font-size: 11px;
-        }
-        .lesson-details {
-            font-size: 11px;
-            padding: 4px;
-            background: var(--primary-bg);
-            border-radius: 5px;
-            border: 1px solid var(--border-color);
-        }
+        /* REMOVED: .teacher-box */
         .lessons-count-box {
             background: var(--secondary-bg);
             border-radius: 10px;
@@ -1042,11 +997,12 @@
             display: flex;
             flex-direction: column;
             height: 500px; /* Altezza fissa */
+            flex: 1; /* Occupa spazio rimanente */
             /* NEW: Apply red border style */
             border: 1px solid #dc3545;
             border-left: 4px solid #dc3545;
             transform: translateZ(5px);
-            box-shadow: 
+            box-shadow:
                 0 10px 30px rgba(0, 0, 0, 0.1),
                 inset 0 2px 4px rgba(255, 255, 255, 0.3),
                 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
@@ -1061,8 +1017,8 @@
             left: 0;
             right: 0;
             height: 100%;
-            background: linear-gradient(135deg, 
-                rgba(255,255,255,0.1) 0%, 
+            background: linear-gradient(135deg,
+                rgba(255,255,255,0.1) 0%,
                 transparent 50%,
                 rgba(0,0,0,0.05) 100%);
             border-radius: 10px;
@@ -1169,6 +1125,68 @@
             background-color: rgba(175, 82, 222, 0.08) !important;
             border-left: 3px solid var(--teacher-jenkins-color);
         }
+        /* NEW: Today's lessons box styles */
+        .today-lessons-container {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            height: 500px; /* Altezza fissa */
+            flex: 1; /* Occupa spazio rimanente */
+            /* NEW: Apply blue border style */
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            transform: translateZ(5px);
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        [data-theme="dark"] .today-lessons-container {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .today-lessons-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg,
+                rgba(255,255,255,0.1) 0%,
+                transparent 50%,
+                rgba(0,0,0,0.05) 100%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        .today-lessons-header {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--header-bg);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .today-lesson-item {
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .today-lesson-subject {
+            flex-grow: 1;
+        }
+        .today-lesson-room {
+            font-size: 10px;
+            opacity: 0.8;
+            margin-left: 4px;
+        }
+        .today-lesson-arakelian { color: var(--teacher-arakelian-color); }
+        .today-lesson-jenkins { color: var(--teacher-jenkins-color); }
         /* --- Statistics Box Style --- */
         .statistics-box {
             background: var(--secondary-bg);
@@ -1312,15 +1330,13 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            .lessons-sidebar,
-            .teachers-sidebar,
-            .statistics-box,
-            .non-inclusive-dates-box {
+            .lessons-sidebar {
+                width: 100%;
+                flex-direction: column; /* Torna a colonna su schermi piccoli */
+            }
+            .lessons-count-box, .today-lessons-container, .statistics-box, .non-inclusive-dates-box {
                 width: 100%;
                 min-width: auto;
-            }
-            .teacher-box, .lessons-count-box, .statistics-box, .non-inclusive-dates-box {
-                min-width: 48%;
                 height: auto;
             }
         }
@@ -1355,6 +1371,17 @@
                 margin-left: 10px;
                 margin-right: 10px;
             }
+            /* --- NEW: Responsive adjustments for now-context-bar --- */
+            .now-context-bar {
+                flex-direction: column; /* Stack on small screens */
+                align-items: stretch; /* Align items to full width */
+            }
+            .progress-bar-container {
+                width: 100%; /* Full width for progress bar on small screens */
+                margin-top: 5px; /* Add space above */
+                margin-left: 0; /* Reset margin */
+            }
+            /* --- END NEW: Responsive adjustments --- */
         }
         /* --- END NEW: Responsive adjustments --- */
         .version-badge, .refresh-badge {
@@ -1569,11 +1596,16 @@
         <!-- NEW: Moved now-context-bar outside header-content-box -->
         <div class="now-context-bar" id="now-context-bar">
             <div id="now-summary-box" class="now-summary-box">
-                <div class="now-summary-icon" id="now-summary-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <div class="now-summary-row">
+                    <div class="now-summary-icon" id="now-summary-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div class="now-summary-content" id="now-summary-content">
+                        Loading...
+                    </div>
                 </div>
-                <div class="now-summary-content" id="now-summary-content">
-                    Loading...
+                <div class="now-summary-next" id="now-summary-next">
+                    <!-- Next lesson info will be populated here -->
                 </div>
             </div>
             <div id="progress-bar-container" class="progress-bar-container">
@@ -1709,37 +1741,16 @@
                         </div>
                     </div>
                 </div>
+                <!-- NEW: Today's Lessons Container -->
+                <div class="today-lessons-container">
+                    <div class="today-lessons-header">Today's Lessons</div>
+                    <div id="today-lessons-content">
+                        <!-- Popolato via JavaScript -->
+                    </div>
+                </div>
                 <!-- OLD: Non Inclusive Dates Box removed from here -->
             </div>
-            <div class="teachers-sidebar">
-                <div class="teacher-box">
-                    <div class="teacher-header">
-                        <h3>Ms K. Arakelian</h3>
-                    </div>
-                    <div class="lesson-info">
-                        <div class="lesson-label">Current:</div>
-                        <div class="lesson-details" id="current-arakelian">No Lesson Now</div>
-                    </div>
-                    <div class="lesson-info">
-                        <div class="lesson-label">Next:</div>
-                        <div class="lesson-details" id="next-arakelian">No Lesson Next</div>
-                    </div>
-                </div>
-                <div class="teacher-box">
-                    <div class="teacher-header">
-                        <h3>Ms N. Jenkins</h3>
-                    </div>
-                    <div class="lesson-info">
-                        <div class="lesson-label">Current:</div>
-                        <div class="lesson-details" id="current-jenkins">No Lesson Now</div>
-                    </div>
-                    <div class="lesson-info">
-                        <div class="lesson-label">Next:</div>
-                        <div class="lesson-details" id="next-jenkins">No Lesson Next</div>
-                    </div>
-                </div>
-            </div>
-            <!-- NEW: Statistics Box (posizionato accanto a teachers-sidebar) -->
+            <!-- NEW: Statistics Box (posizionato accanto a lessons-sidebar) -->
             <div class="statistics-box" id="statistics-box">
                 <div class="statistics-header">
                     Lesson Statistics
@@ -2047,11 +2058,9 @@
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const dayIndex = days.indexOf(day);
             if (dayIndex === -1) return new Date(); // Restituisci oggi se il giorno non è valido
-
             // Trova la settimana corrente (A o B) per oggi
             const currentWeekType = getCurrentWeekCorrect();
             const isTodayTargetWeek = (currentWeekType === week);
-
             if (isTodayTargetWeek) {
                 // Se oggi è della settimana richiesta, calcola la data del giorno richiesto
                 const todayIndex = days.indexOf(today.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase());
@@ -2064,7 +2073,6 @@
                 // Cerchiamo a partire da oggi
                 let searchDate = new Date(today);
                 let foundDate = null;
-
                 // Cerca avanti nel tempo
                 for (let i = 0; i < 14; i++) { // Cerca entro 14 giorni
                     const checkDate = new Date(searchDate);
@@ -2076,7 +2084,6 @@
                         break;
                     }
                 }
-
                 if (foundDate) {
                     return foundDate;
                 } else {
@@ -2092,11 +2099,9 @@
                         }
                     }
                 }
-
                 return foundDate || new Date(); // Restituisci la data trovata o oggi come fallback
             }
         }
-
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -2295,7 +2300,7 @@
                 // Lezioni rimanenti NEL MESE CORRENTE, a partire da OGGI
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0); // ultimo giorno del mese
             } else if (filterMode === 'week') {
-                // Lezioni rimanenti NELLA SETTIMANA CORRENTE, a partire da OGGI
+                // Lezioni rimanente NELLA SETTIMANA CORRENTE, a partire da OGGI
                 const dayOfWeek = todayStart.getDay(); // 0=Domenica, 1=Lunedì...
                 const daysUntilFriday = (5 - dayOfWeek + 7) % 7; // Venerdì è il 5° giorno lavorativo
                 endDate = new Date(todayStart);
@@ -2437,6 +2442,75 @@
                 currentDate.setDate(currentDate.getDate() + 1);
             }
             return { counts: subjectCount, byTeacher: teacherCounts };
+        }
+        // NEW: Function to get today's lessons for both teachers
+        function getTodaysLessons() {
+            const now = new Date();
+            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            const week = getCurrentWeek();
+            const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
+            const todayData = wd[today];
+            const lessons = { 'Ms K Arakelian': [], 'Ms N Jenkins': [] };
+            if (todayData) {
+                for (const period in todayData) {
+                    const entry = todayData[period];
+                    if (entry && entry.teachers) {
+                        for (const teacher of teachers) {
+                            const lesson = entry.teachers[teacher];
+                            if (lesson && lesson.subject && !['Lunch', 'Form Time', ''].includes(lesson.subject)) {
+                                const timeRange = entry.time;
+                                const [startStr, endStr] = timeRange.split(' - ');
+                                const start = parseTime(startStr);
+                                const end = parseTime(endStr);
+                                if (start && end) {
+                                    const nowMins = now.getHours() * 60 + now.getMinutes();
+                                    const startMins = start.hours * 60 + start.minutes;
+                                    const endMins = end.hours * 60 + end.minutes;
+                                    if (nowMins < endMins) { // Include only lessons not yet finished
+                                        lessons[teacher].push({
+                                            period: period,
+                                            subject: lesson.subject,
+                                            room: lesson.room,
+                                            time: timeRange,
+                                            start: startMins
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Sort lessons by start time
+            for (const teacher in lessons) {
+                lessons[teacher].sort((a, b) => a.start - b.start);
+            }
+            return lessons;
+        }
+        // NEW: Function to populate today's lessons box
+        function populateTodaysLessonsBox() {
+            const lessons = getTodaysLessons();
+            const contentDiv = document.getElementById('today-lessons-content');
+            contentDiv.innerHTML = '';
+            for (const teacher in lessons) {
+                const teacherLessons = lessons[teacher];
+                if (teacherLessons.length === 0) continue;
+                const teacherClass = teacher === 'Ms K Arakelian' ? 'today-lesson-arakelian' : 'today-lesson-jenkins';
+                const teacherName = teacher === 'Ms K Arakelian' ? 'Arakelian' : 'Jenkins';
+                const teacherHeader = document.createElement('div');
+                teacherHeader.className = `today-lesson-item ${teacherClass}`;
+                teacherHeader.innerHTML = `<span><strong>${teacherName}</strong></span>`;
+                contentDiv.appendChild(teacherHeader);
+                teacherLessons.forEach(lesson => {
+                    const lessonItem = document.createElement('div');
+                    lessonItem.className = `today-lesson-item ${teacherClass}`;
+                    lessonItem.innerHTML = `<span class="today-lesson-subject">${lesson.subject}</span><span class="today-lesson-room">${lesson.room}</span>`;
+                    contentDiv.appendChild(lessonItem);
+                });
+            }
+            if (contentDiv.innerHTML === '') {
+                contentDiv.innerHTML = '<div class="today-lesson-item">No lessons scheduled</div>';
+            }
         }
         function generateTimetable() {
             const week = getCurrentWeek();
@@ -2607,66 +2681,12 @@
             document.getElementById('jenkins-total').innerHTML = jenkinsTotalDisplay;
             document.getElementById('lessons-total-count').innerHTML = grandTotalDisplay;
             const nextTerm = getNextTerm();
-            const termDate = nextTerm?.startDate 
-                ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) 
+            const termDate = nextTerm?.startDate
+                ? nextTerm.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
-        function updateTeacherBoxes() {
-            const now = new Date();
-            const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-            const week = getCurrentWeek();
-            const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
-            const todayData = wd[today];
-            teachers.forEach(teacher => {
-                const key = teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins';
-                let current = 'No Lesson Now';
-                let next = 'No Lesson Next';
-                let currentIdx = -1;
-                periods.forEach((p, i) => {
-                    if (todayData?.[p] && isCurrentTime(todayData[p].time)) {
-                        currentIdx = i;
-                        const d = todayData[p].teachers[teacher];
-                        if (d?.subject) {
-                            current = d.subject === 'Form Time' || d.subject === 'Lunch' 
-                                ? d.subject 
-                                : `${d.subject}${d.room ? ` - ${d.room}` : ''}`;
-                        }
-                    }
-                });
-                if (currentIdx >= 0) {
-                    const nextInfo = getNextPeriod(currentIdx, today, week);
-                    if (nextInfo) {
-                        const d = todayData[nextInfo.period].teachers[teacher];
-                        if (d?.subject) {
-                            next = d.subject === 'Form Time' || d.subject === 'Lunch' 
-                                ? d.subject 
-                                : `${d.subject}${d.room ? ` - ${d.room}` : ''}`;
-                        }
-                    }
-                } else {
-                    periods.forEach(p => {
-                        if (next === 'No Lesson Next' && todayData?.[p]) {
-                            const start = parseTime(todayData[p].time.split(' - ')[0]);
-                            if (start) {
-                                const nowMins = now.getHours() * 60 + now.getMinutes();
-                                const startMins = start.hours * 60 + start.minutes;
-                                if (nowMins < startMins) {
-                                    const d = todayData[p].teachers[teacher];
-                                    if (d?.subject) {
-                                        next = d.subject === 'Form Time' || d.subject === 'Lunch' 
-                                            ? d.subject 
-                                            : `${d.subject}${d.room ? ` - ${d.room}` : ''}`;
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-                document.getElementById(`current-${key}`).textContent = current;
-                document.getElementById(`next-${key}`).textContent = next;
-            });
-        }
+        // REMOVED: updateTeacherBoxes function
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -2724,6 +2744,7 @@
                 el.classList.remove('now-lesson', 'now-break');
             });
             let summaryText = "No scheduled activity";
+            let summaryNextText = ""; // NEW: Variable for next lesson text
             let iconType = 'default';
             let inPeriod = false;
             let isBreakOrLunch = false;
@@ -2741,6 +2762,7 @@
                         summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date`;
                         document.getElementById('now-summary-content').innerHTML = summaryText;
                         document.getElementById('now-summary-icon').innerHTML = ICONS['default'] || ICONS.default;
+                        document.getElementById('now-summary-next').innerHTML = ""; // Clear next lesson
                         return; // Interrompi qui se è una data non inclusiva
                     }
                     let todayColumnOffset = 2;
@@ -2829,6 +2851,26 @@
                             if (teacherDetails.some(t => t.includes('Arakelian'))) nowContextBar.classList.add('arakelian');
                             if (teacherDetails.some(t => t.includes('Jenkins'))) nowContextBar.classList.add('jenkins');
                             inPeriod = true;
+                            // NEW: Find and set next lesson details
+                            const nextPeriodInfo = getNextPeriod(i, today, getCurrentWeek());
+                            if (nextPeriodInfo) {
+                                const nextPeriodData = currentDayData[nextPeriodInfo.period];
+                                if (nextPeriodData && nextPeriodData.teachers) {
+                                    let nextTeacherDetails = [];
+                                    for (const teacher of teachers) {
+                                        const nextLesson = nextPeriodData.teachers[teacher];
+                                        if (nextLesson && nextLesson.subject && !['Lunch', 'Form Time', ''].includes(nextLesson.subject)) {
+                                            const displaySubject = nextLesson.subject;
+                                            const room = nextLesson.room ? `(${nextLesson.room})` : '';
+                                            const teacherColor = teacher === 'Ms K Arakelian' ? 'var(--teacher-arakelian-color)' : 'var(--teacher-jenkins-color)';
+                                            nextTeacherDetails.push(`<span style="color:${teacherColor};font-weight:bold;">${teacher}</span>: ${displaySubject} ${room}`);
+                                        }
+                                    }
+                                    if (nextTeacherDetails.length > 0) {
+                                        summaryNextText = `<span class="now-summary-highlight">Next:</span> Period ${nextPeriodInfo.period} ${nextPeriodData.time} • ${nextTeacherDetails.join(' | ')}`;
+                                    }
+                                }
+                            }
                             break; // Esci dal ciclo una volta trovata la lezione corrente
                         }
                     }
@@ -2848,6 +2890,23 @@
                                     const m = diffMins % 60;
                                     nextLessonTime = `${h > 0 ? h + 'h ' : ''}${m}m`;
                                     nextLessonStartTime = timeRange.split(' - ')[0];
+                                    // NEW: Set next lesson details for non-period time
+                                    let nextTeacherDetails = [];
+                                    const nextPeriodData = currentDayData[period];
+                                    if (nextPeriodData && nextPeriodData.teachers) {
+                                        for (const teacher of teachers) {
+                                            const nextLesson = nextPeriodData.teachers[teacher];
+                                            if (nextLesson && nextLesson.subject && !['Lunch', 'Form Time', ''].includes(nextLesson.subject)) {
+                                                const displaySubject = nextLesson.subject;
+                                                const room = nextLesson.room ? `(${nextLesson.room})` : '';
+                                                const teacherColor = teacher === 'Ms K Arakelian' ? 'var(--teacher-arakelian-color)' : 'var(--teacher-jenkins-color)';
+                                                nextTeacherDetails.push(`<span style="color:${teacherColor};font-weight:bold;">${teacher}</span>: ${displaySubject} ${room}`);
+                                            }
+                                        }
+                                    }
+                                    if (nextTeacherDetails.length > 0) {
+                                        summaryNextText = `<span class="now-summary-highlight">Next:</span> Period ${period} ${timeRange} • ${nextTeacherDetails.join(' | ')}`;
+                                    }
                                     break;
                                 }
                             }
@@ -2868,6 +2927,7 @@
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
                                 iconType = 'default';
                                 nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                                summaryNextText = ""; // Clear next lesson
                             } else {
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 7–8`;
                                 iconType = 'break';
@@ -2880,6 +2940,7 @@
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
                                 iconType = 'default';
                                 nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                                summaryNextText = ""; // Clear next lesson
                             } else {
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Break time</span> – Years 9–13`;
                                 iconType = 'break';
@@ -2892,6 +2953,7 @@
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
                                 iconType = 'default';
                                 nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                                summaryNextText = ""; // Clear next lesson
                             } else {
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 7–8`;
                                 iconType = 'lunch';
@@ -2904,6 +2966,7 @@
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • Non-inclusive date (period-specific exclusion)`;
                                 iconType = 'default';
                                 nowContextBar.classList.remove('break', 'lesson', 'lunch', 'arakelian', 'jenkins');
+                                summaryNextText = ""; // Clear next lesson
                             } else {
                                 summaryText = `<div class="live-indicator"><div class="live-dot"></div><span>LIVE</span></div> • <span class="now-summary-warning">Lunch</span> – Years 9–13`;
                                 iconType = 'lunch';
@@ -2941,6 +3004,7 @@
             }
             // Aggiorna il contenuto HTML della barra
             document.getElementById('now-summary-content').innerHTML = summaryText;
+            document.getElementById('now-summary-next').innerHTML = summaryNextText; // NEW: Set next lesson text
             document.getElementById('now-summary-icon').innerHTML = ICONS[iconType] || ICONS.default;
             // Gestione della barra di progresso
             const progressBarContainer = document.getElementById('progress-bar-container');
@@ -2989,7 +3053,7 @@
                         if (timeLeft < 30) {
                             progressFill.classList.add('blink');
                         }
-                        progressBarContainer.style.display = 'block';
+                        progressBarContainer.style.display = 'flex'; // Show the container
                         return; // Esci dopo aver aggiornato la barra
                     }
                 }
@@ -3000,7 +3064,7 @@
         // *** FINE CORREZIONE PRINCIPALE ***
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
-            if (!document.fullscreenElement && !document.mozFullScreenElement && 
+            if (!document.fullscreenElement && !document.mozFullScreenElement &&
                 !document.webkitFullscreenElement && !document.msFullscreenElement) {
                 const elem = document.documentElement;
                 if (elem.requestFullscreen) {
@@ -3034,7 +3098,7 @@
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
-            if (document.fullscreenElement || document.mozFullScreenElement || 
+            if (document.fullscreenElement || document.mozFullScreenElement ||
                 document.webkitFullscreenElement || document.msFullscreenElement) {
                 btn.classList.add('active');
                 btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
@@ -3080,7 +3144,7 @@
             document.getElementById('statistics-box').style.display = 'none';
             updateWeekSelector();
             generateTimetable();
-            updateTeacherBoxes();
+            // REMOVED: updateTeacherBoxes()
             renderLessonsCountTable();
         }
         function handleLessonsFilter(e) {
@@ -3227,6 +3291,7 @@
         // NEW: Add refresh lessons button functionality
         function handleRefreshLessons() {
              renderLessonsCountTable();
+             populateTodaysLessonsBox(); // NEW: Also refresh today's lessons
         }
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
@@ -3242,24 +3307,23 @@
         document.getElementById('refresh-stats-btn').addEventListener('click', handleRefreshStats);
         document.getElementById('refresh-lessons-btn').addEventListener('click', handleRefreshLessons); // NEW: Event listener for refresh button
         // Removed event listener for teacher-stats-select
-
         // NEW: Apply green active state to 'Automatic' option in week selector on initial load
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('week-selector').value = 'auto';
         });
-
         // NEW: Call the function to populate the list on initial load
         populateNonInclusiveDatesList();
         generateTimetable();
-        updateTeacherBoxes();
+        // REMOVED: updateTeacherBoxes()
         renderLessonsCountTable();
+        populateTodaysLessonsBox(); // NEW: Call this function on initial load
         // NEW: Update interval logic
         let lastLessonsUpdate = Date.now();
         const lessonsUpdateInterval = 30 * 60 * 1000; // 30 minuti in millisecondi
         setInterval(() => {
             updateClockPrecise();
             updateCountdownPrecise();
-            updateTeacherBoxes();
+            // REMOVED: updateTeacherBoxes()
             updateNowContextBar(); // CORREZIONE: Aggiunto questo aggiornamento
             updateDynamicBackgroundAndShadows();
             if (statisticsVisible) updateStatisticsValues();
@@ -3269,11 +3333,13 @@
                 const now = Date.now();
                 if (now - lastLessonsUpdate >= lessonsUpdateInterval) {
                     renderLessonsCountTable();
+                    populateTodaysLessonsBox(); // NEW: Also refresh today's lessons
                     lastLessonsUpdate = now;
                 }
             } else {
                 // Se non è attiva la vista statistiche, aggiorna ogni secondo come prima
                 renderLessonsCountTable();
+                populateTodaysLessonsBox(); // NEW: Also refresh today's lessons
             }
         }, 1000); // Controlla ogni secondo se aggiornare la tabella
         updateClockPrecise();

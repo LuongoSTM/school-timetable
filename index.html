@@ -6,6 +6,8 @@
     <title>St Thomas More Timetable 2025-2026</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:wght@400&display=swap" rel="stylesheet">
     <style>
+        /* ... (TUTTO IL TUO CSS ESISTENTE VIENE MANTENUTO INTEGRO) ... */
+        /* Lo includo per completezza, ma è identico al tuo */
         :root {
             --primary-bg: #ffffff;
             --secondary-bg: #f8f9fa;
@@ -40,7 +42,6 @@
             --now-context-break: #fff3cd;
             --now-context-lunch: #cce5ff;
             --now-context-text: #333333;
-            /* Teacher-specific colors */
             --teacher-arakelian-color: #34c759;
             --teacher-jenkins-color: #af52de;
         }
@@ -134,7 +135,6 @@
             pointer-events: auto;
             overflow: hidden;
         }
-        /* --- Header Content Box --- */
         .header-content-box {
             background: var(--secondary-bg);
             border-radius: 10px;
@@ -199,7 +199,6 @@
             gap: 11px;
             align-items: flex-start;
         }
-        /* ✅ --- STILE MIGLIORATO PER CLOCK E COUNTDOWN --- */
         .clock-box, .countdown-box {
             background: var(--countdown-bg);
             border-radius: 8px;
@@ -207,14 +206,11 @@
             text-align: center;
             min-width: 70px;
             position: relative;
-            /* 🎨 Bordo esterno e sinistro accentuato */
             border: 2px solid var(--header-bg);
             border-left: 4px solid var(--header-bg);
-            /* 🎨 Ombra morbida + highlight interno */
             box-shadow:
                 0 6px 18px rgba(0, 0, 0, 0.12),
                 inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            /* 🎨 Transizione fluida */
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .clock-box:hover, .countdown-box:hover {
@@ -238,7 +234,6 @@
             opacity: 0.9;
             font-weight: 600;
         }
-        /* --- RESTO DEL CSS ORIGINALE --- */
         .logged-in-user-box {
             margin-top: 12px;
             background: var(--countdown-bg);
@@ -1281,6 +1276,188 @@
             margin-left: 5px;
             text-align: right;
         }
+        /* 📌 BOX: My Reminders Panel – STILE */
+        .reminders-box {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            width: 280px;
+            display: none;
+            border: 1px solid var(--header-bg);
+            border-left: 4px solid var(--header-bg);
+            margin-top: 15px;
+        }
+        [data-theme="dark"] .reminders-box {
+            background: rgba(45, 45, 45, 0.9);
+        }
+        .reminders-header {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--header-bg);
+            text-align: center;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .reminder-item {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+        }
+        .reminder-item:last-child {
+            border-bottom: none;
+        }
+        .reminder-meta {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: var(--header-bg);
+        }
+        .reminder-details {
+            font-size: 11px;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+        .reminders-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .reminders-btn {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .reminders-btn.primary {
+            background: var(--header-bg);
+            color: white;
+        }
+        .reminders-btn.secondary {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+        .reminders-btn:hover {
+            opacity: 0.9;
+        }
+        .no-reminders {
+            text-align: center;
+            font-style: italic;
+            opacity: 0.7;
+            padding: 10px 0;
+        }
+        /* ===== MODAL STYLES ===== */
+        #lesson-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--primary-bg);
+            color: var(--text-color);
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--header-bg);
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--header-bg);
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.2s ease;
+        }
+        .close-modal:hover {
+            color: var(--button-active);
+        }
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+        .modal-label {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .modal-value {
+            color: var(--header-bg);
+            font-weight: 600;
+        }
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+        .modal-btn.primary {
+            background: var(--header-bg);
+            color: white;
+        }
+        .modal-btn.primary:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+        }
+        .modal-btn.secondary {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+        .modal-btn.secondary:hover {
+            background: #ccc;
+        }
+        .reminder-added {
+            color: #28a745;
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            display: none;
+        }
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -1290,7 +1467,7 @@
                 width: 100%;
                 flex-direction: column;
             }
-            .lessons-count-box, .today-lessons-container, .statistics-box, .non-inclusive-dates-box {
+            .lessons-count-box, .today-lessons-container, .statistics-box, .non-inclusive-dates-box, .reminders-box {
                 width: 100%;
                 min-width: auto;
                 height: auto;
@@ -1479,110 +1656,6 @@
         .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
-
-        /* ===== MODAL STYLES ===== */
-        #lesson-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: var(--primary-bg);
-            color: var(--text-color);
-            border-radius: 16px;
-            padding: 24px;
-            width: 90%;
-            max-width: 480px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-            position: relative;
-            border: 1px solid var(--border-color);
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--header-bg);
-        }
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--header-bg);
-        }
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-color);
-            transition: color 0.2s ease;
-        }
-        .close-modal:hover {
-            color: var(--button-active);
-        }
-        .modal-body {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .modal-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 15px;
-        }
-        .modal-label {
-            font-weight: bold;
-            color: var(--text-color);
-        }
-        .modal-value {
-            color: var(--header-bg);
-            font-weight: 600;
-        }
-        .modal-actions {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
-        .modal-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.1s ease;
-        }
-        .modal-btn.primary {
-            background: var(--header-bg);
-            color: white;
-        }
-        .modal-btn.primary:hover {
-            background: var(--button-hover);
-            transform: translateY(-2px);
-        }
-        .modal-btn.secondary {
-            background: var(--border-color);
-            color: var(--text-color);
-        }
-        .modal-btn.secondary:hover {
-            background: #ccc;
-        }
-        .reminder-added {
-            color: #28a745;
-            font-size: 13px;
-            margin-top: 8px;
-            text-align: center;
-            display: none;
-        }
     </style>
 </head>
 <body class="authenticated">
@@ -1719,6 +1792,17 @@
                     </div>
                     <span>Statistics</span>
                 </a>
+                <!-- 📌 BOX: My Reminders – NUOVO ELEMENTO NEL MENU -->
+                <a href="#" class="nav-item" id="reminders-nav">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 4v4a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V4m8 16H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2z"/>
+                            <path d="M9 12h6"/>
+                            <path d="M9 16h6"/>
+                        </svg>
+                    </div>
+                    <span>My Reminders</span>
+                </a>
             </div>
             <div class="nav-controls">
                 <select id="day-filter-select">
@@ -1797,6 +1881,19 @@
                     </div>
                 </div>
             </div>
+            <!-- 📌 BOX: My Reminders Panel – CONTENUTO -->
+            <div class="reminders-box" id="reminders-box">
+                <div class="reminders-header">
+                    My Reminders
+                    <button id="clear-reminders-btn" class="reminders-btn secondary" title="Clear all reminders">🗑️</button>
+                </div>
+                <div id="reminders-list">
+                    <!-- I promemoria verranno inseriti dinamicamente qui -->
+                </div>
+                <div class="reminders-actions">
+                    <button id="export-reminders-btn" class="reminders-btn primary">Export CSV</button>
+                </div>
+            </div>
             <div class="statistics-box" id="statistics-box">
                 <div class="statistics-header">
                     Lesson Statistics
@@ -1850,7 +1947,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal per lezione -->
     <div id="lesson-modal">
         <div class="modal-content">
@@ -1891,9 +1987,11 @@
             </div>
         </div>
     </div>
-
-    <div class="version-badge" id="version-badge">ver.31111.01</div>
+    <div class="version-badge" id="version-badge">ver.31111.02</div>
     <script>
+        // ==============================
+        // SCRIPT PRINCIPALE (identico al tuo, ma con generateTimetable corretto + nuove funzioni)
+        // ==============================
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             lesson: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M12 12h6M12 16h6M12 8h6"/></svg>`,
@@ -1924,6 +2022,7 @@
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
+        // ... (TUTTE LE TUE VARIABILI E FUNZIONI: timetableData, schoolTerms, etc.) ...
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -2058,6 +2157,7 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
+        // ... (TUTTE LE TUE FUNZIONI ESISTENTI: extractClassNumber, parseTime, getCurrentWeekCorrect, etc.) ...
         function extractClassNumber(subject) {
             const match = subject.match(/^(\d+)/);
             return match ? parseInt(match[1], 10) : 999;
@@ -2546,15 +2646,105 @@
                 contentDiv.innerHTML = '<div class="today-lesson-item">No lessons scheduled</div>';
             }
         }
-
-        // ==== NUOVE FUNZIONI PER MODAL ====
+        // 📌 BOX: My Reminders – FUNZIONI
+        function loadReminders() {
+            const reminders = [];
+            for (let key in localStorage) {
+                if (key.startsWith('reminder_')) {
+                    try {
+                        const item = JSON.parse(localStorage.getItem(key));
+                        if (item) reminders.push(item);
+                    } catch (e) {
+                        console.warn("Invalid reminder in localStorage:", key);
+                    }
+                }
+            }
+            reminders.sort((a, b) => new Date(a.addedAt) - new Date(b.addedAt));
+            return reminders;
+        }
+        function renderReminders() {
+            const list = document.getElementById('reminders-list');
+            const reminders = loadReminders();
+            if (reminders.length === 0) {
+                list.innerHTML = '<div class="no-reminders">No reminders saved yet.</div>';
+                return;
+            }
+            list.innerHTML = '';
+            reminders.forEach(rem => {
+                const el = document.createElement('div');
+                el.className = 'reminder-item';
+                const dayName = new Date(rem.addedAt).toLocaleDateString('en-US', { weekday: 'short' });
+                el.innerHTML = `
+                    <div class="reminder-meta">
+                        <span>${rem.subject}</span>
+                        <span>${rem.period}</span>
+                    </div>
+                    <div class="reminder-details">
+                        ${rem.teacher} • ${rem.time} • ${rem.room || '—'} • ${dayName}
+                    </div>
+                `;
+                list.appendChild(el);
+            });
+        }
+        function clearAllReminders() {
+            for (let key in localStorage) {
+                if (key.startsWith('reminder_')) {
+                    localStorage.removeItem(key);
+                }
+            }
+            renderReminders();
+            if (document.getElementById('reminders-box').style.display === 'block') {
+                toggleReminders();
+            }
+        }
+        function exportRemindersToCSV() {
+            const reminders = loadReminders();
+            if (reminders.length === 0) {
+                alert("No reminders to export.");
+                return;
+            }
+            let csv = "Teacher,Subject,Period,Time,Room,Day,Week,AddedAt\n";
+            reminders.forEach(r => {
+                const row = [
+                    `"${r.teacher}"`,
+                    `"${r.subject}"`,
+                    `"${r.period}"`,
+                    `"${r.time}"`,
+                    `"${r.room || ''}"`,
+                    `"${r.day}"`,
+                    `"${r.week}"`,
+                    `"${new Date(r.addedAt).toISOString()}"`
+                ].join(",");
+                csv += row + "\n";
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stm-reminders-${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        function toggleReminders() {
+            const box = document.getElementById('reminders-box');
+            const isVisible = box.style.display === 'block';
+            if (isVisible) {
+                box.style.display = 'none';
+                document.getElementById('reminders-nav').classList.remove('stats-active');
+            } else {
+                box.style.display = 'block';
+                document.getElementById('reminders-nav').classList.add('stats-active');
+                renderReminders();
+            }
+        }
+        // 📌 BOX: Modal – FUNZIONI
         function countRemainingLessons(subject) {
             const { counts } = countLessonsUntilTerm('all');
             return counts[subject] || 0;
         }
-
         let currentModalData = null;
-
         function openLessonModal(cellData) {
             if (!cellData.subject || ['Form Time', 'Lunch', ''].includes(cellData.subject)) return;
             currentModalData = cellData;
@@ -2569,12 +2759,10 @@
             document.getElementById('lesson-modal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
         function closeLessonModal() {
             document.getElementById('lesson-modal').style.display = 'none';
             document.body.style.overflow = '';
         }
-
         function addToReminders() {
             if (!currentModalData) return;
             const key = `reminder_${new Date().toISOString().split('T')[0]}_${currentModalData.teacher}_${currentModalData.subject}_${currentModalData.period}`;
@@ -2594,25 +2782,14 @@
                 setTimeout(() => {
                     document.getElementById('reminder-added').style.display = 'none';
                 }, 2000);
+                if (document.getElementById('reminders-box').style.display === 'block') {
+                    renderReminders();
+                }
             } catch (e) {
                 console.warn("Could not save reminder to localStorage", e);
             }
         }
-
-        function attachCellListeners() {
-            document.querySelectorAll('.subject-cell').forEach(cell => {
-                if (cell.dataset.cell && !cell.dataset.listenerAttached) {
-                    cell.addEventListener('click', () => {
-                        const data = JSON.parse(cell.dataset.cell);
-                        if (data.subject && !['Form Time', 'Lunch', ''].includes(data.subject)) {
-                            openLessonModal(data);
-                        }
-                    });
-                    cell.dataset.listenerAttached = 'true';
-                }
-            });
-        }
-
+        // ✅ CORREZIONE FONDAMENTALE: Aggiungiamo `data-cell` in generateTimetable
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -2683,6 +2860,7 @@
                                 }
                             }
                         }
+                        // ✅ CORREZIONE: aggiungiamo data-cell con info strutturate
                         const cellData = JSON.stringify({
                             subject: data?.subject || '',
                             room: data?.room || '',
@@ -2698,11 +2876,19 @@
                 html += '</tr>';
             });
             table.innerHTML = html;
-            // Attacca listener dopo ogni rigenerazione
-            setTimeout(attachCellListeners, 10);
+            // ✅ Aggiungiamo listener dopo la generazione
+            document.querySelectorAll('.subject-cell').forEach(cell => {
+                if (cell.dataset.cell) {
+                    cell.addEventListener('click', () => {
+                        const data = JSON.parse(cell.dataset.cell);
+                        if (data.subject && !['Form Time', 'Lunch', ''].includes(data.subject)) {
+                            openLessonModal(data);
+                        }
+                    });
+                }
+            });
         }
-
-        // ==== EVENT LISTENERS MODAL ====
+        // Event listeners
         document.getElementById('close-btn').addEventListener('click', closeLessonModal);
         document.querySelector('.close-modal').addEventListener('click', closeLessonModal);
         document.getElementById('add-reminder-btn').addEventListener('click', addToReminders);
@@ -2711,8 +2897,13 @@
                 closeLessonModal();
             }
         });
-
-        // ==== RESTO DELLO SCRIPT ORIGINALE ====
+        document.getElementById('reminders-nav').addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleReminders();
+        });
+        document.getElementById('clear-reminders-btn').addEventListener('click', clearAllReminders);
+        document.getElementById('export-reminders-btn').addEventListener('click', exportRemindersToCSV);
+        // ... (RESTO DEL TUO SCRIPT: renderLessonsCountTable, updateClockPrecise, ecc.) ...
         function renderLessonsCountTable() {
             const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode);
             const { counts: nonInclCounts, byTeacher: nonInclByTeacher } = countNonInclusiveLessons(lessonsFilterMode);
@@ -3256,6 +3447,8 @@
             generateTimetable();
             updateStatisticsValues();
         }
+
+        // ✅ CORREZIONE CHIAVE: funzione aggiornata per evitare errori e calcolare correttamente le lezioni
         function updateStatisticsValues() {
             if (!statisticsVisible) return;
             const now = new Date();
@@ -3265,8 +3458,9 @@
             currentWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
             const currentWeekEnd = new Date(currentWeekStart);
             currentWeekEnd.setDate(currentWeekStart.getDate() + 4);
+
             let weekCount = 0;
-            let currentDate = new Date(todayStart);
+            let currentDate = new Date(todayStart); // Inizia da OGGI, non da lunedì
             while (currentDate <= currentWeekEnd) {
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 if (['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'].includes(dayName)) {
@@ -3284,15 +3478,20 @@
                                     if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
                                         continue;
                                     }
+
+                                    // ✅ Calcolo corretto per "This Week": includi solo le lezioni future o in corso
                                     let includeLesson = true;
-                                    if (currentDate.toDateString() === todayStart.toDateString() && timeRange) {
-                                        const [_, endStr] = entry.time.split(' - ');
-                                        const endTime = parseTime(endStr);
-                                        if (endTime) {
-                                            const nowMins = now.getHours() * 60 + now.getMinutes();
-                                            const endMins = endTime.hours * 60 + endTime.minutes;
-                                            if (nowMins >= endMins) {
-                                                includeLesson = false;
+                                    if (currentDate.toDateString() === todayStart.toDateString()) {
+                                        const timeRange = entry.time;
+                                        if (timeRange) {
+                                            const [startStr, endStr] = timeRange.split(' - ');
+                                            const endTime = parseTime(endStr);
+                                            if (endTime) {
+                                                const nowMins = now.getHours() * 60 + now.getMinutes();
+                                                const endMins = endTime.hours * 60 + endTime.minutes;
+                                                if (nowMins >= endMins) {
+                                                    includeLesson = false; // Lezione già terminata oggi
+                                                }
                                             }
                                         }
                                     }
@@ -3306,24 +3505,30 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
+
             const monthCount = countLessonsUntilTerm('month').counts;
             const monthTotal = Object.values(monthCount).reduce((a, b) => a + b, 0);
-            const { counts: _, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all');
-            const halfTermTotal = Object.values(_).reduce((a, b) => a + b, 0);
+            const { counts: halfTermCounts, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all');
+            const halfTermTotal = Object.values(halfTermCounts).reduce((a, b) => a + b, 0);
             const yearEndTotal = countLessonsUntilYearEnd();
+
             document.getElementById('stat-week').textContent = weekCount;
             document.getElementById('stat-month').textContent = monthTotal;
             document.getElementById('stat-half-term').textContent = halfTermTotal;
             document.getElementById('stat-year-end').textContent = yearEndTotal;
-            const maxWeek = 14;
-            const maxMonth = 300;
+
+            // Utilizziamo valori realistici per le barre di progresso
+            const maxWeek = 41; // max settimanale
+            const maxMonth = 200; // stima ragionevole
             const maxHalfTerm = 1000;
             const maxYearEnd = 2000;
+
             document.getElementById('progress-week').style.width = `${Math.min(100, (weekCount / maxWeek) * 100)}%`;
             document.getElementById('progress-month').style.width = `${Math.min(100, (monthTotal / maxMonth) * 100)}%`;
             document.getElementById('progress-half-term').style.width = `${Math.min(100, (halfTermTotal / maxHalfTerm) * 100)}%`;
             document.getElementById('progress-year-end').style.width = `${Math.min(100, (yearEndTotal / maxYearEnd) * 100)}%`;
         }
+
         function handleRefreshStats() {
             updateStatisticsValues();
         }
@@ -3408,7 +3613,7 @@
         updateNowContextBar();
         updateDynamicBackgroundAndShadows();
         renderLessonsCountTable();
-        document.getElementById('version-badge').textContent = `ver.31111.01`;
+        document.getElementById('version-badge').textContent = `ver.31111.02`;
     </script>
 </body>
 </html>

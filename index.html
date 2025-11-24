@@ -199,7 +199,6 @@
             gap: 11px;
             align-items: flex-start;
         }
-
         /* ✅ --- STILE MIGLIORATO PER CLOCK E COUNTDOWN --- */
         .clock-box, .countdown-box {
             background: var(--countdown-bg);
@@ -208,27 +207,22 @@
             text-align: center;
             min-width: 70px;
             position: relative;
-
             /* 🎨 Bordo esterno e sinistro accentuato */
             border: 2px solid var(--header-bg);
             border-left: 4px solid var(--header-bg);
-
             /* 🎨 Ombra morbida + highlight interno */
             box-shadow:
                 0 6px 18px rgba(0, 0, 0, 0.12),
                 inset 0 1px 0 rgba(255, 255, 255, 0.4);
-
             /* 🎨 Transizione fluida */
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-
         .clock-box:hover, .countdown-box:hover {
             transform: translateY(-4px);
             box-shadow:
                 0 10px 25px rgba(0, 0, 0, 0.18),
                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
-
         .clock-value, .countdown-value {
             font-size: 32px;
             font-weight: 800;
@@ -237,7 +231,6 @@
             margin-bottom: 4px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-
         .clock-label, .countdown-label {
             font-size: 12px;
             color: var(--text-color);
@@ -245,7 +238,6 @@
             opacity: 0.9;
             font-weight: 600;
         }
-
         /* --- RESTO DEL CSS ORIGINALE --- */
         .logged-in-user-box {
             margin-top: 12px;
@@ -1487,6 +1479,110 @@
         .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
+
+        /* ===== MODAL STYLES ===== */
+        #lesson-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--primary-bg);
+            color: var(--text-color);
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--header-bg);
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--header-bg);
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.2s ease;
+        }
+        .close-modal:hover {
+            color: var(--button-active);
+        }
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+        .modal-label {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .modal-value {
+            color: var(--header-bg);
+            font-weight: 600;
+        }
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+        .modal-btn.primary {
+            background: var(--header-bg);
+            color: white;
+        }
+        .modal-btn.primary:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+        }
+        .modal-btn.secondary {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+        .modal-btn.secondary:hover {
+            background: #ccc;
+        }
+        .reminder-added {
+            color: #28a745;
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body class="authenticated">
@@ -1754,6 +1850,48 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal per lezione -->
+    <div id="lesson-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Lesson Details</div>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-row">
+                    <span class="modal-label">Teacher:</span>
+                    <span class="modal-value" id="modal-teacher">—</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Subject:</span>
+                    <span class="modal-value" id="modal-subject">—</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Period:</span>
+                    <span class="modal-value" id="modal-period">—</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Time:</span>
+                    <span class="modal-value" id="modal-time">—</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Room:</span>
+                    <span class="modal-value" id="modal-room">—</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Remaining Lessons:</span>
+                    <span class="modal-value" id="modal-remaining">—</span>
+                </div>
+                <div class="reminder-added" id="reminder-added">✅ Added to reminders</div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" id="close-btn">Close</button>
+                <button class="modal-btn primary" id="add-reminder-btn">Add to Reminders</button>
+            </div>
+        </div>
+    </div>
+
     <div class="version-badge" id="version-badge">ver.31111.01</div>
     <script>
         const ICONS = {
@@ -2408,6 +2546,73 @@
                 contentDiv.innerHTML = '<div class="today-lesson-item">No lessons scheduled</div>';
             }
         }
+
+        // ==== NUOVE FUNZIONI PER MODAL ====
+        function countRemainingLessons(subject) {
+            const { counts } = countLessonsUntilTerm('all');
+            return counts[subject] || 0;
+        }
+
+        let currentModalData = null;
+
+        function openLessonModal(cellData) {
+            if (!cellData.subject || ['Form Time', 'Lunch', ''].includes(cellData.subject)) return;
+            currentModalData = cellData;
+            document.getElementById('modal-teacher').textContent = cellData.teacher;
+            document.getElementById('modal-subject').textContent = cellData.subject;
+            document.getElementById('modal-period').textContent = cellData.period;
+            document.getElementById('modal-time').textContent = cellData.time;
+            document.getElementById('modal-room').textContent = cellData.room || '—';
+            const remaining = countRemainingLessons(cellData.subject);
+            document.getElementById('modal-remaining').textContent = remaining;
+            document.getElementById('reminder-added').style.display = 'none';
+            document.getElementById('lesson-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLessonModal() {
+            document.getElementById('lesson-modal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function addToReminders() {
+            if (!currentModalData) return;
+            const key = `reminder_${new Date().toISOString().split('T')[0]}_${currentModalData.teacher}_${currentModalData.subject}_${currentModalData.period}`;
+            const reminder = {
+                teacher: currentModalData.teacher,
+                subject: currentModalData.subject,
+                period: currentModalData.period,
+                time: currentModalData.time,
+                room: currentModalData.room,
+                day: currentModalData.day,
+                week: currentModalData.week,
+                addedAt: new Date().toISOString()
+            };
+            try {
+                localStorage.setItem(key, JSON.stringify(reminder));
+                document.getElementById('reminder-added').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('reminder-added').style.display = 'none';
+                }, 2000);
+            } catch (e) {
+                console.warn("Could not save reminder to localStorage", e);
+            }
+        }
+
+        function attachCellListeners() {
+            document.querySelectorAll('.subject-cell').forEach(cell => {
+                if (cell.dataset.cell && !cell.dataset.listenerAttached) {
+                    cell.addEventListener('click', () => {
+                        const data = JSON.parse(cell.dataset.cell);
+                        if (data.subject && !['Form Time', 'Lunch', ''].includes(data.subject)) {
+                            openLessonModal(data);
+                        }
+                    });
+                    cell.dataset.listenerAttached = 'true';
+                }
+            });
+        }
+
         function generateTimetable() {
             const week = getCurrentWeek();
             const wd = week === 'A' ? timetableData.weekA : timetableData.weekB;
@@ -2493,7 +2698,21 @@
                 html += '</tr>';
             });
             table.innerHTML = html;
+            // Attacca listener dopo ogni rigenerazione
+            setTimeout(attachCellListeners, 10);
         }
+
+        // ==== EVENT LISTENERS MODAL ====
+        document.getElementById('close-btn').addEventListener('click', closeLessonModal);
+        document.querySelector('.close-modal').addEventListener('click', closeLessonModal);
+        document.getElementById('add-reminder-btn').addEventListener('click', addToReminders);
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('lesson-modal').style.display === 'flex') {
+                closeLessonModal();
+            }
+        });
+
+        // ==== RESTO DELLO SCRIPT ORIGINALE ====
         function renderLessonsCountTable() {
             const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode);
             const { counts: nonInclCounts, byTeacher: nonInclByTeacher } = countNonInclusiveLessons(lessonsFilterMode);

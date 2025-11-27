@@ -6,7 +6,7 @@
     <title>St Thomas More Timetable 2025-2026</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:wght@400&display=swap" rel="stylesheet">
     <style>
-        /* ... (TUTTO IL TUO CSS ESISTENTE VIENE MANTENUTO INTEGRO) ... */
+        /* ... TUTTO IL TUO CSS ESISTENTE VIENE MANTENUTO INTEGRO ... */
         /* Lo includo per completezza, ma è identico al tuo */
         :root {
             --primary-bg: #ffffff;
@@ -818,6 +818,10 @@
             background-color: var(--fullscreen-active-bg) !important;
             color: white !important;
         }
+        .nav-item.requests-active {
+            background-color: #ffc107 !important;
+            color: white !important;
+        }
         .nav-controls {
             display: flex;
             align-items: center;
@@ -1422,6 +1426,13 @@
             color: var(--header-bg);
             font-weight: 600;
         }
+        .modal-input {
+            width: calc(100% - 120px);
+            padding: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
         .modal-actions {
             margin-top: 20px;
             display: flex;
@@ -1457,6 +1468,73 @@
             margin-top: 8px;
             text-align: center;
             display: none;
+        }
+        /* ===== REQUESTS PAGE STYLES ===== */
+        #requests-page {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .requests-header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: var(--header-bg);
+        }
+        .requests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .request-item {
+            background: var(--secondary-bg);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--header-bg);
+            box-shadow: 0 2px 6px var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .request-info {
+            flex: 1;
+        }
+        .request-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .request-actions button {
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .request-actions .edit-btn {
+            background: #007bff;
+            color: white;
+        }
+        .request-actions .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+        .no-requests {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            opacity: 0.7;
+        }
+        .requests-export {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .requests-export button {
+            padding: 8px 16px;
+            background: var(--header-bg);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
         }
         @media (max-width: 1200px) {
             .main-content {
@@ -1656,9 +1734,80 @@
         .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
+        /* Login Page */
+        #login-page {
+            display: none;
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 30px;
+            background: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        #login-page h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--header-bg);
+        }
+        .login-group {
+            margin-bottom: 15px;
+        }
+        .login-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .login-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--header-bg);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-btn:hover {
+            background: var(--button-hover);
+        }
+        .error-msg {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="authenticated">
+    <div id="login-page">
+        <h2>Login</h2>
+        <div class="login-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="e.g., Administrator">
+        </div>
+        <div class="login-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+        </div>
+        <button class="login-btn" id="login-btn">Login</button>
+        <div class="error-msg" id="login-error"></div>
+    </div>
+
+    <div id="requests-page">
+        <h2 class="requests-header">Lesson Requests</h2>
+        <div class="requests-list" id="requests-list-container"></div>
+        <div class="requests-export">
+            <button id="export-requests-csv">Export Requests (CSV)</button>
+        </div>
+    </div>
+
     <div class="dynamic-bg" id="dynamic-bg"></div>
     <div id="offline-banner">⚠️ You are offline. Some features may not work.</div>
     <div class="container">
@@ -1681,7 +1830,7 @@
                         </div>
                     </div>
                     <div class="logged-in-user-box">
-                        Logged in as: Administrator
+                        Logged in as: <span id="logged-in-user">Guest</span>
                     </div>
                 </div>
                 <div class="title-section">
@@ -1744,7 +1893,7 @@
         </div>
         <nav class="navbar">
             <div class="nav-main">
-                <a href="index.html" class="nav-item">
+                <a href="#" class="nav-item" id="nav-home">
                     <div class="icon-wrapper">
                         <svg class="nav-icon home-icon" viewBox="0 0 100 100">
                             <path class="roof" d="M20,55 L50,25 L80,55" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1754,7 +1903,7 @@
                     </div>
                     <span>Home</span>
                 </a>
-                <a href="timetable.html" class="nav-item active">
+                <a href="#" class="nav-item active" id="nav-timetable">
                     <div class="icon-wrapper">
                         <svg class="nav-icon timetable-icon" viewBox="0 0 100 100">
                             <rect class="page" x="15" y="20" width="70" height="60" rx="8" stroke-width="8"/>
@@ -1768,7 +1917,7 @@
                     </div>
                     <span id="nav-title">Timetable</span>
                 </a>
-                <a href="exam-clock.html" class="nav-item">
+                <a href="#" class="nav-item" id="nav-exam-clock">
                     <div class="icon-wrapper">
                         <svg class="nav-icon clock-icon" viewBox="0 0 100 100">
                             <circle cx="50" cy="50" r="40" stroke-width="8"/>
@@ -1803,6 +1952,19 @@
                     </div>
                     <span>My Reminders</span>
                 </a>
+                <!-- 📌 NEW: Lesson Requests -->
+                <a href="#" class="nav-item" id="requests-nav" style="display:none;">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <span>Lesson Request</span>
+                </a>
             </div>
             <div class="nav-controls">
                 <select id="day-filter-select">
@@ -1828,7 +1990,7 @@
                         <div class="toggle-slider"></div>
                     </div>
                 </div>
-                <a href="login.html" class="nav-item" style="padding:6px 10px; font-size:12px;">Login</a>
+                <a href="#" class="nav-item" id="logout-link" style="padding:6px 10px; font-size:12px;">Logout</a>
             </div>
         </nav>
         <div class="main-content">
@@ -1979,18 +2141,277 @@
                     <span class="modal-label">Remaining Lessons:</span>
                     <span class="modal-value" id="modal-remaining">—</span>
                 </div>
+                <div class="modal-row" id="request-row" style="display:none;">
+                    <span class="modal-label">Request:</span>
+                    <textarea class="modal-input" id="modal-request" rows="3" placeholder="Enter your lesson request..."></textarea>
+                </div>
                 <div class="reminder-added" id="reminder-added">✅ Added to reminders</div>
             </div>
             <div class="modal-actions">
                 <button class="modal-btn secondary" id="close-btn">Close</button>
                 <button class="modal-btn primary" id="add-reminder-btn">Add to Reminders</button>
+                <button class="modal-btn primary" id="save-request-btn" style="display:none;">Save Request</button>
             </div>
         </div>
     </div>
     <div class="version-badge" id="version-badge">ver.31111.02</div>
     <script>
+        const VALID_USERS = {
+            "Administrator": "admin123",
+            "Ms K Arakelian": "arakelian123",
+            "Ms N Jenkins": "jenkins123"
+        };
+
+        let currentUser = null;
+        let currentModalData = null;
+
         // ==============================
-        // SCRIPT PRINCIPALE (identico al tuo, ma con generateTimetable corretto + nuove funzioni)
+        // LOGIN SYSTEM
+        // ==============================
+        if (localStorage.getItem('currentUser') && VALID_USERS[localStorage.getItem('currentUser')]) {
+            currentUser = localStorage.getItem('currentUser');
+            document.getElementById('logged-in-user').textContent = currentUser;
+            document.getElementById('login-page').style.display = 'none';
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('requests-nav').style.display = 'flex';
+        } else {
+            document.getElementById('login-page').style.display = 'block';
+            document.querySelector('.container').style.display = 'none';
+        }
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+            if (VALID_USERS[user] === pass) {
+                currentUser = user;
+                localStorage.setItem('currentUser', user);
+                document.getElementById('logged-in-user').textContent = user;
+                document.getElementById('login-page').style.display = 'none';
+                document.querySelector('.container').style.display = 'block';
+                document.getElementById('requests-nav').style.display = 'flex';
+                generateTimetable();
+                renderLessonsCountTable();
+                populateTodaysLessonsBox();
+                errorEl.textContent = '';
+            } else {
+                errorEl.textContent = "Invalid username or password.";
+            }
+        });
+
+        document.getElementById('logout-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('login-page').style.display = 'block';
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('requests-nav').style.display = 'none';
+        });
+
+        // ==============================
+        // REQUESTS SYSTEM
+        // ==============================
+        function loadRequests() {
+            const requests = [];
+            for (let key in localStorage) {
+                if (key.startsWith('request_')) {
+                    try {
+                        const req = JSON.parse(localStorage.getItem(key));
+                        if (req) {
+                            if (currentUser === "Administrator" || req.teacher === currentUser) {
+                                requests.push(req);
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Invalid request in localStorage:", key);
+                    }
+                }
+            }
+            return requests.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+        }
+
+        function saveRequest(req) {
+            const key = `request_${req.teacher}_${req.subject}_${req.period}_${req.day}_${req.week}`;
+            req.addedAt = req.addedAt || new Date().toISOString();
+            req.lastModified = new Date().toISOString();
+            localStorage.setItem(key, JSON.stringify(req));
+        }
+
+        function deleteRequest(req) {
+            const key = `request_${req.teacher}_${req.subject}_${req.period}_${req.day}_${req.week}`;
+            localStorage.removeItem(key);
+        }
+
+        function renderRequestsPage() {
+            const container = document.getElementById('requests-list-container');
+            const requests = loadRequests();
+            container.innerHTML = '';
+            if (requests.length === 0) {
+                container.innerHTML = '<div class="no-requests">No lesson requests yet.</div>';
+                return;
+            }
+            requests.forEach(req => {
+                const el = document.createElement('div');
+                el.className = 'request-item';
+                const dayName = new Date(req.addedAt).toLocaleDateString('en-US', { weekday: 'short' });
+                el.innerHTML = `
+                    <div class="request-info">
+                        <div><strong>${req.subject}</strong> • ${req.teacher}</div>
+                        <div>Period: ${req.period} • ${req.time} • ${req.room || '—'}</div>
+                        <div><em>${req.requestText || '—'}</em></div>
+                        <div><small>${req.day} • Week ${req.week} • ${dayName}</small></div>
+                    </div>
+                    <div class="request-actions">
+                        <button class="edit-btn" data-key="${btoa(JSON.stringify(req))}">Edit</button>
+                        ${currentUser === "Administrator" ? `<button class="delete-btn" data-key="${btoa(JSON.stringify(req))}">Delete</button>` : ''}
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+            container.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const req = JSON.parse(atob(btn.dataset.key));
+                    openRequestInModal(req);
+                });
+            });
+            container.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (confirm("Delete this request?")) {
+                        const req = JSON.parse(atob(btn.dataset.key));
+                        deleteRequest(req);
+                        renderRequestsPage();
+                    }
+                });
+            });
+        }
+
+        function openRequestInModal(req) {
+            currentModalData = req;
+            document.getElementById('modal-teacher').textContent = req.teacher;
+            document.getElementById('modal-subject').textContent = req.subject;
+            document.getElementById('modal-period').textContent = req.period;
+            document.getElementById('modal-time').textContent = req.time;
+            document.getElementById('modal-room').textContent = req.room || '—';
+            const remaining = countRemainingLessons(req.subject);
+            document.getElementById('modal-remaining').textContent = remaining;
+            document.getElementById('request-row').style.display = 'flex';
+            document.getElementById('modal-request').value = req.requestText || '';
+            document.getElementById('save-request-btn').style.display = 'inline-block';
+            document.getElementById('add-reminder-btn').style.display = 'none';
+            document.getElementById('lesson-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function exportRequestsToCSV() {
+            const requests = loadRequests();
+            if (requests.length === 0) {
+                alert("No requests to export.");
+                return;
+            }
+            let csv = "Teacher,Subject,Period,Time,Room,Request,Day,Week,AddedAt\n";
+            requests.forEach(r => {
+                const row = [
+                    `"${r.teacher}"`,
+                    `"${r.subject}"`,
+                    `"${r.period}"`,
+                    `"${r.time}"`,
+                    `"${r.room || ''}"`,
+                    `"${(r.requestText || '').replace(/"/g, '""')}"`,
+                    `"${r.day}"`,
+                    `"${r.week}"`,
+                    `"${new Date(r.addedAt).toISOString()}"`
+                ].join(",");
+                csv += row + "\n";
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lesson-requests-${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ==============================
+        // MODAL UPDATE
+        // ==============================
+        function openLessonModal(cellData) {
+            if (!cellData.subject || ['Form Time', 'Lunch', ''].includes(cellData.subject)) return;
+            currentModalData = cellData;
+            document.getElementById('modal-teacher').textContent = cellData.teacher;
+            document.getElementById('modal-subject').textContent = cellData.subject;
+            document.getElementById('modal-period').textContent = cellData.period;
+            document.getElementById('modal-time').textContent = cellData.time;
+            document.getElementById('modal-room').textContent = cellData.room || '—';
+            const remaining = countRemainingLessons(cellData.subject);
+            document.getElementById('modal-remaining').textContent = remaining;
+
+            // Show request field only if logged in and own lesson or admin
+            const canEditRequest = currentUser === "Administrator" || currentUser === cellData.teacher;
+            document.getElementById('request-row').style.display = canEditRequest ? 'flex' : 'none';
+            if (canEditRequest) {
+                const requestKey = `request_${cellData.teacher}_${cellData.subject}_${cellData.period}_${cellData.day}_${cellData.week}`;
+                const saved = JSON.parse(localStorage.getItem(requestKey) || '{}');
+                document.getElementById('modal-request').value = saved.requestText || '';
+                document.getElementById('save-request-btn').style.display = 'inline-block';
+            } else {
+                document.getElementById('save-request-btn').style.display = 'none';
+            }
+
+            document.getElementById('add-reminder-btn').style.display = 'inline-block';
+            document.getElementById('reminder-added').style.display = 'none';
+            document.getElementById('lesson-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.getElementById('save-request-btn').addEventListener('click', () => {
+            if (!currentModalData || !currentUser) return;
+            const requestText = document.getElementById('modal-request').value.trim();
+            const req = {
+                teacher: currentModalData.teacher,
+                subject: currentModalData.subject,
+                period: currentModalData.period,
+                time: currentModalData.time,
+                room: currentModalData.room,
+                day: currentModalData.day,
+                week: currentModalData.week,
+                requestText
+            };
+            saveRequest(req);
+            alert("Request saved!");
+            closeLessonModal();
+        });
+
+        // ==============================
+        // NAVIGATION
+        // ==============================
+        document.getElementById('nav-home').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('requests-page').style.display = 'none';
+            document.querySelector('.container').style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-timetable').classList.add('active');
+        });
+        document.getElementById('nav-timetable').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('requests-page').style.display = 'none';
+            document.querySelector('.container').style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            e.target.closest('.nav-item').classList.add('active');
+        });
+        document.getElementById('requests-nav').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('requests-page').style.display = 'block';
+            renderRequestsPage();
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            e.target.closest('.nav-item').classList.add('active');
+        });
+
+        // ==============================
+        // RESTO DEL TUO SCRIPT (SENZA CAMBIAMENTI)
         // ==============================
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
@@ -1998,6 +2419,7 @@
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
+
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
@@ -2016,13 +2438,15 @@
                 body.classList.add('time-evening');
             }
         }
+
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
+
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
-        // ... (TUTTE LE TUE VARIABILI E FUNZIONI: timetableData, schoolTerms, etc.) ...
+
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -2119,11 +2543,13 @@
                 }
             }
         };
+
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
         let lessonsFilterMode = 'all';
         let statisticsVisible = false;
+
         const weekAStartDate = new Date(2025, 8, 1);
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
@@ -2133,6 +2559,7 @@
             { name: "May Half Term", startDate: new Date(2026, 4, 25), endDate: new Date(2026, 4, 29) },
             { name: "Summer Term", startDate: new Date(2026, 6, 20), endDate: new Date(2026, 7, 31) }
         ];
+
         const nonInclusiveDates = [
             new Date(2025, 8, 1),
             new Date(2025, 8, 2),
@@ -2148,25 +2575,29 @@
             new Date(2026, 6, 16),
             new Date(2026, 6, 17)
         ];
+
         const nonInclusivePeriods = {
             "2025-09-25": ["4b", "5"],
             "2025-10-09": ["4b", "5"],
             "2026-03-19": ["4b", "5"]
         };
+
         const schoolYearEnd = new Date(2026, 7, 31);
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-        // ... (TUTTE LE TUE FUNZIONI ESISTENTI: extractClassNumber, parseTime, getCurrentWeekCorrect, etc.) ...
+
         function extractClassNumber(subject) {
             const match = subject.match(/^(\d+)/);
             return match ? parseInt(match[1], 10) : 999;
         }
+
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
+
         function getCurrentWeekCorrect() {
             const now = new Date();
             let lastTermEnd = new Date(2025, 8, 1);
@@ -2187,10 +2618,12 @@
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0 ? 'A' : 'B';
         }
+
         function getCurrentWeek() {
             if (currentMode === 'auto') return getCurrentWeekCorrect();
             return currentWeek;
         }
+
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
             let clean = subject.toLowerCase()
@@ -2200,6 +2633,7 @@
             clean = clean.replace(/-+/g, '-').replace(/^-|-$/g, '');
             return `subject-${clean}`;
         }
+
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -2212,6 +2646,7 @@
             const isToday = date.toDateString() === today.toDateString();
             return `<div class="date-weekday">${weekday} <span class="date-day">${day}</span> ${month} ${year}</div>`;
         }
+
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -2224,6 +2659,7 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
+
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -2268,6 +2704,7 @@
                 return foundDate || new Date();
             }
         }
+
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -2276,6 +2713,7 @@
             }
             return null;
         }
+
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -2283,6 +2721,7 @@
             }
             return null;
         }
+
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -2300,6 +2739,7 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
+
         function getCutOffDate(termStartDate) {
             const termMonday = new Date(termStartDate);
             const day = termMonday.getDay();
@@ -2309,10 +2749,12 @@
             fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
             return fridayBefore;
         }
+
         function isNonInclusiveDate(date) {
             const dateStr = date.toDateString();
             return nonInclusiveDates.some(d => d.toDateString() === dateStr);
         }
+
         function getWeekTypeForDate(date) {
             const searchDate = new Date(date);
             if (isNonInclusiveDate(searchDate)) {
@@ -2353,6 +2795,7 @@
             }
             return weekCount % 2 === 0 ? 'A' : 'B';
         }
+
         function countLessonsInWeek(weekType) {
             const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
             let count = 0;
@@ -2375,6 +2818,7 @@
             }
             return count;
         }
+
         function countLessonsInMonth(month, year) {
             const now = new Date();
             let count = 0;
@@ -2407,6 +2851,7 @@
             }
             return count;
         }
+
         function countLessonsUntilYearEnd() {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -2439,6 +2884,7 @@
             }
             return count;
         }
+
         function countLessonsUntilTerm(filterMode = 'all') {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -2520,6 +2966,7 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
+
         function countNonInclusiveLessons(filterMode = 'all') {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -2580,6 +3027,7 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts };
         }
+
         function getTodaysLessons() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -2622,6 +3070,7 @@
             }
             return lessons;
         }
+
         function populateTodaysLessonsBox() {
             const lessons = getTodaysLessons();
             const contentDiv = document.getElementById('today-lessons-content');
@@ -2646,6 +3095,7 @@
                 contentDiv.innerHTML = '<div class="today-lesson-item">No lessons scheduled</div>';
             }
         }
+
         // 📌 BOX: My Reminders – FUNZIONI
         function loadReminders() {
             const reminders = [];
@@ -2662,6 +3112,7 @@
             reminders.sort((a, b) => new Date(a.addedAt) - new Date(b.addedAt));
             return reminders;
         }
+
         function renderReminders() {
             const list = document.getElementById('reminders-list');
             const reminders = loadReminders();
@@ -2686,6 +3137,7 @@
                 list.appendChild(el);
             });
         }
+
         function clearAllReminders() {
             for (let key in localStorage) {
                 if (key.startsWith('reminder_')) {
@@ -2697,6 +3149,7 @@
                 toggleReminders();
             }
         }
+
         function exportRemindersToCSV() {
             const reminders = loadReminders();
             if (reminders.length === 0) {
@@ -2727,6 +3180,7 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
+
         function toggleReminders() {
             const box = document.getElementById('reminders-box');
             const isVisible = box.style.display === 'block';
@@ -2739,32 +3193,24 @@
                 renderReminders();
             }
         }
+
         // 📌 BOX: Modal – FUNZIONI
         function countRemainingLessons(subject) {
             const { counts } = countLessonsUntilTerm('all');
             return counts[subject] || 0;
         }
-        let currentModalData = null;
-        function openLessonModal(cellData) {
-            if (!cellData.subject || ['Form Time', 'Lunch', ''].includes(cellData.subject)) return;
-            currentModalData = cellData;
-            document.getElementById('modal-teacher').textContent = cellData.teacher;
-            document.getElementById('modal-subject').textContent = cellData.subject;
-            document.getElementById('modal-period').textContent = cellData.period;
-            document.getElementById('modal-time').textContent = cellData.time;
-            document.getElementById('modal-room').textContent = cellData.room || '—';
-            const remaining = countRemainingLessons(cellData.subject);
-            document.getElementById('modal-remaining').textContent = remaining;
-            document.getElementById('reminder-added').style.display = 'none';
-            document.getElementById('lesson-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
+
         function closeLessonModal() {
             document.getElementById('lesson-modal').style.display = 'none';
             document.body.style.overflow = '';
         }
+
         function addToReminders() {
             if (!currentModalData) return;
+            if (!currentUser) {
+                alert("Please log in to add reminders.");
+                return;
+            }
             const key = `reminder_${new Date().toISOString().split('T')[0]}_${currentModalData.teacher}_${currentModalData.subject}_${currentModalData.period}`;
             const reminder = {
                 teacher: currentModalData.teacher,
@@ -2789,6 +3235,7 @@
                 console.warn("Could not save reminder to localStorage", e);
             }
         }
+
         // ✅ CORREZIONE FONDAMENTALE: Aggiungiamo `data-cell` in generateTimetable
         function generateTimetable() {
             const week = getCurrentWeek();
@@ -2888,6 +3335,7 @@
                 }
             });
         }
+
         // Event listeners
         document.getElementById('close-btn').addEventListener('click', closeLessonModal);
         document.querySelector('.close-modal').addEventListener('click', closeLessonModal);
@@ -2903,6 +3351,8 @@
         });
         document.getElementById('clear-reminders-btn').addEventListener('click', clearAllReminders);
         document.getElementById('export-reminders-btn').addEventListener('click', exportRemindersToCSV);
+        document.getElementById('export-requests-csv').addEventListener('click', exportRequestsToCSV);
+
         // ... (RESTO DEL TUO SCRIPT: renderLessonsCountTable, updateClockPrecise, ecc.) ...
         function renderLessonsCountTable() {
             const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode);
@@ -2983,6 +3433,7 @@
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
+
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
@@ -2992,6 +3443,7 @@
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
         }
+
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -3025,6 +3477,7 @@
                 document.getElementById('term-info-box').textContent = "Academic year completed";
             }
         }
+
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -3338,6 +3791,7 @@
             }
             progressBarContainer.style.display = 'none';
         }
+
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement &&
@@ -3368,10 +3822,12 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
+
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement ||
@@ -3383,9 +3839,11 @@
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
+
         function updateWeekSelector() {
             document.getElementById('week-selector').value = currentMode === 'auto' ? 'auto' : currentWeek;
         }
+
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
@@ -3401,6 +3859,7 @@
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
+
         function handleDayFilter() {
             currentViewDay = document.getElementById('day-filter-select').value;
             statisticsVisible = false;
@@ -3408,6 +3867,7 @@
             generateTimetable();
             renderLessonsCountTable();
         }
+
         function handleWeekSelector(e) {
             const val = e.target.value;
             if (val === 'auto') {
@@ -3422,6 +3882,7 @@
             generateTimetable();
             renderLessonsCountTable();
         }
+
         function handleLessonsFilter(e) {
             const filter = e.target.dataset.filter;
             if (!filter) return;
@@ -3431,6 +3892,7 @@
             });
             renderLessonsCountTable();
         }
+
         function toggleStatistics() {
             statisticsVisible = !statisticsVisible;
             if (statisticsVisible) {
@@ -3458,7 +3920,6 @@
             currentWeekStart.setDate(todayStart.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
             const currentWeekEnd = new Date(currentWeekStart);
             currentWeekEnd.setDate(currentWeekStart.getDate() + 4);
-
             let weekCount = 0;
             let currentDate = new Date(todayStart); // Inizia da OGGI, non da lunedì
             while (currentDate <= currentWeekEnd) {
@@ -3478,7 +3939,6 @@
                                     if (nonInclusivePeriods[dateStr] && nonInclusivePeriods[dateStr].includes(period)) {
                                         continue;
                                     }
-
                                     // ✅ Calcolo corretto per "This Week": includi solo le lezioni future o in corso
                                     let includeLesson = true;
                                     if (currentDate.toDateString() === todayStart.toDateString()) {
@@ -3505,24 +3965,20 @@
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-
             const monthCount = countLessonsUntilTerm('month').counts;
             const monthTotal = Object.values(monthCount).reduce((a, b) => a + b, 0);
             const { counts: halfTermCounts, byTeacher: __, todayLessons: ___ } = countLessonsUntilTerm('all');
             const halfTermTotal = Object.values(halfTermCounts).reduce((a, b) => a + b, 0);
             const yearEndTotal = countLessonsUntilYearEnd();
-
             document.getElementById('stat-week').textContent = weekCount;
             document.getElementById('stat-month').textContent = monthTotal;
             document.getElementById('stat-half-term').textContent = halfTermTotal;
             document.getElementById('stat-year-end').textContent = yearEndTotal;
-
             // Utilizziamo valori realistici per le barre di progresso
             const maxWeek = 41; // max settimanale
             const maxMonth = 200; // stima ragionevole
             const maxHalfTerm = 1000;
             const maxYearEnd = 2000;
-
             document.getElementById('progress-week').style.width = `${Math.min(100, (weekCount / maxWeek) * 100)}%`;
             document.getElementById('progress-month').style.width = `${Math.min(100, (monthTotal / maxMonth) * 100)}%`;
             document.getElementById('progress-half-term').style.width = `${Math.min(100, (halfTermTotal / maxHalfTerm) * 100)}%`;
@@ -3532,6 +3988,7 @@
         function handleRefreshStats() {
             updateStatisticsValues();
         }
+
         function populateNonInclusiveDatesList() {
             const list = document.getElementById('non-inclusive-dates-list');
             list.innerHTML = '';
@@ -3562,10 +4019,12 @@
                 list.appendChild(li);
             });
         }
+
         function handleRefreshLessons() {
              renderLessonsCountTable();
              populateTodaysLessonsBox();
         }
+
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -3582,6 +4041,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('week-selector').value = 'auto';
         });
+
         populateNonInclusiveDatesList();
         generateTimetable();
         renderLessonsCountTable();

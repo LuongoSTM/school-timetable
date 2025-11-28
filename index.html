@@ -6,8 +6,6 @@
     <title>St Thomas More Timetable 2025-2026</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:wght@400&display=swap" rel="stylesheet">
     <style>
-        /* ... TUTTO IL TUO CSS ESISTENTE VIENE MANTENUTO INTEGRO ... */
-        /* Lo includo per completezza, ma è identico al tuo */
         :root {
             --primary-bg: #ffffff;
             --secondary-bg: #f8f9fa;
@@ -127,7 +125,7 @@
             z-index: 1000;
             mix-blend-mode: overlay;
         }
-        .container {
+        .container, #requests-page {
             max-width: 1800px;
             margin: 0 auto;
             padding: 20px;
@@ -330,6 +328,21 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 5;
+        }
+        .request-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 12px;
+            height: 12px;
+            background: #dc3545;
+            border-radius: 50%;
+            z-index: 10;
+            animation: blinkRed 1s infinite;
+        }
+        @keyframes blinkRed {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
         .countdown-title-row {
             display: flex;
@@ -673,13 +686,6 @@
             font-weight: bold;
             color: var(--text-color);
             white-space: nowrap;
-        }
-        @keyframes blinkRed {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        .progress-fill.blink {
-            animation: blinkRed 1s infinite;
         }
         .now-badge {
             position: absolute;
@@ -1280,7 +1286,6 @@
             margin-left: 5px;
             text-align: right;
         }
-        /* 📌 BOX: My Reminders Panel – STILE */
         .reminders-box {
             background: var(--secondary-bg);
             border-radius: 10px;
@@ -1359,7 +1364,6 @@
             opacity: 0.7;
             padding: 10px 0;
         }
-        /* ===== MODAL STYLES ===== */
         #lesson-modal {
             display: none;
             position: fixed;
@@ -1469,11 +1473,10 @@
             text-align: center;
             display: none;
         }
-        /* ===== REQUESTS PAGE STYLES ===== */
         #requests-page {
             display: none;
             padding: 20px;
-            max-width: 1200px;
+            max-width: 1800px;
             margin: 0 auto;
         }
         .requests-header {
@@ -1734,7 +1737,6 @@
         .subject-9s-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-9hm-food { background-color: #ff6b35 !important; color: white !important; }
         .subject-pshe { background-color: #8e8e93 !important; color: white !important; }
-        /* Login Page */
         #login-page {
             display: none;
             max-width: 400px;
@@ -1800,7 +1802,167 @@
         <div class="error-msg" id="login-error"></div>
     </div>
 
+    <!-- PAGINA REQUESTS con navbar -->
     <div id="requests-page">
+        <div class="header-content-box">
+            <div class="header">
+                <div class="clock-section">
+                    <div class="clock-title">St Thomas More Time</div>
+                    <div class="clock-container">
+                        <div class="clock-box">
+                            <div class="clock-value" id="requests-hours">00</div>
+                            <div class="clock-label">Hours</div>
+                        </div>
+                        <div class="clock-box">
+                            <div class="clock-value" id="requests-minutes">00</div>
+                            <div class="clock-label">Minutes</div>
+                        </div>
+                        <div class="clock-box">
+                            <div class="clock-value" id="requests-seconds">00</div>
+                            <div class="clock-label">Seconds</div>
+                        </div>
+                    </div>
+                    <div class="logged-in-user-box">
+                        Logged in as: <span id="requests-logged-in-user">Guest</span>
+                    </div>
+                </div>
+                <div class="title-section">
+                    <div class="title">Time Table 2025-2026</div>
+                    <div class="date-info" id="requests-date-info">Loading...</div>
+                </div>
+                <div class="countdown-section">
+                    <div class="countdown-title-wrapper">
+                        <div class="countdown-title-row">
+                            <div class="countdown-title" id="requests-countdown-title">October Half Term</div>
+                            <div id="requests-week-info">Current Week: A</div>
+                        </div>
+                    </div>
+                    <div class="countdown-row">
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="requests-countdown-days">000</div>
+                            <div class="clock-label">Days</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="requests-countdown-hours">00</div>
+                            <div class="clock-label">Hours</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="requests-countdown-minutes">00</div>
+                            <div class="clock-label">Minutes</div>
+                        </div>
+                        <div class="countdown-box">
+                            <div class="countdown-value" id="requests-countdown-seconds">00</div>
+                            <div class="clock-label">Seconds</div>
+                        </div>
+                    </div>
+                    <div class="countdown-lower-row">
+                        <div class="term-info-box" id="requests-term-info-box">
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="nav-main">
+                <a href="#" class="nav-item" id="requests-nav-home">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon home-icon" viewBox="0 0 100 100">
+                            <path class="roof" d="M20,55 L50,25 L80,55" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="30" y="55" width="40" height="25" rx="3" stroke-width="8"/>
+                            <rect class="door" x="45" y="65" width="10" height="15" rx="2"/>
+                        </svg>
+                    </div>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item" id="requests-nav-timetable">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon timetable-icon" viewBox="0 0 100 100">
+                            <rect class="page" x="15" y="20" width="70" height="60" rx="8" stroke-width="8"/>
+                            <line x1="30" y1="35" x2="70" y2="35" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="30" y1="50" x2="70" y2="50" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="30" y1="65" x2="55" y2="65" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="25" cy="35" r="4"/>
+                            <circle cx="25" cy="50" r="4"/>
+                            <circle cx="25" cy="65" r="4"/>
+                        </svg>
+                    </div>
+                    <span>Timetable</span>
+                </a>
+                <a href="#" class="nav-item" id="requests-nav-exam-clock">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon clock-icon" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" stroke-width="8"/>
+                            <circle cx="50" cy="50" r="4"/>
+                            <line class="hand" x1="50" y1="50" x2="50" y2="30" stroke-width="6" stroke-linecap="round"/>
+                            <line x1="50" y1="50" x2="65" y2="50" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Exam Clock</span>
+                </a>
+                <a href="#" class="nav-item" id="requests-stats-nav">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon data-icon" viewBox="0 0 100 100">
+                            <rect class="bar bar-1" x="25" y="70" width="6" height="0" rx="2"/>
+                            <rect class="bar bar-2" x="38" y="70" width="6" height="0" rx="2"/>
+                            <rect class="bar bar-3" x="51" y="70" width="6" height="0" rx="2"/>
+                            <rect class="bar bar-4" x="64" y="70" width="6" height="0" rx="2"/>
+                            <path d="M20,80 L80,80" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M20,80 L20,30" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Statistics</span>
+                </a>
+                <a href="#" class="nav-item" id="requests-reminders-nav">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 4v4a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V4m8 16H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2z"/>
+                            <path d="M9 12h6"/>
+                            <path d="M9 16h6"/>
+                        </svg>
+                    </div>
+                    <span>My Reminders</span>
+                </a>
+                <a href="#" class="nav-item requests-active" id="requests-nav-current">
+                    <div class="icon-wrapper">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <span>Lesson Request</span>
+                </a>
+            </div>
+            <div class="nav-controls">
+                <select id="requests-day-filter-select">
+                    <option value="all">All Days</option>
+                    <option value="MONDAY">Monday</option>
+                    <option value="TUESDAY">Tuesday</option>
+                    <option value="WEDNESDAY">Wednesday</option>
+                    <option value="THURSDAY">Thursday</option>
+                    <option value="FRIDAY">Friday</option>
+                </select>
+                <select id="requests-week-selector">
+                    <option value="auto">Automatic</option>
+                    <option value="A">Week A</option>
+                    <option value="B">Week B</option>
+                </select>
+                <button id="requests-fullscreen-btn" class="fullscreen-btn">
+                    <span>⛶</span>
+                    <span>Full Screen</span>
+                </button>
+                <div class="dark-mode-control">
+                    <span>🌙</span>
+                    <div class="toggle-switch" id="requests-dark-mode-toggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <a href="#" class="nav-item" id="requests-logout-link" style="padding:6px 10px; font-size:12px;">Logout</a>
+            </div>
+        </nav>
         <h2 class="requests-header">Lesson Requests</h2>
         <div class="requests-list" id="requests-list-container"></div>
         <div class="requests-export">
@@ -1941,7 +2103,6 @@
                     </div>
                     <span>Statistics</span>
                 </a>
-                <!-- 📌 BOX: My Reminders – NUOVO ELEMENTO NEL MENU -->
                 <a href="#" class="nav-item" id="reminders-nav">
                     <div class="icon-wrapper">
                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1952,7 +2113,6 @@
                     </div>
                     <span>My Reminders</span>
                 </a>
-                <!-- 📌 NEW: Lesson Requests -->
                 <a href="#" class="nav-item" id="requests-nav" style="display:none;">
                     <div class="icon-wrapper">
                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2043,14 +2203,12 @@
                     </div>
                 </div>
             </div>
-            <!-- 📌 BOX: My Reminders Panel – CONTENUTO -->
             <div class="reminders-box" id="reminders-box">
                 <div class="reminders-header">
                     My Reminders
                     <button id="clear-reminders-btn" class="reminders-btn secondary" title="Clear all reminders">🗑️</button>
                 </div>
                 <div id="reminders-list">
-                    <!-- I promemoria verranno inseriti dinamicamente qui -->
                 </div>
                 <div class="reminders-actions">
                     <button id="export-reminders-btn" class="reminders-btn primary">Export CSV</button>
@@ -2109,7 +2267,6 @@
             </div>
         </div>
     </div>
-    <!-- Modal per lezione -->
     <div id="lesson-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -2161,7 +2318,6 @@
             "Ms K Arakelian": "arakelian123",
             "Ms N Jenkins": "jenkins123"
         };
-
         let currentUser = null;
         let currentModalData = null;
 
@@ -2171,6 +2327,7 @@
         if (localStorage.getItem('currentUser') && VALID_USERS[localStorage.getItem('currentUser')]) {
             currentUser = localStorage.getItem('currentUser');
             document.getElementById('logged-in-user').textContent = currentUser;
+            document.getElementById('requests-logged-in-user').textContent = currentUser;
             document.getElementById('login-page').style.display = 'none';
             document.querySelector('.container').style.display = 'block';
             document.getElementById('requests-nav').style.display = 'flex';
@@ -2187,6 +2344,7 @@
                 currentUser = user;
                 localStorage.setItem('currentUser', user);
                 document.getElementById('logged-in-user').textContent = user;
+                document.getElementById('requests-logged-in-user').textContent = user;
                 document.getElementById('login-page').style.display = 'none';
                 document.querySelector('.container').style.display = 'block';
                 document.getElementById('requests-nav').style.display = 'flex';
@@ -2229,19 +2387,16 @@
             }
             return requests.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
         }
-
         function saveRequest(req) {
             const key = `request_${req.teacher}_${req.subject}_${req.period}_${req.day}_${req.week}`;
             req.addedAt = req.addedAt || new Date().toISOString();
             req.lastModified = new Date().toISOString();
             localStorage.setItem(key, JSON.stringify(req));
         }
-
         function deleteRequest(req) {
             const key = `request_${req.teacher}_${req.subject}_${req.period}_${req.day}_${req.week}`;
             localStorage.removeItem(key);
         }
-
         function renderRequestsPage() {
             const container = document.getElementById('requests-list-container');
             const requests = loadRequests();
@@ -2284,7 +2439,6 @@
                 });
             });
         }
-
         function openRequestInModal(req) {
             currentModalData = req;
             document.getElementById('modal-teacher').textContent = req.teacher;
@@ -2301,7 +2455,6 @@
             document.getElementById('lesson-modal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
         function exportRequestsToCSV() {
             const requests = loadRequests();
             if (requests.length === 0) {
@@ -2347,8 +2500,6 @@
             document.getElementById('modal-room').textContent = cellData.room || '—';
             const remaining = countRemainingLessons(cellData.subject);
             document.getElementById('modal-remaining').textContent = remaining;
-
-            // Show request field only if logged in and own lesson or admin
             const canEditRequest = currentUser === "Administrator" || currentUser === cellData.teacher;
             document.getElementById('request-row').style.display = canEditRequest ? 'flex' : 'none';
             if (canEditRequest) {
@@ -2359,13 +2510,11 @@
             } else {
                 document.getElementById('save-request-btn').style.display = 'none';
             }
-
             document.getElementById('add-reminder-btn').style.display = 'inline-block';
             document.getElementById('reminder-added').style.display = 'none';
             document.getElementById('lesson-modal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
         document.getElementById('save-request-btn').addEventListener('click', () => {
             if (!currentModalData || !currentUser) return;
             const requestText = document.getElementById('modal-request').value.trim();
@@ -2387,31 +2536,83 @@
         // ==============================
         // NAVIGATION
         // ==============================
+        function hideAllPages() {
+            document.getElementById('requests-page').style.display = 'none';
+            document.querySelector('.container').style.display = 'none';
+        }
+
+        function setActiveNavItem(navId) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'requests-active', 'stats-active'));
+            document.querySelectorAll('#requests-page .nav-item').forEach(el => el.classList.remove('active', 'requests-active', 'stats-active'));
+            if (navId.startsWith('requests-')) {
+                document.getElementById(navId).classList.add('requests-active');
+            } else {
+                document.getElementById(navId).classList.add('active');
+            }
+        }
+
         document.getElementById('nav-home').addEventListener('click', (e) => {
             e.preventDefault();
-            document.getElementById('requests-page').style.display = 'none';
+            hideAllPages();
             document.querySelector('.container').style.display = 'block';
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-timetable').classList.add('active');
+            setActiveNavItem('nav-timetable');
         });
         document.getElementById('nav-timetable').addEventListener('click', (e) => {
             e.preventDefault();
-            document.getElementById('requests-page').style.display = 'none';
+            hideAllPages();
             document.querySelector('.container').style.display = 'block';
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            e.target.closest('.nav-item').classList.add('active');
+            setActiveNavItem('nav-timetable');
         });
         document.getElementById('requests-nav').addEventListener('click', (e) => {
             e.preventDefault();
-            document.querySelector('.container').style.display = 'none';
+            hideAllPages();
             document.getElementById('requests-page').style.display = 'block';
+            setActiveNavItem('requests-nav-current');
             renderRequestsPage();
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            e.target.closest('.nav-item').classList.add('active');
         });
 
+        // Requests page nav
+        document.getElementById('requests-nav-home').addEventListener('click', (e) => {
+            e.preventDefault();
+            hideAllPages();
+            document.querySelector('.container').style.display = 'block';
+            setActiveNavItem('nav-timetable');
+        });
+        document.getElementById('requests-nav-timetable').addEventListener('click', (e) => {
+            e.preventDefault();
+            hideAllPages();
+            document.querySelector('.container').style.display = 'block';
+            setActiveNavItem('nav-timetable');
+        });
+        document.getElementById('requests-nav-current').addEventListener('click', (e) => {
+            e.preventDefault();
+            renderRequestsPage();
+        });
+        document.getElementById('requests-stats-nav').addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleStatistics();
+        });
+        document.getElementById('requests-reminders-nav').addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleReminders();
+        });
+        document.getElementById('requests-logout-link').addEventListener('click', (e) => {
+            document.getElementById('logout-link').click();
+        });
+
+        document.getElementById('requests-day-filter-select').addEventListener('change', (e) => {
+            document.getElementById('day-filter-select').value = e.target.value;
+            handleDayFilter();
+        });
+        document.getElementById('requests-week-selector').addEventListener('change', (e) => {
+            document.getElementById('week-selector').value = e.target.value;
+            handleWeekSelector(e);
+        });
+        document.getElementById('requests-fullscreen-btn').addEventListener('click', toggleFullScreen);
+        document.getElementById('requests-dark-mode-toggle').addEventListener('click', toggleDarkMode);
+
         // ==============================
-        // RESTO DEL TUO SCRIPT (SENZA CAMBIAMENTI)
+        // ICONS & DYNAMIC BG
         // ==============================
         const ICONS = {
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
@@ -2419,7 +2620,6 @@
             break: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
             lunch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 14h.01M12 14h.01M19 14h.01M8 18h8"/></svg>`
         };
-
         function updateDynamicBackgroundAndShadows() {
             const now = new Date();
             const hour = now.getHours();
@@ -2439,14 +2639,19 @@
             }
         }
 
+        // ==============================
+        // OFFLINE BANNER
+        // ==============================
         window.addEventListener('online', () => {
             document.getElementById('offline-banner').style.display = 'none';
         });
-
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
 
+        // ==============================
+        // TIMETABLE DATA
+        // ==============================
         const timetableData = {
             "weekA": {
                 "MONDAY": {
@@ -2559,7 +2764,6 @@
             { name: "May Half Term", startDate: new Date(2026, 4, 25), endDate: new Date(2026, 4, 29) },
             { name: "Summer Term", startDate: new Date(2026, 6, 20), endDate: new Date(2026, 7, 31) }
         ];
-
         const nonInclusiveDates = [
             new Date(2025, 8, 1),
             new Date(2025, 8, 2),
@@ -2575,13 +2779,11 @@
             new Date(2026, 6, 16),
             new Date(2026, 6, 17)
         ];
-
         const nonInclusivePeriods = {
             "2025-09-25": ["4b", "5"],
             "2025-10-09": ["4b", "5"],
             "2026-03-19": ["4b", "5"]
         };
-
         const schoolYearEnd = new Date(2026, 7, 31);
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
@@ -2591,13 +2793,11 @@
             const match = subject.match(/^(\d+)/);
             return match ? parseInt(match[1], 10) : 999;
         }
-
         function parseTime(timeStr) {
             const match = timeStr.match(/(\d{1,2}):(\d{2})/);
             if (!match) return null;
             return { hours: parseInt(match[1]), minutes: parseInt(match[2]) };
         }
-
         function getCurrentWeekCorrect() {
             const now = new Date();
             let lastTermEnd = new Date(2025, 8, 1);
@@ -2618,12 +2818,10 @@
             const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
             return diffWeeks % 2 === 0 ? 'A' : 'B';
         }
-
         function getCurrentWeek() {
             if (currentMode === 'auto') return getCurrentWeekCorrect();
             return currentWeek;
         }
-
         function getSubjectClass(subject) {
             if (!subject || ['Lunch', 'Form Time'].includes(subject)) return '';
             let clean = subject.toLowerCase()
@@ -2633,7 +2831,6 @@
             clean = clean.replace(/-+/g, '-').replace(/^-|-$/g, '');
             return `subject-${clean}`;
         }
-
         function formatDate(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const full = date.toLocaleDateString('en-US', options);
@@ -2646,7 +2843,6 @@
             const isToday = date.toDateString() === today.toDateString();
             return `<div class="date-weekday">${weekday} <span class="date-day">${day}</span> ${month} ${year}</div>`;
         }
-
         function isCurrentTime(timeRange) {
             if (!timeRange) return false;
             const now = new Date();
@@ -2659,7 +2855,6 @@
             const endMins = e.hours * 60 + e.minutes;
             return nowMins >= startMins && nowMins < endMins;
         }
-
         function getDayDate(day, week) {
             const now = new Date();
             const targetWeekIsA = (week === 'A');
@@ -2704,7 +2899,6 @@
                 return foundDate || new Date();
             }
         }
-
         function getNextPeriod(currentPeriodIndex, day, week) {
             for (let i = currentPeriodIndex + 1; i < periods.length; i++) {
                 const p = periods[i];
@@ -2713,7 +2907,6 @@
             }
             return null;
         }
-
         function getNextTerm() {
             const now = new Date();
             for (let term of schoolTerms) {
@@ -2721,7 +2914,6 @@
             }
             return null;
         }
-
         function formatTermDates(term) {
             const start = term.startDate;
             const end = term.endDate;
@@ -2739,7 +2931,6 @@
             const weeksText = weeksRemaining === 1 ? '1 week' : `${weeksRemaining} weeks`;
             return `${startDateStr} – ${endDateStr} (${weeksText} remaining)`;
         }
-
         function getCutOffDate(termStartDate) {
             const termMonday = new Date(termStartDate);
             const day = termMonday.getDay();
@@ -2749,12 +2940,10 @@
             fridayBefore.setDate(mondayOfTermWeek.getDate() - 3);
             return fridayBefore;
         }
-
         function isNonInclusiveDate(date) {
             const dateStr = date.toDateString();
             return nonInclusiveDates.some(d => d.toDateString() === dateStr);
         }
-
         function getWeekTypeForDate(date) {
             const searchDate = new Date(date);
             if (isNonInclusiveDate(searchDate)) {
@@ -2795,7 +2984,6 @@
             }
             return weekCount % 2 === 0 ? 'A' : 'B';
         }
-
         function countLessonsInWeek(weekType) {
             const weekData = timetableData[weekType === 'A' ? 'weekA' : 'weekB'];
             let count = 0;
@@ -2818,7 +3006,6 @@
             }
             return count;
         }
-
         function countLessonsInMonth(month, year) {
             const now = new Date();
             let count = 0;
@@ -2851,7 +3038,6 @@
             }
             return count;
         }
-
         function countLessonsUntilYearEnd() {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -2884,7 +3070,6 @@
             }
             return count;
         }
-
         function countLessonsUntilTerm(filterMode = 'all') {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -2966,7 +3151,6 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts, todayLessons };
         }
-
         function countNonInclusiveLessons(filterMode = 'all') {
             const now = new Date();
             const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -3027,7 +3211,6 @@
             }
             return { counts: subjectCount, byTeacher: teacherCounts };
         }
-
         function getTodaysLessons() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -3070,7 +3253,6 @@
             }
             return lessons;
         }
-
         function populateTodaysLessonsBox() {
             const lessons = getTodaysLessons();
             const contentDiv = document.getElementById('today-lessons-content');
@@ -3112,7 +3294,6 @@
             reminders.sort((a, b) => new Date(a.addedAt) - new Date(b.addedAt));
             return reminders;
         }
-
         function renderReminders() {
             const list = document.getElementById('reminders-list');
             const reminders = loadReminders();
@@ -3137,7 +3318,6 @@
                 list.appendChild(el);
             });
         }
-
         function clearAllReminders() {
             for (let key in localStorage) {
                 if (key.startsWith('reminder_')) {
@@ -3149,7 +3329,6 @@
                 toggleReminders();
             }
         }
-
         function exportRemindersToCSV() {
             const reminders = loadReminders();
             if (reminders.length === 0) {
@@ -3180,16 +3359,17 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
-
         function toggleReminders() {
             const box = document.getElementById('reminders-box');
             const isVisible = box.style.display === 'block';
             if (isVisible) {
                 box.style.display = 'none';
                 document.getElementById('reminders-nav').classList.remove('stats-active');
+                document.getElementById('requests-reminders-nav').classList.remove('stats-active');
             } else {
                 box.style.display = 'block';
                 document.getElementById('reminders-nav').classList.add('stats-active');
+                document.getElementById('requests-reminders-nav').classList.add('stats-active');
                 renderReminders();
             }
         }
@@ -3199,12 +3379,10 @@
             const { counts } = countLessonsUntilTerm('all');
             return counts[subject] || 0;
         }
-
         function closeLessonModal() {
             document.getElementById('lesson-modal').style.display = 'none';
             document.body.style.overflow = '';
         }
-
         function addToReminders() {
             if (!currentModalData) return;
             if (!currentUser) {
@@ -3317,7 +3495,13 @@
                             day,
                             week
                         });
-                        html += `<td class="${cls}" data-cell='${cellData}' data-teacher="${teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins'}">${content}</td>`;
+                        html += `<td class="${cls}" data-cell='${cellData}' data-teacher="${teacher === 'Ms K Arakelian' ? 'arakelian' : 'jenkins'}">${content}`;
+                        // 🟢 AGGIUNGI INDICATORE RICHIESTA
+                        const requestKey = `request_${teacher}_${data?.subject}_${period}_${day}_${week}`;
+                        if (data?.subject && !['Form Time', 'Lunch', ''].includes(data.subject) && localStorage.getItem(requestKey)) {
+                            html += `<div class="request-indicator"></div>`;
+                        }
+                        html += `</td>`;
                     });
                 });
                 html += '</tr>';
@@ -3433,17 +3617,20 @@
                 : '—';
             document.getElementById('term-end-date').textContent = termDate;
         }
-
         function updateClockPrecise() {
             const now = new Date();
             document.getElementById('hours').textContent = now.getHours().toString().padStart(2, '0');
             document.getElementById('minutes').textContent = now.getMinutes().toString().padStart(2, '0');
             document.getElementById('seconds').textContent = now.getSeconds().toString().padStart(2, '0');
             document.getElementById('date-info').innerHTML = formatDate(now);
+            document.getElementById('requests-hours').textContent = now.getHours().toString().padStart(2, '0');
+            document.getElementById('requests-minutes').textContent = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('requests-seconds').textContent = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('requests-date-info').innerHTML = formatDate(now);
             const w = getCurrentWeek();
             document.getElementById('week-info').textContent = `Current Week: ${w}`;
+            document.getElementById('requests-week-info').textContent = `Current Week: ${w}`;
         }
-
         function updateCountdownPrecise() {
             const now = new Date();
             const nextTerm = getNextTerm();
@@ -3460,13 +3647,28 @@
                     document.getElementById('countdown-minutes').textContent = mins.toString().padStart(2, '0');
                     document.getElementById('countdown-seconds').textContent = secs.toString().padStart(2, '0');
                     document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
+
+                    document.getElementById('requests-countdown-title').textContent = nextTerm.name;
+                    document.getElementById('requests-countdown-days').textContent = totalDays.toString().padStart(3, '0');
+                    document.getElementById('requests-countdown-hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('requests-countdown-minutes').textContent = mins.toString().padStart(2, '0');
+                    document.getElementById('requests-countdown-seconds').textContent = secs.toString().padStart(2, '0');
+                    document.getElementById('requests-term-info-box').textContent = formatTermDates(nextTerm);
                 } else {
+                    // term ended
                     document.getElementById('countdown-title').textContent = nextTerm.name;
                     document.getElementById('countdown-days').textContent = "000";
                     document.getElementById('countdown-hours').textContent = "00";
                     document.getElementById('countdown-minutes').textContent = "00";
                     document.getElementById('countdown-seconds').textContent = "00";
                     document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
+
+                    document.getElementById('requests-countdown-title').textContent = nextTerm.name;
+                    document.getElementById('requests-countdown-days').textContent = "000";
+                    document.getElementById('requests-countdown-hours').textContent = "00";
+                    document.getElementById('requests-countdown-minutes').textContent = "00";
+                    document.getElementById('requests-countdown-seconds').textContent = "00";
+                    document.getElementById('requests-term-info-box').textContent = formatTermDates(nextTerm);
                 }
             } else {
                 document.getElementById('countdown-title').textContent = "No More Terms";
@@ -3475,9 +3677,15 @@
                 document.getElementById('countdown-minutes').textContent = "00";
                 document.getElementById('countdown-seconds').textContent = "00";
                 document.getElementById('term-info-box').textContent = "Academic year completed";
+
+                document.getElementById('requests-countdown-title').textContent = "No More Terms";
+                document.getElementById('requests-countdown-days').textContent = "000";
+                document.getElementById('requests-countdown-hours').textContent = "00";
+                document.getElementById('requests-countdown-minutes').textContent = "00";
+                document.getElementById('requests-countdown-seconds').textContent = "00";
+                document.getElementById('requests-term-info-box').textContent = "Academic year completed";
             }
         }
-
         function updateNowContextBar() {
             const now = new Date();
             const today = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
@@ -3791,9 +3999,9 @@
             }
             progressBarContainer.style.display = 'none';
         }
-
         function toggleFullScreen() {
             const btn = document.getElementById('fullscreen-btn');
+            const reqBtn = document.getElementById('requests-fullscreen-btn');
             if (!document.fullscreenElement && !document.mozFullScreenElement &&
                 !document.webkitFullscreenElement && !document.msFullscreenElement) {
                 const elem = document.documentElement;
@@ -3807,7 +4015,9 @@
                     elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
                 }
                 btn.classList.add('active');
+                reqBtn.classList.add('active');
                 btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
+                reqBtn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -3819,55 +4029,61 @@
                     document.webkitExitFullscreen();
                 }
                 btn.classList.remove('active');
+                reqBtn.classList.remove('active');
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+                reqBtn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         document.addEventListener('fullscreenchange', updateFullScreenButton);
         document.addEventListener('webkitfullscreenchange', updateFullScreenButton);
         document.addEventListener('mozfullscreenchange', updateFullScreenButton);
         document.addEventListener('MSFullscreenChange', updateFullScreenButton);
-
         function updateFullScreenButton() {
             const btn = document.getElementById('fullscreen-btn');
+            const reqBtn = document.getElementById('requests-fullscreen-btn');
             if (document.fullscreenElement || document.mozFullScreenElement ||
                 document.webkitFullscreenElement || document.msFullscreenElement) {
                 btn.classList.add('active');
+                reqBtn.classList.add('active');
                 btn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
+                reqBtn.innerHTML = '<span>⛶</span><span>Exit Full Screen</span>';
             } else {
                 btn.classList.remove('active');
+                reqBtn.classList.remove('active');
                 btn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
+                reqBtn.innerHTML = '<span>⛶</span><span>Full Screen</span>';
             }
         }
-
         function updateWeekSelector() {
             document.getElementById('week-selector').value = currentMode === 'auto' ? 'auto' : currentWeek;
+            document.getElementById('requests-week-selector').value = currentMode === 'auto' ? 'auto' : currentWeek;
         }
-
         function toggleDarkMode() {
             const body = document.body;
             const toggle = document.getElementById('dark-mode-toggle');
+            const reqToggle = document.getElementById('requests-dark-mode-toggle');
             body.classList.add('theme-transition');
             if (body.hasAttribute('data-theme')) {
                 body.removeAttribute('data-theme');
                 toggle.classList.remove('active');
+                reqToggle.classList.remove('active');
                 localStorage.setItem('darkMode', 'false');
             } else {
                 body.setAttribute('data-theme', 'dark');
                 toggle.classList.add('active');
+                reqToggle.classList.add('active');
                 localStorage.setItem('darkMode', 'true');
             }
             setTimeout(() => body.classList.remove('theme-transition'), 500);
         }
-
         function handleDayFilter() {
             currentViewDay = document.getElementById('day-filter-select').value;
+            document.getElementById('requests-day-filter-select').value = currentViewDay;
             statisticsVisible = false;
             document.getElementById('statistics-box').style.display = 'none';
             generateTimetable();
             renderLessonsCountTable();
         }
-
         function handleWeekSelector(e) {
             const val = e.target.value;
             if (val === 'auto') {
@@ -3882,7 +4098,6 @@
             generateTimetable();
             renderLessonsCountTable();
         }
-
         function handleLessonsFilter(e) {
             const filter = e.target.dataset.filter;
             if (!filter) return;
@@ -3892,24 +4107,25 @@
             });
             renderLessonsCountTable();
         }
-
         function toggleStatistics() {
             statisticsVisible = !statisticsVisible;
             if (statisticsVisible) {
                 currentViewDay = 'all';
                 document.getElementById('day-filter-select').value = 'all';
+                document.getElementById('requests-day-filter-select').value = 'all';
                 document.getElementById('statistics-box').style.display = 'block';
                 document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
+                document.getElementById('requests-stats-nav').classList.toggle('stats-active', statisticsVisible);
                 document.getElementById('non-inclusive-dates-box').style.display = 'block';
             } else {
                 document.getElementById('statistics-box').style.display = 'none';
                 document.getElementById('stats-nav').classList.toggle('stats-active', statisticsVisible);
+                document.getElementById('requests-stats-nav').classList.toggle('stats-active', statisticsVisible);
                 document.getElementById('non-inclusive-dates-box').style.display = 'none';
             }
             generateTimetable();
             updateStatisticsValues();
         }
-
         // ✅ CORREZIONE CHIAVE: funzione aggiornata per evitare errori e calcolare correttamente le lezioni
         function updateStatisticsValues() {
             if (!statisticsVisible) return;
@@ -3984,11 +4200,9 @@
             document.getElementById('progress-half-term').style.width = `${Math.min(100, (halfTermTotal / maxHalfTerm) * 100)}%`;
             document.getElementById('progress-year-end').style.width = `${Math.min(100, (yearEndTotal / maxYearEnd) * 100)}%`;
         }
-
         function handleRefreshStats() {
             updateStatisticsValues();
         }
-
         function populateNonInclusiveDatesList() {
             const list = document.getElementById('non-inclusive-dates-list');
             list.innerHTML = '';
@@ -4019,12 +4233,10 @@
                 list.appendChild(li);
             });
         }
-
         function handleRefreshLessons() {
              renderLessonsCountTable();
              populateTodaysLessonsBox();
         }
-
         document.getElementById('day-filter-select').addEventListener('change', handleDayFilter);
         document.getElementById('week-selector').addEventListener('change', handleWeekSelector);
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -4040,8 +4252,8 @@
         document.getElementById('refresh-lessons-btn').addEventListener('click', handleRefreshLessons);
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('week-selector').value = 'auto';
+            document.getElementById('requests-week-selector').value = 'auto';
         });
-
         populateNonInclusiveDatesList();
         generateTimetable();
         renderLessonsCountTable();

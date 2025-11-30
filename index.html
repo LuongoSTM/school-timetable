@@ -1539,6 +1539,56 @@
             border-radius: 6px;
             cursor: pointer;
         }
+        /* =============== STILI AGGIUNTI PER REQUESTS =============== */
+        .request-new {
+            border-left: 4px solid #ff6b35;
+            animation: pulseNew 1.5s infinite alternate;
+        }
+        @keyframes pulseNew {
+            from { box-shadow: 0 0 0 rgba(255,107,53,0); }
+            to { box-shadow: 0 0 12px rgba(255,107,53,0.6); }
+        }
+        .request-item {
+            background: var(--secondary-bg);
+            border-radius: 12px !important;
+            padding: 14px !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-left: 4px solid var(--header-bg);
+            box-shadow: 0 2px 6px var(--card-shadow);
+        }
+        .request-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px var(--hover-shadow);
+        }
+        .request-info strong {
+            color: var(--header-bg);
+            font-size: 14px;
+        }
+        .request-info em {
+            display: block;
+            margin-top: 4px;
+            font-style: normal;
+            background: rgba(0,123,255,0.05);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+        .requests-filters {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .requests-summary {
+            font-size: 13px;
+            color: var(--text-color);
+            background: var(--countdown-bg);
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        /* =============== FINE NUOVI STILI =============== */
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -1801,7 +1851,6 @@
         <button class="login-btn" id="login-btn">Login</button>
         <div class="error-msg" id="login-error"></div>
     </div>
-
     <!-- PAGINA REQUESTS con navbar -->
     <div id="requests-page">
         <div class="header-content-box">
@@ -1964,12 +2013,22 @@
             </div>
         </nav>
         <h2 class="requests-header">Lesson Requests</h2>
+        
+        <!-- ✅ FILTRI AGGIUNTI -->
+        <div class="requests-filters">
+            <select id="requests-teacher-filter">
+                <option value="all">All Teachers</option>
+                <option value="Ms K Arakelian">Ms K Arakelian</option>
+                <option value="Ms N Jenkins">Ms N Jenkins</option>
+            </select>
+            <div class="requests-summary" id="requests-summary"></div>
+        </div>
+
         <div class="requests-list" id="requests-list-container"></div>
         <div class="requests-export">
             <button id="export-requests-csv">Export Requests (CSV)</button>
         </div>
     </div>
-
     <div class="dynamic-bg" id="dynamic-bg"></div>
     <div id="offline-banner">⚠️ You are offline. Some features may not work.</div>
     <div class="container">
@@ -2320,7 +2379,6 @@
         };
         let currentUser = null;
         let currentModalData = null;
-
         // ==============================
         // LOGIN SYSTEM
         // ==============================
@@ -2335,7 +2393,6 @@
             document.getElementById('login-page').style.display = 'block';
             document.querySelector('.container').style.display = 'none';
         }
-
         document.getElementById('login-btn').addEventListener('click', () => {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value;
@@ -2356,7 +2413,6 @@
                 errorEl.textContent = "Invalid username or password.";
             }
         });
-
         document.getElementById('logout-link').addEventListener('click', (e) => {
             e.preventDefault();
             currentUser = null;
@@ -2365,7 +2421,6 @@
             document.querySelector('.container').style.display = 'none';
             document.getElementById('requests-nav').style.display = 'none';
         });
-
         // ==============================
         // REQUESTS SYSTEM
         // ==============================
@@ -2397,17 +2452,42 @@
             const key = `request_${req.teacher}_${req.subject}_${req.period}_${req.day}_${req.week}`;
             localStorage.removeItem(key);
         }
+        // ✅ FUNZIONE AGGIORNATA PER RENDERIZZARE CON FILTRO, INDICATORE E SUMMARY
         function renderRequestsPage() {
             const container = document.getElementById('requests-list-container');
+            const filterSelect = document.getElementById('requests-teacher-filter');
+            const summaryEl = document.getElementById('requests-summary');
             const requests = loadRequests();
             container.innerHTML = '';
+
             if (requests.length === 0) {
                 container.innerHTML = '<div class="no-requests">No lesson requests yet.</div>';
+                summaryEl.textContent = 'Total: 0';
                 return;
             }
-            requests.forEach(req => {
+
+            // Aggiorna riepilogo
+            const total = requests.length;
+            const arakelian = requests.filter(r => r.teacher === "Ms K Arakelian").length;
+            const jenkins = requests.filter(r => r.teacher === "Ms N Jenkins").length;
+            summaryEl.innerHTML = `📚 Total: ${total} | 👩‍🏫 Arakelian: ${arakelian} | 👨‍🏫 Jenkins: ${jenkins}`;
+
+            // Applica filtro
+            const teacherFilter = filterSelect.value;
+            const filtered = requests.filter(r => 
+                teacherFilter === 'all' || r.teacher === teacherFilter
+            );
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="no-requests">No requests match the selected filter.</div>';
+                return;
+            }
+
+            filtered.forEach(req => {
                 const el = document.createElement('div');
-                el.className = 'request-item';
+                // ✅ Indicatore per richieste recenti (<1h)
+                const isNew = (new Date() - new Date(req.addedAt)) < 3600000;
+                el.className = 'request-item' + (isNew ? ' request-new' : '');
                 const dayName = new Date(req.addedAt).toLocaleDateString('en-US', { weekday: 'short' });
                 el.innerHTML = `
                     <div class="request-info">
@@ -2423,6 +2503,8 @@
                 `;
                 container.appendChild(el);
             });
+
+            // Aggiungi listener
             container.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const req = JSON.parse(atob(btn.dataset.key));
@@ -2439,6 +2521,18 @@
                 });
             });
         }
+
+        // ✅ AUTO-REFRESH OGNI 5 MINUTI
+        let autoRefreshInterval;
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(() => {
+                if (document.getElementById('requests-page').style.display === 'block') {
+                    renderRequestsPage();
+                }
+            }, 5 * 60 * 1000);
+        }
+
         function openRequestInModal(req) {
             currentModalData = req;
             document.getElementById('modal-teacher').textContent = req.teacher;
@@ -2486,7 +2580,6 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
-
         // ==============================
         // MODAL UPDATE
         // ==============================
@@ -2532,7 +2625,6 @@
             alert("Request saved!");
             closeLessonModal();
         });
-
         // ==============================
         // NAVIGATION
         // ==============================
@@ -2540,7 +2632,6 @@
             document.getElementById('requests-page').style.display = 'none';
             document.querySelector('.container').style.display = 'none';
         }
-
         function setActiveNavItem(navId) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'requests-active', 'stats-active'));
             document.querySelectorAll('#requests-page .nav-item').forEach(el => el.classList.remove('active', 'requests-active', 'stats-active'));
@@ -2550,7 +2641,6 @@
                 document.getElementById(navId).classList.add('active');
             }
         }
-
         document.getElementById('nav-home').addEventListener('click', (e) => {
             e.preventDefault();
             hideAllPages();
@@ -2570,7 +2660,6 @@
             setActiveNavItem('requests-nav-current');
             renderRequestsPage();
         });
-
         // Requests page nav
         document.getElementById('requests-nav-home').addEventListener('click', (e) => {
             e.preventDefault();
@@ -2599,7 +2688,6 @@
         document.getElementById('requests-logout-link').addEventListener('click', (e) => {
             document.getElementById('logout-link').click();
         });
-
         document.getElementById('requests-day-filter-select').addEventListener('change', (e) => {
             document.getElementById('day-filter-select').value = e.target.value;
             handleDayFilter();
@@ -2610,7 +2698,6 @@
         });
         document.getElementById('requests-fullscreen-btn').addEventListener('click', toggleFullScreen);
         document.getElementById('requests-dark-mode-toggle').addEventListener('click', toggleDarkMode);
-
         // ==============================
         // ICONS & DYNAMIC BG
         // ==============================
@@ -2638,7 +2725,6 @@
                 body.classList.add('time-evening');
             }
         }
-
         // ==============================
         // OFFLINE BANNER
         // ==============================
@@ -2648,7 +2734,6 @@
         window.addEventListener('offline', () => {
             document.getElementById('offline-banner').style.display = 'block';
         });
-
         // ==============================
         // TIMETABLE DATA
         // ==============================
@@ -2748,13 +2833,11 @@
                 }
             }
         };
-
         let currentMode = 'auto';
         let currentWeek = 'A';
         let currentViewDay = 'all';
         let lessonsFilterMode = 'all';
         let statisticsVisible = false;
-
         const weekAStartDate = new Date(2025, 8, 1);
         const schoolTerms = [
             { name: "October Half Term", startDate: new Date(2025, 9, 27), endDate: new Date(2025, 9, 31) },
@@ -2788,7 +2871,6 @@
         const teachers = ['Ms K Arakelian', 'Ms N Jenkins'];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
         const periods = ['Form Time', '1', '2', '3', '4a', '4b', '5'];
-
         function extractClassNumber(subject) {
             const match = subject.match(/^(\d+)/);
             return match ? parseInt(match[1], 10) : 999;
@@ -3277,7 +3359,6 @@
                 contentDiv.innerHTML = '<div class="today-lesson-item">No lessons scheduled</div>';
             }
         }
-
         // 📌 BOX: My Reminders – FUNZIONI
         function loadReminders() {
             const reminders = [];
@@ -3373,7 +3454,6 @@
                 renderReminders();
             }
         }
-
         // 📌 BOX: Modal – FUNZIONI
         function countRemainingLessons(subject) {
             const { counts } = countLessonsUntilTerm('all');
@@ -3413,7 +3493,6 @@
                 console.warn("Could not save reminder to localStorage", e);
             }
         }
-
         // ✅ CORREZIONE FONDAMENTALE: Aggiungiamo `data-cell` in generateTimetable
         function generateTimetable() {
             const week = getCurrentWeek();
@@ -3519,7 +3598,6 @@
                 }
             });
         }
-
         // Event listeners
         document.getElementById('close-btn').addEventListener('click', closeLessonModal);
         document.querySelector('.close-modal').addEventListener('click', closeLessonModal);
@@ -3536,7 +3614,6 @@
         document.getElementById('clear-reminders-btn').addEventListener('click', clearAllReminders);
         document.getElementById('export-reminders-btn').addEventListener('click', exportRemindersToCSV);
         document.getElementById('export-requests-csv').addEventListener('click', exportRequestsToCSV);
-
         // ... (RESTO DEL TUO SCRIPT: renderLessonsCountTable, updateClockPrecise, ecc.) ...
         function renderLessonsCountTable() {
             const { counts, byTeacher, todayLessons } = countLessonsUntilTerm(lessonsFilterMode);
@@ -3647,7 +3724,6 @@
                     document.getElementById('countdown-minutes').textContent = mins.toString().padStart(2, '0');
                     document.getElementById('countdown-seconds').textContent = secs.toString().padStart(2, '0');
                     document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
-
                     document.getElementById('requests-countdown-title').textContent = nextTerm.name;
                     document.getElementById('requests-countdown-days').textContent = totalDays.toString().padStart(3, '0');
                     document.getElementById('requests-countdown-hours').textContent = hours.toString().padStart(2, '0');
@@ -3662,7 +3738,6 @@
                     document.getElementById('countdown-minutes').textContent = "00";
                     document.getElementById('countdown-seconds').textContent = "00";
                     document.getElementById('term-info-box').textContent = formatTermDates(nextTerm);
-
                     document.getElementById('requests-countdown-title').textContent = nextTerm.name;
                     document.getElementById('requests-countdown-days').textContent = "000";
                     document.getElementById('requests-countdown-hours').textContent = "00";
@@ -3677,7 +3752,6 @@
                 document.getElementById('countdown-minutes').textContent = "00";
                 document.getElementById('countdown-seconds').textContent = "00";
                 document.getElementById('term-info-box').textContent = "Academic year completed";
-
                 document.getElementById('requests-countdown-title').textContent = "No More Terms";
                 document.getElementById('requests-countdown-days').textContent = "000";
                 document.getElementById('requests-countdown-hours').textContent = "00";
@@ -4253,6 +4327,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('week-selector').value = 'auto';
             document.getElementById('requests-week-selector').value = 'auto';
+            // ✅ AGGIUNGI LISTENER PER IL NUOVO FILTRO
+            document.getElementById('requests-teacher-filter').addEventListener('change', renderRequestsPage);
+            // ✅ AVVIA AUTO-REFRESH SE SI È NELLA PAGINA REQUESTS
+            document.getElementById('requests-nav').addEventListener('click', startAutoRefresh);
+            document.getElementById('requests-nav-current').addEventListener('click', startAutoRefresh);
         });
         populateNonInclusiveDatesList();
         generateTimetable();
